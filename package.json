@@ -1,0 +1,37 @@
+{
+  "name": "kaia-system-contracts",
+  "version": "0.0.1",
+  "description": "System Contracts for Kaia",
+  "workspaces": [
+    "contracts-klaytn-v1.0",
+    "contracts-klaytn-v1.10",
+    "contracts-klaytn-v1.12",
+    "contracts-v1.0",
+    "contracts-v2.0",
+    "contracts-v2.1",
+    "contracts-v2.2"
+  ],
+  "keywords": [
+    "kaia",
+    "system",
+    "contracts"
+  ],
+  "private": true,
+  "author": "Kaia Team",
+  "license": "LGPL-3.0",
+  "scripts": {
+    "clean": "npm run clean --workspaces --if-present",
+    "compile": "npm run compile --workspaces --if-present",
+    "test": "npm run test --workspaces --if-present",
+    "lint": "npm run lint --workspaces --if-present",
+    "prepublish:all": "npm run clean && npm run compile",
+    "publish:all": "npm run prepublish:all && npm publish --workspaces --access public",
+    "publish:dry-run": "npm run prepublish:all && npm publish --workspaces --access public --dry-run"
+  },
+  "devDependencies": {
+    "dotenv": "^17.2.3",
+    "ethers": "^6.16.0",
+    "bech32": "^2.0.0",
+    "@types/minimatch": "^6.0.0"
+  }
+}

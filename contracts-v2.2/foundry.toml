@@ -1,0 +1,29 @@
+# See more config options https://github.com/foundry-rs/foundry/tree/master/config
+[profile.default]
+src = './contracts'
+out = './out'
+libs = ['lib', 'node_modules']
+allow_paths = [".."]
+optimizer = true
+optimizer_runs = 200
+
+[profile.ci]
+verbosity = 4
+
+[profile.baobab]
+eth_rpc_url = 'https://archive-en-kairos.node.kaia.io/'
+
+[profile.cypress]
+eth_rpc_url = 'https://archive-en.node.kaia.io'
+
+[profile.homi]
+eth_rpc_url = 'http://127.0.0.1:8551'
+
+[rpc_endpoints]
+cypress = 'https://archive-en.node.kaia.io'
+baobab = 'https://archive-en-kairos.node.kaia.io/'
+localhost = 'http://127.0.0.1:8545'
+homi = 'http://127.0.0.1:8551'
+
+[lint]
+lint_on_build = false

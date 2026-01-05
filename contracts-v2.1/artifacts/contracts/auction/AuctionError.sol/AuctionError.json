@@ -1,0 +1,76 @@
+{
+  "_format": "hh-sol-artifact-1",
+  "contractName": "AuctionError",
+  "sourceName": "contracts/auction/AuctionError.sol",
+  "abi": [
+    {
+      "inputs": [],
+      "name": "EmptyDepositVault",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "InvalidInput",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "InvalidRange",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "MinDepositNotOver",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "OnlyAuctionDepositVault",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "OnlyEntryPoint",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "OnlyProposer",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "OnlyStakingAdmin",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "WithdrawReservationExists",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "WithdrawalFailed",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "WithdrawalNotAllowedYet",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "ZeroAddress",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "ZeroDepositAmount",
+      "type": "error"
+    }
+  ],
+  "bytecode": "0x6080604052348015600f57600080fd5b50603f80601d6000396000f3fe6080604052600080fdfea2646970667358221220eb2f133eecd7c99b3f3b4562fcc6babda1c2176c54322f9b6a78ff60280692f264736f6c63430008190033",
+  "deployedBytecode": "0x6080604052600080fdfea2646970667358221220eb2f133eecd7c99b3f3b4562fcc6babda1c2176c54322f9b6a78ff60280692f264736f6c63430008190033",
+  "linkReferences": {},
+  "deployedLinkReferences": {}
+}

@@ -1,0 +1,993 @@
+{
+  "address": "0x3D478E73c9dBebB72332712D7265961B1868d193",
+  "abi": [
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "_rebalanceBlockNumber",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "nonpayable",
+      "type": "constructor"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "internalType": "address",
+          "name": "allocated",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "fundAllocation",
+          "type": "uint256"
+        }
+      ],
+      "name": "AllocatedRegistered",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "internalType": "address",
+          "name": "allocated",
+          "type": "address"
+        }
+      ],
+      "name": "AllocatedRemoved",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "internalType": "address",
+          "name": "zeroed",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "address",
+          "name": "approver",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "approversCount",
+          "type": "uint256"
+        }
+      ],
+      "name": "Approved",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "internalType": "enum TreasuryRebalanceV2.Status",
+          "name": "status",
+          "type": "uint8"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "rebalanceBlockNumber",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "deployedBlockNumber",
+          "type": "uint256"
+        }
+      ],
+      "name": "ContractDeployed",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "internalType": "string",
+          "name": "memo",
+          "type": "string"
+        },
+        {
+          "indexed": false,
+          "internalType": "enum TreasuryRebalanceV2.Status",
+          "name": "status",
+          "type": "uint8"
+        }
+      ],
+      "name": "Finalized",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "previousOwner",
+          "type": "address"
+        },
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "newOwner",
+          "type": "address"
+        }
+      ],
+      "name": "OwnershipTransferred",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "internalType": "enum TreasuryRebalanceV2.Status",
+          "name": "status",
+          "type": "uint8"
+        }
+      ],
+      "name": "StatusChanged",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "internalType": "address",
+          "name": "zeroed",
+          "type": "address"
+        }
+      ],
+      "name": "ZeroedRegistered",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "internalType": "address",
+          "name": "zeroed",
+          "type": "address"
+        }
+      ],
+      "name": "ZeroedRemoved",
+      "type": "event"
+    },
+    {
+      "stateMutability": "payable",
+      "type": "fallback"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "_allocatedAddress",
+          "type": "address"
+        }
+      ],
+      "name": "allocatedExists",
+      "outputs": [
+        {
+          "internalType": "bool",
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "name": "allocateds",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "addr",
+          "type": "address"
+        },
+        {
+          "internalType": "uint256",
+          "name": "amount",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "_zeroedAddress",
+          "type": "address"
+        }
+      ],
+      "name": "approve",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "checkZeroedsApproved",
+      "outputs": [],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "finalizeApproval",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "string",
+          "name": "_memo",
+          "type": "string"
+        }
+      ],
+      "name": "finalizeContract",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "finalizeRegistration",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "_allocatedAddress",
+          "type": "address"
+        }
+      ],
+      "name": "getAllocated",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        },
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getAllocatedCount",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "_allocatedAddress",
+          "type": "address"
+        }
+      ],
+      "name": "getAllocatedIndex",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getTreasuryAmount",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "treasuryAmount",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "_zeroedAddress",
+          "type": "address"
+        }
+      ],
+      "name": "getZeroed",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        },
+        {
+          "internalType": "address[]",
+          "name": "",
+          "type": "address[]"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getZeroedCount",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "_zeroedAddress",
+          "type": "address"
+        }
+      ],
+      "name": "getZeroedIndex",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "_addr",
+          "type": "address"
+        }
+      ],
+      "name": "isContractAddr",
+      "outputs": [
+        {
+          "internalType": "bool",
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "isOwner",
+      "outputs": [
+        {
+          "internalType": "bool",
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "memo",
+      "outputs": [
+        {
+          "internalType": "string",
+          "name": "",
+          "type": "string"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "owner",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "rebalanceBlockNumber",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "_allocatedAddress",
+          "type": "address"
+        },
+        {
+          "internalType": "uint256",
+          "name": "_amount",
+          "type": "uint256"
+        }
+      ],
+      "name": "registerAllocated",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "_zeroedAddress",
+          "type": "address"
+        }
+      ],
+      "name": "registerZeroed",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "_allocatedAddress",
+          "type": "address"
+        }
+      ],
+      "name": "removeAllocated",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "_zeroedAddress",
+          "type": "address"
+        }
+      ],
+      "name": "removeZeroed",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "renounceOwnership",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "reset",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "status",
+      "outputs": [
+        {
+          "internalType": "enum TreasuryRebalanceV2.Status",
+          "name": "",
+          "type": "uint8"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "sumOfZeroedBalance",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "zeroedsBalance",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "newOwner",
+          "type": "address"
+        }
+      ],
+      "name": "transferOwnership",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "_rebalanceBlockNumber",
+          "type": "uint256"
+        }
+      ],
+      "name": "updateRebalanceBlocknumber",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "_zeroedAddress",
+          "type": "address"
+        }
+      ],
+      "name": "zeroedExists",
+      "outputs": [
+        {
+          "internalType": "bool",
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "name": "zeroeds",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "addr",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    }
+  ],
+  "transactionHash": "0x85185bf7a5aed2585b182f6fec864f7e0daffdb65f63797f61ca3c73035fd8d6",
+  "receipt": {
+    "to": null,
+    "from": "0xe4460065c651692cC5f0Bb584d4b3A0050fE2301",
+    "contractAddress": "0x3D478E73c9dBebB72332712D7265961B1868d193",
+    "transactionIndex": 0,
+    "gasUsed": "3076525",
+    "logsBloom": "0x00000000000000000000000080000000000000000000000000800000000000000000000000000000000000000000000400000000000000000000000000000000000000008000000000000000000000000001000000000004000000000000000000000000020000000001000000000800000000000000000000000000000000400000000000008000000000000000000000000000000000000000000000000000000000000000000000001000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000020000000000100000000000000000000000000000000000000000000000000001000",
+    "blockHash": "0x696f9f8099329b45cd9a5381f9e29098e6f9b21eac62faa94ff1ec8854ecea3b",
+    "transactionHash": "0x85185bf7a5aed2585b182f6fec864f7e0daffdb65f63797f61ca3c73035fd8d6",
+    "logs": [
+      {
+        "transactionIndex": 0,
+        "blockNumber": 156147523,
+        "transactionHash": "0x85185bf7a5aed2585b182f6fec864f7e0daffdb65f63797f61ca3c73035fd8d6",
+        "address": "0x3D478E73c9dBebB72332712D7265961B1868d193",
+        "topics": [
+          "0x8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e0",
+          "0x0000000000000000000000000000000000000000000000000000000000000000",
+          "0x000000000000000000000000e4460065c651692cc5f0bb584d4b3a0050fe2301"
+        ],
+        "data": "0x",
+        "logIndex": 0,
+        "blockHash": "0x696f9f8099329b45cd9a5381f9e29098e6f9b21eac62faa94ff1ec8854ecea3b"
+      },
+      {
+        "transactionIndex": 0,
+        "blockNumber": 156147523,
+        "transactionHash": "0x85185bf7a5aed2585b182f6fec864f7e0daffdb65f63797f61ca3c73035fd8d6",
+        "address": "0x3D478E73c9dBebB72332712D7265961B1868d193",
+        "topics": [
+          "0x6f182006c5a12fe70c0728eedb2d1b0628c41483ca6721c606707d778d22ed0a"
+        ],
+        "data": "0x0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000956712000000000000000000000000000000000000000000000000000000000666275f4",
+        "logIndex": 1,
+        "blockHash": "0x696f9f8099329b45cd9a5381f9e29098e6f9b21eac62faa94ff1ec8854ecea3b"
+      }
+    ],
+    "blockNumber": 156147523,
+    "cumulativeGasUsed": "3076525",
+    "status": 1,
+    "byzantium": true
+  },
+  "args": [
+    "156660000"
+  ],
+  "numDeployments": 1,
+  "solcInputHash": "b7a2a041c55f30c427729ad9ddc1764e",
+  "metadata": "{\"compiler\":{\"version\":\"0.8.25+commit.b61c2a91\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"_rebalanceBlockNumber\",\"type\":\"uint256\"}],\"stateMutability\":\"nonpayable\",\"type\":\"constructor\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"address\",\"name\":\"allocated\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"fundAllocation\",\"type\":\"uint256\"}],\"name\":\"AllocatedRegistered\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"address\",\"name\":\"allocated\",\"type\":\"address\"}],\"name\":\"AllocatedRemoved\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"address\",\"name\":\"zeroed\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"address\",\"name\":\"approver\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"approversCount\",\"type\":\"uint256\"}],\"name\":\"Approved\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"enum TreasuryRebalanceV2.Status\",\"name\":\"status\",\"type\":\"uint8\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"rebalanceBlockNumber\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"deployedBlockNumber\",\"type\":\"uint256\"}],\"name\":\"ContractDeployed\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"string\",\"name\":\"memo\",\"type\":\"string\"},{\"indexed\":false,\"internalType\":\"enum TreasuryRebalanceV2.Status\",\"name\":\"status\",\"type\":\"uint8\"}],\"name\":\"Finalized\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"previousOwner\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"newOwner\",\"type\":\"address\"}],\"name\":\"OwnershipTransferred\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"enum TreasuryRebalanceV2.Status\",\"name\":\"status\",\"type\":\"uint8\"}],\"name\":\"StatusChanged\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"address\",\"name\":\"zeroed\",\"type\":\"address\"}],\"name\":\"ZeroedRegistered\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"address\",\"name\":\"zeroed\",\"type\":\"address\"}],\"name\":\"ZeroedRemoved\",\"type\":\"event\"},{\"stateMutability\":\"payable\",\"type\":\"fallback\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"_allocatedAddress\",\"type\":\"address\"}],\"name\":\"allocatedExists\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"name\":\"allocateds\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"addr\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"_zeroedAddress\",\"type\":\"address\"}],\"name\":\"approve\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"checkZeroedsApproved\",\"outputs\":[],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"finalizeApproval\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"string\",\"name\":\"_memo\",\"type\":\"string\"}],\"name\":\"finalizeContract\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"finalizeRegistration\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"_allocatedAddress\",\"type\":\"address\"}],\"name\":\"getAllocated\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getAllocatedCount\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"_allocatedAddress\",\"type\":\"address\"}],\"name\":\"getAllocatedIndex\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getTreasuryAmount\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"treasuryAmount\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"_zeroedAddress\",\"type\":\"address\"}],\"name\":\"getZeroed\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"},{\"internalType\":\"address[]\",\"name\":\"\",\"type\":\"address[]\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getZeroedCount\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"_zeroedAddress\",\"type\":\"address\"}],\"name\":\"getZeroedIndex\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"_addr\",\"type\":\"address\"}],\"name\":\"isContractAddr\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"isOwner\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"memo\",\"outputs\":[{\"internalType\":\"string\",\"name\":\"\",\"type\":\"string\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"owner\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"rebalanceBlockNumber\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"_allocatedAddress\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"_amount\",\"type\":\"uint256\"}],\"name\":\"registerAllocated\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"_zeroedAddress\",\"type\":\"address\"}],\"name\":\"registerZeroed\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"_allocatedAddress\",\"type\":\"address\"}],\"name\":\"removeAllocated\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"_zeroedAddress\",\"type\":\"address\"}],\"name\":\"removeZeroed\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"renounceOwnership\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"reset\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"status\",\"outputs\":[{\"internalType\":\"enum TreasuryRebalanceV2.Status\",\"name\":\"\",\"type\":\"uint8\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"sumOfZeroedBalance\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"zeroedsBalance\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"newOwner\",\"type\":\"address\"}],\"name\":\"transferOwnership\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"_rebalanceBlockNumber\",\"type\":\"uint256\"}],\"name\":\"updateRebalanceBlocknumber\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"_zeroedAddress\",\"type\":\"address\"}],\"name\":\"zeroedExists\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"name\":\"zeroeds\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"addr\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"}],\"devdoc\":{\"events\":{\"AllocatedRegistered(address,uint256)\":{\"details\":\"Emitted when an Allocated is registered\"},\"AllocatedRemoved(address)\":{\"details\":\"Emitted when an Allocated is removed\"},\"Approved(address,address,uint256)\":{\"details\":\"Emitted when an admin approves the zeroed address.\"},\"ContractDeployed(uint8,uint256,uint256)\":{\"details\":\"Emitted when the contract is deployed `rebalanceBlockNumber` is the target block number of the execution the rebalance in Core `deployedBlockNumber` is the current block number when its deployed\"},\"Finalized(string,uint8)\":{\"details\":\"Emitted when the contract is finalized memo - is the result of the treasury fund rebalancing\"},\"StatusChanged(uint8)\":{\"details\":\"Emitted when the contract status changes\"},\"ZeroedRegistered(address)\":{\"details\":\"Emitted when a Zeroed is registered\"},\"ZeroedRemoved(address)\":{\"details\":\"Emitted when a Zeroed is removed\"}},\"kind\":\"dev\",\"methods\":{\"allocatedExists(address)\":{\"details\":\"check whether _allocatedAddress is registered\",\"params\":{\"_allocatedAddress\":\"is the address of the allocated\"}},\"approve(address)\":{\"details\":\"zeroedAddress can be a EOA or a contract address. To approve:      If the zeroedAddress is a EOA, the msg.sender should be the EOA address      If the zeroedAddress is a Contract, the msg.sender should be one of the contract `admin`.      It uses the getState() function in the zeroedAddress contract to get the admin details.\",\"params\":{\"_zeroedAddress\":\"is the address of the zeroed\"}},\"checkZeroedsApproved()\":{\"details\":\"verify if quorom reached for the zeroed approvals\"},\"constructor\":{\"params\":{\"_rebalanceBlockNumber\":\"is the target block number of the execution the rebalance in Core\"}},\"finalizeApproval()\":{\"details\":\"finalizeApproval sets the status to Approved,      After this stage, approvals will be restricted.\"},\"finalizeContract(string)\":{\"details\":\"sets the status of the contract to Finalize. Once finalized the storage data of the contract cannot be modified\",\"params\":{\"_memo\":\"is the result of the rebalance after executing successfully in the core.\"}},\"finalizeRegistration()\":{\"details\":\"finalizeRegistration sets the status to Registered,      After this stage, registrations will be restricted.\"},\"getAllocated(address)\":{\"details\":\"to get allocated details by allocatedAddress\",\"params\":{\"_allocatedAddress\":\"is the address of the allocated\"},\"returns\":{\"_0\":\"allocated is the address of the allocated\",\"_1\":\"amount is the fund allocated to the allocated\"}},\"getAllocatedCount()\":{\"details\":\"gets the length of allocateds list\"},\"getAllocatedIndex(address)\":{\"details\":\"get index of the allocated in the allocateds array\",\"params\":{\"_allocatedAddress\":\"is the address of the allocated\"}},\"getTreasuryAmount()\":{\"details\":\"to calculate the sum of allocated funds\",\"returns\":{\"treasuryAmount\":\"the sum of funds allocated to allocateds\"}},\"getZeroed(address)\":{\"details\":\"to get zeroed details by zeroedAddress\",\"params\":{\"_zeroedAddress\":\"is the address of the zeroed\"}},\"getZeroedCount()\":{\"details\":\"gets the length of zeroeds list\"},\"getZeroedIndex(address)\":{\"details\":\"get index of the zeroed in the zeroeds array\",\"params\":{\"_zeroedAddress\":\"is the address of the zeroed\"}},\"isContractAddr(address)\":{\"details\":\"Helper function to check the address is contract addr or EOA\"},\"isOwner()\":{\"details\":\"Returns true if the caller is the current owner.\"},\"owner()\":{\"details\":\"Returns the address of the current owner.\"},\"registerAllocated(address,uint256)\":{\"details\":\"registers allocated address and its fund distribution\",\"params\":{\"_allocatedAddress\":\"is the address of the allocated\",\"_amount\":\"is the fund to be allocated to the allocated\"}},\"registerZeroed(address)\":{\"details\":\"registers zeroed details\",\"params\":{\"_zeroedAddress\":\"is the address of the zeroed\"}},\"removeAllocated(address)\":{\"details\":\"remove the allocated details from the array\",\"params\":{\"_allocatedAddress\":\"is the address of the allocated\"}},\"removeZeroed(address)\":{\"details\":\"remove the zeroed details from the array\",\"params\":{\"_zeroedAddress\":\"is the address of the zeroed\"}},\"renounceOwnership()\":{\"details\":\"Leaves the contract without owner. It will not be possible to call `onlyOwner` functions anymore. Can only be called by the current owner. > Note: Renouncing ownership will leave the contract without an owner, thereby removing any functionality that is only available to the owner.\"},\"reset()\":{\"details\":\"resets all storage values to empty objects except targetBlockNumber\"},\"sumOfZeroedBalance()\":{\"details\":\"to calculate the sum of zeroeds balances\",\"returns\":{\"zeroedsBalance\":\"the sum of balances of zeroeds\"}},\"transferOwnership(address)\":{\"details\":\"Transfers ownership of the contract to a new account (`newOwner`). Can only be called by the current owner.\"},\"updateRebalanceBlocknumber(uint256)\":{\"details\":\"updates rebalance block number\",\"params\":{\"_rebalanceBlockNumber\":\"is the updated target block number of the execution the rebalance in Core\"}},\"zeroedExists(address)\":{\"details\":\"check whether zeroedAddress is registered\",\"params\":{\"_zeroedAddress\":\"is the address of the zeroed\"}}},\"title\":\"Smart contract to record the rebalance of treasury funds. This contract is to mainly record the addresses which holds the treasury funds before and after rebalancing. It facilates approval and redistributing to new addresses. Core will execute the re-distribution by reading this contract.\",\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{\"constructor\":{\"notice\":\"Constructor\"},\"zeroeds(uint256)\":{\"notice\":\"Storage\"}},\"version\":1}},\"settings\":{\"compilationTarget\":{\"contracts/rebalance/TreasuryRebalanceV2.sol\":\"TreasuryRebalanceV2\"},\"evmVersion\":\"paris\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\",\"useLiteralContent\":true},\"optimizer\":{\"enabled\":true,\"runs\":200},\"remappings\":[]},\"sources\":{\"contracts/lib/Ownable.sol\":{\"content\":\"// SPDX-License-Identifier: GPL-3.0\\npragma solidity ^0.8.0;\\n\\n/**\\n * @dev Contract module which provides a basic access control mechanism, where\\n * there is an account (an owner) that can be granted exclusive access to\\n * specific functions.\\n *\\n * This module is used through inheritance. It will make available the modifier\\n * `onlyOwner`, which can be aplied to your functions to restrict their use to\\n * the owner.\\n */\\ncontract Ownable {\\n    address private _owner;\\n\\n    event OwnershipTransferred(address indexed previousOwner, address indexed newOwner);\\n\\n    /**\\n     * @dev Initializes the contract setting the deployer as the initial owner.\\n     */\\n    constructor() {\\n        _owner = msg.sender;\\n        emit OwnershipTransferred(address(0), _owner);\\n    }\\n\\n    /**\\n     * @dev Returns the address of the current owner.\\n     */\\n    function owner() public view returns (address) {\\n        return _owner;\\n    }\\n\\n    /**\\n     * @dev Throws if called by any account other than the owner.\\n     */\\n    modifier onlyOwner() {\\n        require(isOwner(), \\\"Ownable: caller is not the owner\\\");\\n        _;\\n    }\\n\\n    /**\\n     * @dev Returns true if the caller is the current owner.\\n     */\\n    function isOwner() public view returns (bool) {\\n        return msg.sender == _owner;\\n    }\\n\\n    /**\\n     * @dev Leaves the contract without owner. It will not be possible to call\\n     * `onlyOwner` functions anymore. Can only be called by the current owner.\\n     *\\n     * > Note: Renouncing ownership will leave the contract without an owner,\\n     * thereby removing any functionality that is only available to the owner.\\n     */\\n    function renounceOwnership() public onlyOwner {\\n        emit OwnershipTransferred(_owner, address(0));\\n        _owner = address(0);\\n    }\\n\\n    /**\\n     * @dev Transfers ownership of the contract to a new account (`newOwner`).\\n     * Can only be called by the current owner.\\n     */\\n    function transferOwnership(address newOwner) public onlyOwner {\\n        _transferOwnership(newOwner);\\n    }\\n\\n    /**\\n     * @dev Transfers ownership of the contract to a new account (`newOwner`).\\n     */\\n    function _transferOwnership(address newOwner) internal {\\n        require(newOwner != address(0), \\\"Ownable: new owner is the zero address\\\");\\n        emit OwnershipTransferred(_owner, newOwner);\\n        _owner = newOwner;\\n    }\\n}\\n\",\"keccak256\":\"0xc5178b51ac81c2705eeceef21b4cdeba7e2d00c83444e82bcdfe5c275342da16\",\"license\":\"GPL-3.0\"},\"contracts/rebalance/TreasuryRebalanceV2.sol\":{\"content\":\"// Copyright 2024 The klaytn Authors\\n// This file is part of the klaytn library.\\n//\\n// The klaytn library is free software: you can redistribute it and/or modify\\n// it under the terms of the GNU Lesser General Public License as published by\\n// the Free Software Foundation, either version 3 of the License, or\\n// (at your option) any later version.\\n//\\n// The klaytn library is distributed in the hope that it will be useful,\\n// but WITHOUT ANY WARRANTY; without even the implied warranty of\\n// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the\\n// GNU Lesser General Public License for more details.\\n//\\n// You should have received a copy of the GNU Lesser General Public License\\n// along with the klaytn library. If not, see <http://www.gnu.org/licenses/>.\\n\\n// SPDX-License-Identifier: GPL-3.0\\n\\npragma solidity ^0.8.0;\\n\\nimport \\\"../lib/Ownable.sol\\\";\\n\\n/**\\n * @title Interface to get adminlist and quorom\\n */\\ninterface IZeroedContract {\\n    function getState() external view returns (address[] memory adminList, uint256 quorom);\\n}\\n\\n/**\\n * @title Smart contract to record the rebalance of treasury funds.\\n * This contract is to mainly record the addresses which holds the treasury funds\\n * before and after rebalancing. It facilates approval and redistributing to new addresses.\\n * Core will execute the re-distribution by reading this contract.\\n */\\ncontract TreasuryRebalanceV2 is Ownable {\\n    // Status of the contract\\n    enum Status {\\n        Initialized,\\n        Registered,\\n        Approved,\\n        Finalized\\n    }\\n\\n    /**\\n     * Zeroed struct to store zeroed address and their approver addresses\\n     */\\n    struct Zeroed {\\n        address addr;\\n        address[] approvers;\\n    }\\n\\n    /**\\n     * Allocated struct to receiver address and their fund allocation\\n     */\\n    struct Allocated {\\n        address addr;\\n        uint256 amount;\\n    }\\n\\n    /**\\n     * @dev Emitted when the contract is deployed\\n     * `rebalanceBlockNumber` is the target block number of the execution the rebalance in Core\\n     * `deployedBlockNumber` is the current block number when its deployed\\n     */\\n    event ContractDeployed(Status status, uint256 rebalanceBlockNumber, uint256 deployedBlockNumber);\\n\\n    /**\\n     * @dev Emitted when a Zeroed is registered\\n     */\\n    event ZeroedRegistered(address zeroed);\\n\\n    /**\\n     * @dev Emitted when a Zeroed is removed\\n     */\\n    event ZeroedRemoved(address zeroed);\\n\\n    /**\\n     * @dev Emitted when an Allocated is registered\\n     */\\n    event AllocatedRegistered(address allocated, uint256 fundAllocation);\\n\\n    /**\\n     * @dev Emitted when an Allocated is removed\\n     */\\n    event AllocatedRemoved(address allocated);\\n\\n    /**\\n     * @dev Emitted when an admin approves the zeroed address.\\n     */\\n    event Approved(address zeroed, address approver, uint256 approversCount);\\n\\n    /**\\n     * @dev Emitted when the contract status changes\\n     */\\n    event StatusChanged(Status status);\\n\\n    /**\\n     * @dev Emitted when the contract is finalized\\n     * memo - is the result of the treasury fund rebalancing\\n     */\\n    event Finalized(string memo, Status status);\\n\\n    /**\\n     * Storage\\n     */\\n    Zeroed[] public zeroeds; // array of the Zeroed struct\\n    Allocated[] public allocateds; // array of Allocated struct\\n    Status public status; // current status of the contract\\n    uint256 public rebalanceBlockNumber; // the target block number of the execution of rebalancing.\\n    string public memo; // result of the treasury fund rebalance.\\n\\n    /**\\n     * Modifiers\\n     */\\n    modifier onlyAtStatus(Status _status) {\\n        require(status == _status, \\\"Not in the designated status\\\");\\n        _;\\n    }\\n\\n    /**\\n     *  Constructor\\n     * @param _rebalanceBlockNumber is the target block number of the execution the rebalance in Core\\n     */\\n    constructor(uint256 _rebalanceBlockNumber) {\\n        require(_rebalanceBlockNumber > block.number, \\\"rebalance blockNumber should be greater than current block\\\");\\n        rebalanceBlockNumber = _rebalanceBlockNumber;\\n        status = Status.Initialized;\\n        emit ContractDeployed(status, _rebalanceBlockNumber, block.timestamp);\\n    }\\n\\n    //State changing Functions\\n    /**\\n     * @dev updates rebalance block number\\n     * @param _rebalanceBlockNumber is the updated target block number of the execution the rebalance in Core\\n     */\\n    function updateRebalanceBlocknumber(uint256 _rebalanceBlockNumber) public onlyOwner {\\n        require(block.number < rebalanceBlockNumber, \\\"current block shouldn't be past the currently set block number\\\");\\n        require(block.number < _rebalanceBlockNumber, \\\"rebalance blockNumber should be greater than current block\\\");\\n        rebalanceBlockNumber = _rebalanceBlockNumber;\\n    }\\n\\n    /**\\n     * @dev registers zeroed details\\n     * @param _zeroedAddress is the address of the zeroed\\n     */\\n    function registerZeroed(address _zeroedAddress) public onlyOwner onlyAtStatus(Status.Initialized) {\\n        require(!zeroedExists(_zeroedAddress), \\\"Zeroed address is already registered\\\");\\n        Zeroed storage zeroed = zeroeds.push();\\n        zeroed.addr = _zeroedAddress;\\n        emit ZeroedRegistered(zeroed.addr);\\n    }\\n\\n    /**\\n     * @dev remove the zeroed details from the array\\n     * @param _zeroedAddress is the address of the zeroed\\n     */\\n    function removeZeroed(address _zeroedAddress) public onlyOwner onlyAtStatus(Status.Initialized) {\\n        uint256 zeroedIndex = getZeroedIndex(_zeroedAddress);\\n        require(zeroedIndex != type(uint256).max, \\\"Zeroed not registered\\\");\\n        zeroeds[zeroedIndex] = zeroeds[zeroeds.length - 1];\\n        zeroeds.pop();\\n        emit ZeroedRemoved(_zeroedAddress);\\n    }\\n\\n    /**\\n     * @dev registers allocated address and its fund distribution\\n     * @param _allocatedAddress is the address of the allocated\\n     * @param _amount is the fund to be allocated to the allocated\\n     */\\n    function registerAllocated(\\n        address _allocatedAddress,\\n        uint256 _amount\\n    ) public onlyOwner onlyAtStatus(Status.Initialized) {\\n        require(!allocatedExists(_allocatedAddress), \\\"Allocated address is already registered\\\");\\n        require(_amount != 0, \\\"Amount cannot be set to 0\\\");\\n        Allocated memory allocated = Allocated(_allocatedAddress, _amount);\\n        allocateds.push(allocated);\\n        emit AllocatedRegistered(_allocatedAddress, _amount);\\n    }\\n\\n    /**\\n     * @dev remove the allocated details from the array\\n     * @param _allocatedAddress is the address of the allocated\\n     */\\n    function removeAllocated(address _allocatedAddress) public onlyOwner onlyAtStatus(Status.Initialized) {\\n        uint256 allocatedIndex = getAllocatedIndex(_allocatedAddress);\\n        require(allocatedIndex != type(uint256).max, \\\"Allocated not registered\\\");\\n        allocateds[allocatedIndex] = allocateds[allocateds.length - 1];\\n        allocateds.pop();\\n        emit AllocatedRemoved(_allocatedAddress);\\n    }\\n\\n    /**\\n     * @dev zeroedAddress can be a EOA or a contract address. To approve:\\n     *      If the zeroedAddress is a EOA, the msg.sender should be the EOA address\\n     *      If the zeroedAddress is a Contract, the msg.sender should be one of the contract `admin`.\\n     *      It uses the getState() function in the zeroedAddress contract to get the admin details.\\n     * @param _zeroedAddress is the address of the zeroed\\n     */\\n    function approve(address _zeroedAddress) public onlyAtStatus(Status.Registered) {\\n        require(zeroedExists(_zeroedAddress), \\\"zeroed needs to be registered before approval\\\");\\n        //Check whether the zeroed address is EOA or contract address\\n        bool isContract = isContractAddr(_zeroedAddress);\\n        if (!isContract) {\\n            //check whether the msg.sender is the zeroed if its a EOA\\n            require(msg.sender == _zeroedAddress, \\\"zeroedAddress is not the msg.sender\\\");\\n            _updateApprover(_zeroedAddress, msg.sender);\\n        } else {\\n            (address[] memory adminList, uint256 req) = _getState(_zeroedAddress);\\n            require(adminList.length != 0, \\\"admin list cannot be empty\\\");\\n            //check if the msg.sender is one of the admin of the zeroedAddress contract\\n            require(_validateAdmin(msg.sender, adminList), \\\"msg.sender is not the admin\\\");\\n            _updateApprover(_zeroedAddress, msg.sender);\\n        }\\n    }\\n\\n    /**\\n     * @dev validate if the msg.sender is admin if the zeroedAddress is a contract\\n     * @param _approver is the msg.sender\\n     * @return isAdmin is true if the msg.sender is one of the admin\\n     */\\n    function _validateAdmin(address _approver, address[] memory _adminList) private pure returns (bool isAdmin) {\\n        for (uint256 i = 0; i < _adminList.length; i++) {\\n            if (_approver == _adminList[i]) {\\n                isAdmin = true;\\n            }\\n        }\\n    }\\n\\n    /**\\n     * @dev gets the adminList and quorom by calling `getState()` method in zeroedAddress contract\\n     * @param _zeroedAddress is the address of the contract\\n     * @return adminList list of the zeroedAddress contract admins\\n     * @return req min required number of approvals\\n     */\\n    function _getState(address _zeroedAddress) private view returns (address[] memory adminList, uint256 req) {\\n        IZeroedContract zeroedContract = IZeroedContract(_zeroedAddress);\\n        (adminList, req) = zeroedContract.getState();\\n    }\\n\\n    /**\\n     * @dev Internal function to update the approver details of a zeroed\\n     * _zeroedAddress is the address of the zeroed\\n     * _approver is the admin of the zeroedAddress\\n     */\\n    function _updateApprover(address _zeroedAddress, address _approver) private {\\n        uint256 index = getZeroedIndex(_zeroedAddress);\\n        require(index != type(uint256).max, \\\"Zeroed not registered\\\");\\n        address[] memory approvers = zeroeds[index].approvers;\\n        for (uint256 i = 0; i < approvers.length; i++) {\\n            require(approvers[i] != _approver, \\\"Already approved\\\");\\n        }\\n        zeroeds[index].approvers.push(_approver);\\n        emit Approved(_zeroedAddress, _approver, zeroeds[index].approvers.length);\\n    }\\n\\n    /**\\n     * @dev finalizeRegistration sets the status to Registered,\\n     *      After this stage, registrations will be restricted.\\n     */\\n    function finalizeRegistration() public onlyOwner onlyAtStatus(Status.Initialized) {\\n        status = Status.Registered;\\n        emit StatusChanged(status);\\n    }\\n\\n    /**\\n     * @dev finalizeApproval sets the status to Approved,\\n     *      After this stage, approvals will be restricted.\\n     */\\n    function finalizeApproval() public onlyOwner onlyAtStatus(Status.Registered) {\\n        checkZeroedsApproved();\\n        status = Status.Approved;\\n        emit StatusChanged(status);\\n    }\\n\\n    /**\\n     * @dev verify if quorom reached for the zeroed approvals\\n     */\\n    function checkZeroedsApproved() public view {\\n        for (uint256 i = 0; i < zeroeds.length; i++) {\\n            Zeroed memory zeroed = zeroeds[i];\\n            bool isContract = isContractAddr(zeroed.addr);\\n            if (isContract) {\\n                (address[] memory adminList, uint256 req) = _getState(zeroed.addr);\\n                require(zeroed.approvers.length >= req, \\\"min required admins should approve\\\");\\n                //if min quorom reached, make sure all approvers are still valid\\n                address[] memory approvers = zeroed.approvers;\\n                uint256 validApprovals = 0;\\n                for (uint256 j = 0; j < approvers.length; j++) {\\n                    if (_validateAdmin(approvers[j], adminList)) {\\n                        validApprovals++;\\n                    }\\n                }\\n                require(validApprovals >= req, \\\"min required admins should approve\\\");\\n            } else {\\n                require(zeroed.approvers.length == 1, \\\"EOA should approve\\\");\\n            }\\n        }\\n    }\\n\\n    /**\\n     * @dev sets the status of the contract to Finalize. Once finalized the storage data\\n     * of the contract cannot be modified\\n     * @param _memo is the result of the rebalance after executing successfully in the core.\\n     */\\n    function finalizeContract(string memory _memo) public onlyOwner onlyAtStatus(Status.Approved) {\\n        memo = _memo;\\n        status = Status.Finalized;\\n        emit Finalized(memo, status);\\n        require(block.number > rebalanceBlockNumber, \\\"Contract can only finalize after executing rebalancing\\\");\\n    }\\n\\n    /**\\n     * @dev resets all storage values to empty objects except targetBlockNumber\\n     */\\n    function reset() public onlyOwner {\\n        //reset cannot be called at Finalized status or after target block.number\\n        require(status != Status.Finalized, \\\"Contract is finalized, cannot reset values\\\");\\n        require(block.number < rebalanceBlockNumber, \\\"Rebalance blocknumber already passed\\\");\\n\\n        //`delete` keyword is used to set a storage variable or a dynamic array to its default value.\\n        delete zeroeds;\\n        delete allocateds;\\n        delete memo;\\n        status = Status.Initialized;\\n    }\\n\\n    //Getters\\n    /**\\n     * @dev to get zeroed details by zeroedAddress\\n     * @param _zeroedAddress is the address of the zeroed\\n     */\\n    function getZeroed(address _zeroedAddress) public view returns (address, address[] memory) {\\n        uint256 index = getZeroedIndex(_zeroedAddress);\\n        require(index != type(uint256).max, \\\"Zeroed not registered\\\");\\n        Zeroed memory zeroed = zeroeds[index];\\n        return (zeroed.addr, zeroed.approvers);\\n    }\\n\\n    /**\\n     * @dev check whether zeroedAddress is registered\\n     * @param _zeroedAddress is the address of the zeroed\\n     */\\n    function zeroedExists(address _zeroedAddress) public view returns (bool) {\\n        require(_zeroedAddress != address(0), \\\"Invalid address\\\");\\n        for (uint256 i = 0; i < zeroeds.length; i++) {\\n            if (zeroeds[i].addr == _zeroedAddress) {\\n                return true;\\n            }\\n        }\\n    }\\n\\n    /**\\n     * @dev get index of the zeroed in the zeroeds array\\n     * @param _zeroedAddress is the address of the zeroed\\n     */\\n    function getZeroedIndex(address _zeroedAddress) public view returns (uint256) {\\n        for (uint256 i = 0; i < zeroeds.length; i++) {\\n            if (zeroeds[i].addr == _zeroedAddress) {\\n                return i;\\n            }\\n        }\\n        return type(uint256).max;\\n    }\\n\\n    /**\\n     * @dev to calculate the sum of zeroeds balances\\n     * @return zeroedsBalance the sum of balances of zeroeds\\n     */\\n    function sumOfZeroedBalance() public view returns (uint256 zeroedsBalance) {\\n        for (uint256 i = 0; i < zeroeds.length; i++) {\\n            zeroedsBalance += zeroeds[i].addr.balance;\\n        }\\n        return zeroedsBalance;\\n    }\\n\\n    /**\\n     * @dev to get allocated details by allocatedAddress\\n     * @param _allocatedAddress is the address of the allocated\\n     * @return allocated is the address of the allocated\\n     * @return amount is the fund allocated to the allocated\\n     */\\n    function getAllocated(address _allocatedAddress) public view returns (address, uint256) {\\n        uint256 index = getAllocatedIndex(_allocatedAddress);\\n        require(index != type(uint256).max, \\\"Allocated not registered\\\");\\n        Allocated memory allocated = allocateds[index];\\n        return (allocated.addr, allocated.amount);\\n    }\\n\\n    /**\\n     * @dev check whether _allocatedAddress is registered\\n     * @param _allocatedAddress is the address of the allocated\\n     */\\n    function allocatedExists(address _allocatedAddress) public view returns (bool) {\\n        require(_allocatedAddress != address(0), \\\"Invalid address\\\");\\n        for (uint256 i = 0; i < allocateds.length; i++) {\\n            if (allocateds[i].addr == _allocatedAddress) {\\n                return true;\\n            }\\n        }\\n    }\\n\\n    /**\\n     * @dev get index of the allocated in the allocateds array\\n     * @param _allocatedAddress is the address of the allocated\\n     */\\n    function getAllocatedIndex(address _allocatedAddress) public view returns (uint256) {\\n        for (uint256 i = 0; i < allocateds.length; i++) {\\n            if (allocateds[i].addr == _allocatedAddress) {\\n                return i;\\n            }\\n        }\\n        return type(uint256).max;\\n    }\\n\\n    /**\\n     * @dev to calculate the sum of allocated funds\\n     * @return treasuryAmount the sum of funds allocated to allocateds\\n     */\\n    function getTreasuryAmount() public view returns (uint256 treasuryAmount) {\\n        for (uint256 i = 0; i < allocateds.length; i++) {\\n            treasuryAmount += allocateds[i].amount;\\n        }\\n        return treasuryAmount;\\n    }\\n\\n    /**\\n     * @dev gets the length of zeroeds list\\n     */\\n    function getZeroedCount() public view returns (uint256) {\\n        return zeroeds.length;\\n    }\\n\\n    /**\\n     * @dev gets the length of allocateds list\\n     */\\n    function getAllocatedCount() public view returns (uint256) {\\n        return allocateds.length;\\n    }\\n\\n    /**\\n     * @dev fallback function to revert any payments\\n     */\\n    fallback() external payable {\\n        revert(\\\"This contract does not accept any payments\\\");\\n    }\\n\\n    /**\\n     * @dev Helper function to check the address is contract addr or EOA\\n     */\\n    function isContractAddr(address _addr) public view returns (bool) {\\n        uint256 size;\\n        assembly {\\n            size := extcodesize(_addr)\\n        }\\n        return size > 0;\\n    }\\n}\\n\",\"keccak256\":\"0x68bee4b1cac8151e6638fd76c70b725d8a704b7e558973fd979435ead1531f78\",\"license\":\"GPL-3.0\"}},\"version\":1}",
+  "bytecode": "0x608060405234801561001057600080fd5b506040516127b43803806127b483398101604081905261002f91610139565b600080546001600160a01b0319163390811782556040519091907f8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e0908290a34381116100e75760405162461bcd60e51b815260206004820152603a60248201527f726562616c616e636520626c6f636b4e756d6265722073686f756c642062652060448201527f67726561746572207468616e2063757272656e7420626c6f636b000000000000606482015260840160405180910390fd5b60048190556003805460ff191690556040517f6f182006c5a12fe70c0728eedb2d1b0628c41483ca6721c606707d778d22ed0a9061012b9060009084904290610152565b60405180910390a150610188565b60006020828403121561014b57600080fd5b5051919050565b606081016004851061017457634e487b7160e01b600052602160045260246000fd5b938152602081019290925260409091015290565b61261d806101976000396000f3fe6080604052600436106101d85760003560e01c80638f32d59b11610102578063db27b50b11610095578063ecd8677811610064578063ecd86778146105b7578063ed355529146105d7578063f2fde38b146105ec578063faaf9ca61461060c576101d8565b8063db27b50b14610541578063e20fcf0014610561578063e2384cb314610576578063ea6d4a9b14610597576101d8565b8063bd786f57116100d1578063bd786f57146104be578063cea1c338146104de578063d826f88f1461050c578063daea85c514610521576101d8565b80638f32d59b146104545780639ab29b70146104745780639dc954ba146104895780639e59eb141461049e576101d8565b8063518592da1161017a57806362aa3e911161014957806362aa3e91146103c9578063715018a6146104015780637bfaf7b7146104165780638da5cb5b14610436576101d8565b8063518592da1461033757806358c3b870146103575780635f8798c0146103795780635f9b0df7146103a9576101d8565b806327704cb5116101b657806327704cb51461029f578063343e2c85146102bf57806348409096146102fe57806349a3fb4514610313576101d8565b80630287d126146102385780631804692f1461024f578063200d2ed21461026f575b60405162461bcd60e51b815260206004820152602a60248201527f5468697320636f6e747261637420646f6573206e6f742061636365707420616e60448201526979207061796d656e747360b01b60648201526084015b60405180910390fd5b34801561024457600080fd5b5061024d610621565b005b34801561025b57600080fd5b5061024d61026a366004611fa2565b6107f0565b34801561027b57600080fd5b506003546102899060ff1681565b6040516102969190611ff3565b60405180910390f35b3480156102ab57600080fd5b5061024d6102ba36600461201c565b61090b565b3480156102cb57600080fd5b506102df6102da366004611fa2565b610ac0565b604080516001600160a01b039093168352602083019190915201610296565b34801561030a57600080fd5b5061024d610af8565b34801561031f57600080fd5b5061032960045481565b604051908152602001610296565b34801561034357600080fd5b5061032961035236600461201c565b610baf565b34801561036357600080fd5b5061036c610c11565b6040516102969190612040565b34801561038557600080fd5b5061039961039436600461201c565b610c9f565b6040519015158152602001610296565b3480156103b557600080fd5b5061024d6103c436600461201c565b610d49565b3480156103d557600080fd5b506103e96103e4366004611fa2565b610e8c565b6040516001600160a01b039091168152602001610296565b34801561040d57600080fd5b5061024d610ebb565b34801561042257600080fd5b5061032961043136600461201c565b610f2f565b34801561044257600080fd5b506000546001600160a01b03166103e9565b34801561046057600080fd5b506000546001600160a01b03163314610399565b34801561048057600080fd5b50610329610f87565b34801561049557600080fd5b50600154610329565b3480156104aa57600080fd5b506102df6104b936600461201c565b610fdb565b3480156104ca57600080fd5b506103996104d936600461201c565b61108e565b3480156104ea57600080fd5b506104fe6104f936600461201c565b611132565b60405161029692919061208f565b34801561051857600080fd5b5061024d611219565b34801561052d57600080fd5b5061024d61053c36600461201c565b611347565b34801561054d57600080fd5b5061024d61055c36600461201c565b61152d565b34801561056d57600080fd5b506103296116c2565b34801561058257600080fd5b5061039961059136600461201c565b3b151590565b3480156105a357600080fd5b5061024d6105b2366004612132565b61170a565b3480156105c357600080fd5b5061024d6105d23660046121c7565b611832565b3480156105e357600080fd5b50600254610329565b3480156105f857600080fd5b5061024d61060736600461201c565b611a1f565b34801561061857600080fd5b5061024d611a52565b60005b6001548110156107ed57600060018281548110610643576106436121f3565b6000918252602091829020604080518082018252600290930290910180546001600160a01b031683526001810180548351818702810187019094528084529394919385830193928301828280156106c357602002820191906000526020600020905b81546001600160a01b031681526001909101906020018083116106a5575b505050505081525050905060006106de82600001513b151590565b90508015610799576000806106f68460000151611acf565b9150915080846020015151101561071f5760405162461bcd60e51b815260040161022f90612209565b60208401516000805b825181101561076f57610754838281518110610746576107466121f3565b602002602001015186611b48565b15610767578161076381612261565b9250505b600101610728565b50828110156107905760405162461bcd60e51b815260040161022f90612209565b505050506107e3565b8160200151516001146107e35760405162461bcd60e51b8152602060048201526012602482015271454f412073686f756c6420617070726f766560701b604482015260640161022f565b5050600101610624565b50565b6000546001600160a01b0316331461081a5760405162461bcd60e51b815260040161022f9061227a565b60045443106108915760405162461bcd60e51b815260206004820152603e60248201527f63757272656e7420626c6f636b2073686f756c646e277420626520706173742060448201527f7468652063757272656e746c792073657420626c6f636b206e756d6265720000606482015260840161022f565b8043106109065760405162461bcd60e51b815260206004820152603a60248201527f726562616c616e636520626c6f636b4e756d6265722073686f756c642062652060448201527f67726561746572207468616e2063757272656e7420626c6f636b000000000000606482015260840161022f565b600455565b6000546001600160a01b031633146109355760405162461bcd60e51b815260040161022f9061227a565b6000806003805460ff169081111561094f5761094f611fbb565b1461096c5760405162461bcd60e51b815260040161022f906122af565b600061097783610f2f565b905060001981036109c55760405162461bcd60e51b8152602060048201526018602482015277105b1b1bd8d85d1959081b9bdd081c9959da5cdd195c995960421b604482015260640161022f565b600280546109d5906001906122e6565b815481106109e5576109e56121f3565b906000526020600020906002020160028281548110610a0657610a066121f3565b600091825260209091208254600292830290910180546001600160a01b0319166001600160a01b03909216919091178155600192830154920191909155805480610a5257610a526122f9565b600082815260208082206002600019949094019384020180546001600160a01b03191681556001019190915591556040516001600160a01b03851681527ff8f67464bea52432645435be9c46c427173a75aefaa1001272e08a4b8572f06e91015b60405180910390a1505050565b60028181548110610ad057600080fd5b6000918252602090912060029091020180546001909101546001600160a01b03909116915082565b6000546001600160a01b03163314610b225760405162461bcd60e51b815260040161022f9061227a565b6000806003805460ff1690811115610b3c57610b3c611fbb565b14610b595760405162461bcd60e51b815260040161022f906122af565b600380546001919060ff191682805b02179055506003546040517fafa725e7f44cadb687a7043853fa1a7e7b8f0da74ce87ec546e9420f04da8c1e91610ba49160ff90911690611ff3565b60405180910390a150565b6000805b600154811015610c0757826001600160a01b031660018281548110610bda57610bda6121f3565b60009182526020909120600290910201546001600160a01b031603610bff5792915050565b600101610bb3565b5060001992915050565b60058054610c1e9061230f565b80601f0160208091040260200160405190810160405280929190818152602001828054610c4a9061230f565b8015610c975780601f10610c6c57610100808354040283529160200191610c97565b820191906000526020600020905b815481529060010190602001808311610c7a57829003601f168201915b505050505081565b60006001600160a01b038216610ce95760405162461bcd60e51b815260206004820152600f60248201526e496e76616c6964206164647265737360881b604482015260640161022f565b60005b600154811015610d4357826001600160a01b031660018281548110610d1357610d136121f3565b60009182526020909120600290910201546001600160a01b031603610d3b5750600192915050565b600101610cec565b50919050565b6000546001600160a01b03163314610d735760405162461bcd60e51b815260040161022f9061227a565b6000806003805460ff1690811115610d8d57610d8d611fbb565b14610daa5760405162461bcd60e51b815260040161022f906122af565b610db382610c9f565b15610e0c5760405162461bcd60e51b8152602060048201526024808201527f5a65726f6564206164647265737320697320616c726561647920726567697374604482015263195c995960e21b606482015260840161022f565b6001805480820182556000919091526002027fb10e2d527612073b26eecdfd717e6a320cf44b4afac2b0732d9fcbe2b7fa0cf60180546001600160a01b0384166001600160a01b0319909116811782556040519081527fa9a4f3b74b03e48e76814dbc308d3f20104d608c67a42a7ae678d0945daa8e9290602001610ab3565b60018181548110610e9c57600080fd5b60009182526020909120600290910201546001600160a01b0316905081565b6000546001600160a01b03163314610ee55760405162461bcd60e51b815260040161022f9061227a565b600080546040516001600160a01b03909116907f8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e0908390a3600080546001600160a01b0319169055565b6000805b600254811015610c0757826001600160a01b031660028281548110610f5a57610f5a6121f3565b60009182526020909120600290910201546001600160a01b031603610f7f5792915050565b600101610f33565b6000805b600154811015610fd75760018181548110610fa857610fa86121f3565b6000918252602090912060029091020154610fcd906001600160a01b03163183612343565b9150600101610f8b565b5090565b6000806000610fe984610f2f565b905060001981036110375760405162461bcd60e51b8152602060048201526018602482015277105b1b1bd8d85d1959081b9bdd081c9959da5cdd195c995960421b604482015260640161022f565b60006002828154811061104c5761104c6121f3565b60009182526020918290206040805180820190915260029092020180546001600160a01b03168083526001909101549190920181905290969095509350505050565b60006001600160a01b0382166110d85760405162461bcd60e51b815260206004820152600f60248201526e496e76616c6964206164647265737360881b604482015260640161022f565b60005b600254811015610d4357826001600160a01b031660028281548110611102576111026121f3565b60009182526020909120600290910201546001600160a01b03160361112a5750600192915050565b6001016110db565b60006060600061114184610baf565b905060001981036111645760405162461bcd60e51b815260040161022f90612356565b600060018281548110611179576111796121f3565b6000918252602091829020604080518082018252600290930290910180546001600160a01b031683526001810180548351818702810187019094528084529394919385830193928301828280156111f957602002820191906000526020600020905b81546001600160a01b031681526001909101906020018083116111db575b505050505081525050905080600001518160200151935093505050915091565b6000546001600160a01b031633146112435760405162461bcd60e51b815260040161022f9061227a565b6003805460ff168181111561125a5761125a611fbb565b036112ba5760405162461bcd60e51b815260206004820152602a60248201527f436f6e74726163742069732066696e616c697a65642c2063616e6e6f742072656044820152697365742076616c75657360b01b606482015260840161022f565b60045443106113175760405162461bcd60e51b8152602060048201526024808201527f526562616c616e636520626c6f636b6e756d62657220616c72656164792070616044820152631cdcd95960e21b606482015260840161022f565b61132360016000611e53565b61132f60026000611e74565b61133b60056000611e95565b6003805460ff19169055565b6001806003805460ff169081111561136157611361611fbb565b1461137e5760405162461bcd60e51b815260040161022f906122af565b61138782610c9f565b6113e95760405162461bcd60e51b815260206004820152602d60248201527f7a65726f6564206e6565647320746f206265207265676973746572656420626560448201526c199bdc9948185c1c1c9bdd985b609a1b606482015260840161022f565b813b15158061146557336001600160a01b038416146114565760405162461bcd60e51b815260206004820152602360248201527f7a65726f656441646472657373206973206e6f7420746865206d73672e73656e6044820152623232b960e91b606482015260840161022f565b6114608333611b9b565b505050565b60008061147185611acf565b9150915081516000036114c65760405162461bcd60e51b815260206004820152601a60248201527f61646d696e206c6973742063616e6e6f7420626520656d707479000000000000604482015260640161022f565b6114d03383611b48565b61151c5760405162461bcd60e51b815260206004820152601b60248201527f6d73672e73656e646572206973206e6f74207468652061646d696e0000000000604482015260640161022f565b6115268533611b9b565b5050505050565b6000546001600160a01b031633146115575760405162461bcd60e51b815260040161022f9061227a565b6000806003805460ff169081111561157157611571611fbb565b1461158e5760405162461bcd60e51b815260040161022f906122af565b600061159983610baf565b905060001981036115bc5760405162461bcd60e51b815260040161022f90612356565b600180546115cb9082906122e6565b815481106115db576115db6121f3565b9060005260206000209060020201600182815481106115fc576115fc6121f3565b60009182526020909120825460029092020180546001600160a01b0319166001600160a01b039092169190911781556001808301805461163f9284019190611ecf565b509050506001805480611654576116546122f9565b60008281526020812060026000199093019283020180546001600160a01b0319168155906116856001830182611f1b565b505090556040516001600160a01b03841681527f8a654c98d0a7856a8d216c621bb8073316efcaa2b65774d2050c4c1fc7a85a0c90602001610ab3565b6000805b600254811015610fd757600281815481106116e3576116e36121f3565b906000526020600020906002020160010154826117009190612343565b91506001016116c6565b6000546001600160a01b031633146117345760405162461bcd60e51b815260040161022f9061227a565b6002806003805460ff169081111561174e5761174e611fbb565b1461176b5760405162461bcd60e51b815260040161022f906122af565b600561177783826123d5565b506003805460ff1916811781556040517f8f8636c7757ca9b7d154e1d44ca90d8e8c885b9eac417c59bbf8eb7779ca6404916117b69160059190612495565b60405180910390a1600454431161182e5760405162461bcd60e51b815260206004820152603660248201527f436f6e74726163742063616e206f6e6c792066696e616c697a6520616674657260448201527520657865637574696e6720726562616c616e63696e6760501b606482015260840161022f565b5050565b6000546001600160a01b0316331461185c5760405162461bcd60e51b815260040161022f9061227a565b6000806003805460ff169081111561187657611876611fbb565b146118935760405162461bcd60e51b815260040161022f906122af565b61189c8361108e565b156118f95760405162461bcd60e51b815260206004820152602760248201527f416c6c6f6361746564206164647265737320697320616c7265616479207265676044820152661a5cdd195c995960ca1b606482015260840161022f565b816000036119495760405162461bcd60e51b815260206004820152601960248201527f416d6f756e742063616e6e6f742062652073657420746f203000000000000000604482015260640161022f565b6040805180820182526001600160a01b038581168083526020808401878152600280546001810182556000829052865191027f405787fa12a823e0f2b7631cc41b3ba8828b3321ca811111fa75cd3aa3bb5ace81018054929096166001600160a01b031990921691909117909455517f405787fa12a823e0f2b7631cc41b3ba8828b3321ca811111fa75cd3aa3bb5acf90930192909255835190815290810185905290917fab5b2126f71ee7e0b39eadc53fb5d08a8f6c68dc61795fa05ed7d176cd2665ed91015b60405180910390a150505050565b6000546001600160a01b03163314611a495760405162461bcd60e51b815260040161022f9061227a565b6107ed81611d93565b6000546001600160a01b03163314611a7c5760405162461bcd60e51b815260040161022f9061227a565b6001806003805460ff1690811115611a9657611a96611fbb565b14611ab35760405162461bcd60e51b815260040161022f906122af565b611abb610621565b600380546002919060ff1916600183610b68565b6060600080839050806001600160a01b0316631865c57d6040518163ffffffff1660e01b8152600401600060405180830381865afa158015611b15573d6000803e3d6000fd5b505050506040513d6000823e601f3d908101601f19168201604052611b3d919081019061252d565b909590945092505050565b6000805b8251811015611b9457828181518110611b6757611b676121f3565b60200260200101516001600160a01b0316846001600160a01b031603611b8c57600191505b600101611b4c565b5092915050565b6000611ba683610baf565b90506000198103611bc95760405162461bcd60e51b815260040161022f90612356565b600060018281548110611bde57611bde6121f3565b9060005260206000209060020201600101805480602002602001604051908101604052809291908181526020018280548015611c4357602002820191906000526020600020905b81546001600160a01b03168152600190910190602001808311611c25575b5050505050905060005b8151811015611ccb57836001600160a01b0316828281518110611c7257611c726121f3565b60200260200101516001600160a01b031603611cc35760405162461bcd60e51b815260206004820152601060248201526f105b1c9958591e48185c1c1c9bdd995960821b604482015260640161022f565b600101611c4d565b5060018281548110611cdf57611cdf6121f3565b600091825260208083206001600290930201820180548084018255908452922090910180546001600160a01b0386166001600160a01b031990911617905580547f80da462ebfbe41cfc9bc015e7a9a3c7a2a73dbccede72d8ceb583606c27f8f9091869186919086908110611d5657611d566121f3565b600091825260209182902060016002909202010154604080516001600160a01b039586168152949093169184019190915290820152606001611a11565b6001600160a01b038116611df85760405162461bcd60e51b815260206004820152602660248201527f4f776e61626c653a206e6577206f776e657220697320746865207a65726f206160448201526564647265737360d01b606482015260840161022f565b600080546040516001600160a01b03808516939216917f8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e091a3600080546001600160a01b0319166001600160a01b0392909216919091179055565b50805460008255600202906000526020600020908101906107ed9190611f39565b50805460008255600202906000526020600020908101906107ed9190611f67565b508054611ea19061230f565b6000825580601f10611eb1575050565b601f0160209004906000526020600020908101906107ed9190611f8d565b828054828255906000526020600020908101928215611f0f5760005260206000209182015b82811115611f0f578254825591600101919060010190611ef4565b50610fd7929150611f8d565b50805460008255906000526020600020908101906107ed9190611f8d565b80821115610fd75780546001600160a01b03191681556000611f5e6001830182611f1b565b50600201611f39565b5b80821115610fd75780546001600160a01b031916815560006001820155600201611f68565b5b80821115610fd75760008155600101611f8e565b600060208284031215611fb457600080fd5b5035919050565b634e487b7160e01b600052602160045260246000fd5b60048110611fef57634e487b7160e01b600052602160045260246000fd5b9052565b602081016120018284611fd1565b92915050565b6001600160a01b03811681146107ed57600080fd5b60006020828403121561202e57600080fd5b813561203981612007565b9392505050565b60006020808352835180602085015260005b8181101561206e57858101830151858201604001528201612052565b506000604082860101526040601f19601f8301168501019250505092915050565b6001600160a01b038381168252604060208084018290528451918401829052600092858201929091906060860190855b818110156120dd5785518516835294830194918301916001016120bf565b509098975050505050505050565b634e487b7160e01b600052604160045260246000fd5b604051601f8201601f1916810167ffffffffffffffff8111828210171561212a5761212a6120eb565b604052919050565b6000602080838503121561214557600080fd5b823567ffffffffffffffff8082111561215d57600080fd5b818501915085601f83011261217157600080fd5b813581811115612183576121836120eb565b612195601f8201601f19168501612101565b915080825286848285010111156121ab57600080fd5b8084840185840137600090820190930192909252509392505050565b600080604083850312156121da57600080fd5b82356121e581612007565b946020939093013593505050565b634e487b7160e01b600052603260045260246000fd5b60208082526022908201527f6d696e2072657175697265642061646d696e732073686f756c6420617070726f604082015261766560f01b606082015260800190565b634e487b7160e01b600052601160045260246000fd5b6000600182016122735761227361224b565b5060010190565b6020808252818101527f4f776e61626c653a2063616c6c6572206973206e6f7420746865206f776e6572604082015260600190565b6020808252601c908201527f4e6f7420696e207468652064657369676e617465642073746174757300000000604082015260600190565b818103818111156120015761200161224b565b634e487b7160e01b600052603160045260246000fd5b600181811c9082168061232357607f821691505b602082108103610d4357634e487b7160e01b600052602260045260246000fd5b808201808211156120015761200161224b565b60208082526015908201527416995c9bd959081b9bdd081c9959da5cdd195c9959605a1b604082015260600190565b601f821115611460576000816000526020600020601f850160051c810160208610156123ae5750805b601f850160051c820191505b818110156123cd578281556001016123ba565b505050505050565b815167ffffffffffffffff8111156123ef576123ef6120eb565b612403816123fd845461230f565b84612385565b602080601f83116001811461243857600084156124205750858301515b600019600386901b1c1916600185901b1785556123cd565b600085815260208120601f198616915b8281101561246757888601518255948401946001909101908401612448565b50858210156124855787850151600019600388901b60f8161c191681555b5050505050600190811b01905550565b6040815260008084546124a78161230f565b80604086015260606001808416600081146124c957600181146124e557612517565b60ff1985166060890152606084151560051b8901019550612517565b8960005260208060002060005b8681101561250d5781548b82018701529084019082016124f2565b8a01606001975050505b5050505050809150506120396020830184611fd1565b6000806040838503121561254057600080fd5b825167ffffffffffffffff8082111561255857600080fd5b818501915085601f83011261256c57600080fd5b8151602082821115612580576125806120eb565b8160051b9250612591818401612101565b82815292840181019281810190898511156125ab57600080fd5b948201945b848610156125d557855193506125c584612007565b83825294820194908201906125b0565b9790910151969896975050505050505056fea2646970667358221220662712b8ee1580fcb91be9c1daa06f67176928cd37faed2d599611381e78254764736f6c63430008190033",
+  "deployedBytecode": "0x6080604052600436106101d85760003560e01c80638f32d59b11610102578063db27b50b11610095578063ecd8677811610064578063ecd86778146105b7578063ed355529146105d7578063f2fde38b146105ec578063faaf9ca61461060c576101d8565b8063db27b50b14610541578063e20fcf0014610561578063e2384cb314610576578063ea6d4a9b14610597576101d8565b8063bd786f57116100d1578063bd786f57146104be578063cea1c338146104de578063d826f88f1461050c578063daea85c514610521576101d8565b80638f32d59b146104545780639ab29b70146104745780639dc954ba146104895780639e59eb141461049e576101d8565b8063518592da1161017a57806362aa3e911161014957806362aa3e91146103c9578063715018a6146104015780637bfaf7b7146104165780638da5cb5b14610436576101d8565b8063518592da1461033757806358c3b870146103575780635f8798c0146103795780635f9b0df7146103a9576101d8565b806327704cb5116101b657806327704cb51461029f578063343e2c85146102bf57806348409096146102fe57806349a3fb4514610313576101d8565b80630287d126146102385780631804692f1461024f578063200d2ed21461026f575b60405162461bcd60e51b815260206004820152602a60248201527f5468697320636f6e747261637420646f6573206e6f742061636365707420616e60448201526979207061796d656e747360b01b60648201526084015b60405180910390fd5b34801561024457600080fd5b5061024d610621565b005b34801561025b57600080fd5b5061024d61026a366004611fa2565b6107f0565b34801561027b57600080fd5b506003546102899060ff1681565b6040516102969190611ff3565b60405180910390f35b3480156102ab57600080fd5b5061024d6102ba36600461201c565b61090b565b3480156102cb57600080fd5b506102df6102da366004611fa2565b610ac0565b604080516001600160a01b039093168352602083019190915201610296565b34801561030a57600080fd5b5061024d610af8565b34801561031f57600080fd5b5061032960045481565b604051908152602001610296565b34801561034357600080fd5b5061032961035236600461201c565b610baf565b34801561036357600080fd5b5061036c610c11565b6040516102969190612040565b34801561038557600080fd5b5061039961039436600461201c565b610c9f565b6040519015158152602001610296565b3480156103b557600080fd5b5061024d6103c436600461201c565b610d49565b3480156103d557600080fd5b506103e96103e4366004611fa2565b610e8c565b6040516001600160a01b039091168152602001610296565b34801561040d57600080fd5b5061024d610ebb565b34801561042257600080fd5b5061032961043136600461201c565b610f2f565b34801561044257600080fd5b506000546001600160a01b03166103e9565b34801561046057600080fd5b506000546001600160a01b03163314610399565b34801561048057600080fd5b50610329610f87565b34801561049557600080fd5b50600154610329565b3480156104aa57600080fd5b506102df6104b936600461201c565b610fdb565b3480156104ca57600080fd5b506103996104d936600461201c565b61108e565b3480156104ea57600080fd5b506104fe6104f936600461201c565b611132565b60405161029692919061208f565b34801561051857600080fd5b5061024d611219565b34801561052d57600080fd5b5061024d61053c36600461201c565b611347565b34801561054d57600080fd5b5061024d61055c36600461201c565b61152d565b34801561056d57600080fd5b506103296116c2565b34801561058257600080fd5b5061039961059136600461201c565b3b151590565b3480156105a357600080fd5b5061024d6105b2366004612132565b61170a565b3480156105c357600080fd5b5061024d6105d23660046121c7565b611832565b3480156105e357600080fd5b50600254610329565b3480156105f857600080fd5b5061024d61060736600461201c565b611a1f565b34801561061857600080fd5b5061024d611a52565b60005b6001548110156107ed57600060018281548110610643576106436121f3565b6000918252602091829020604080518082018252600290930290910180546001600160a01b031683526001810180548351818702810187019094528084529394919385830193928301828280156106c357602002820191906000526020600020905b81546001600160a01b031681526001909101906020018083116106a5575b505050505081525050905060006106de82600001513b151590565b90508015610799576000806106f68460000151611acf565b9150915080846020015151101561071f5760405162461bcd60e51b815260040161022f90612209565b60208401516000805b825181101561076f57610754838281518110610746576107466121f3565b602002602001015186611b48565b15610767578161076381612261565b9250505b600101610728565b50828110156107905760405162461bcd60e51b815260040161022f90612209565b505050506107e3565b8160200151516001146107e35760405162461bcd60e51b8152602060048201526012602482015271454f412073686f756c6420617070726f766560701b604482015260640161022f565b5050600101610624565b50565b6000546001600160a01b0316331461081a5760405162461bcd60e51b815260040161022f9061227a565b60045443106108915760405162461bcd60e51b815260206004820152603e60248201527f63757272656e7420626c6f636b2073686f756c646e277420626520706173742060448201527f7468652063757272656e746c792073657420626c6f636b206e756d6265720000606482015260840161022f565b8043106109065760405162461bcd60e51b815260206004820152603a60248201527f726562616c616e636520626c6f636b4e756d6265722073686f756c642062652060448201527f67726561746572207468616e2063757272656e7420626c6f636b000000000000606482015260840161022f565b600455565b6000546001600160a01b031633146109355760405162461bcd60e51b815260040161022f9061227a565b6000806003805460ff169081111561094f5761094f611fbb565b1461096c5760405162461bcd60e51b815260040161022f906122af565b600061097783610f2f565b905060001981036109c55760405162461bcd60e51b8152602060048201526018602482015277105b1b1bd8d85d1959081b9bdd081c9959da5cdd195c995960421b604482015260640161022f565b600280546109d5906001906122e6565b815481106109e5576109e56121f3565b906000526020600020906002020160028281548110610a0657610a066121f3565b600091825260209091208254600292830290910180546001600160a01b0319166001600160a01b03909216919091178155600192830154920191909155805480610a5257610a526122f9565b600082815260208082206002600019949094019384020180546001600160a01b03191681556001019190915591556040516001600160a01b03851681527ff8f67464bea52432645435be9c46c427173a75aefaa1001272e08a4b8572f06e91015b60405180910390a1505050565b60028181548110610ad057600080fd5b6000918252602090912060029091020180546001909101546001600160a01b03909116915082565b6000546001600160a01b03163314610b225760405162461bcd60e51b815260040161022f9061227a565b6000806003805460ff1690811115610b3c57610b3c611fbb565b14610b595760405162461bcd60e51b815260040161022f906122af565b600380546001919060ff191682805b02179055506003546040517fafa725e7f44cadb687a7043853fa1a7e7b8f0da74ce87ec546e9420f04da8c1e91610ba49160ff90911690611ff3565b60405180910390a150565b6000805b600154811015610c0757826001600160a01b031660018281548110610bda57610bda6121f3565b60009182526020909120600290910201546001600160a01b031603610bff5792915050565b600101610bb3565b5060001992915050565b60058054610c1e9061230f565b80601f0160208091040260200160405190810160405280929190818152602001828054610c4a9061230f565b8015610c975780601f10610c6c57610100808354040283529160200191610c97565b820191906000526020600020905b815481529060010190602001808311610c7a57829003601f168201915b505050505081565b60006001600160a01b038216610ce95760405162461bcd60e51b815260206004820152600f60248201526e496e76616c6964206164647265737360881b604482015260640161022f565b60005b600154811015610d4357826001600160a01b031660018281548110610d1357610d136121f3565b60009182526020909120600290910201546001600160a01b031603610d3b5750600192915050565b600101610cec565b50919050565b6000546001600160a01b03163314610d735760405162461bcd60e51b815260040161022f9061227a565b6000806003805460ff1690811115610d8d57610d8d611fbb565b14610daa5760405162461bcd60e51b815260040161022f906122af565b610db382610c9f565b15610e0c5760405162461bcd60e51b8152602060048201526024808201527f5a65726f6564206164647265737320697320616c726561647920726567697374604482015263195c995960e21b606482015260840161022f565b6001805480820182556000919091526002027fb10e2d527612073b26eecdfd717e6a320cf44b4afac2b0732d9fcbe2b7fa0cf60180546001600160a01b0384166001600160a01b0319909116811782556040519081527fa9a4f3b74b03e48e76814dbc308d3f20104d608c67a42a7ae678d0945daa8e9290602001610ab3565b60018181548110610e9c57600080fd5b60009182526020909120600290910201546001600160a01b0316905081565b6000546001600160a01b03163314610ee55760405162461bcd60e51b815260040161022f9061227a565b600080546040516001600160a01b03909116907f8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e0908390a3600080546001600160a01b0319169055565b6000805b600254811015610c0757826001600160a01b031660028281548110610f5a57610f5a6121f3565b60009182526020909120600290910201546001600160a01b031603610f7f5792915050565b600101610f33565b6000805b600154811015610fd75760018181548110610fa857610fa86121f3565b6000918252602090912060029091020154610fcd906001600160a01b03163183612343565b9150600101610f8b565b5090565b6000806000610fe984610f2f565b905060001981036110375760405162461bcd60e51b8152602060048201526018602482015277105b1b1bd8d85d1959081b9bdd081c9959da5cdd195c995960421b604482015260640161022f565b60006002828154811061104c5761104c6121f3565b60009182526020918290206040805180820190915260029092020180546001600160a01b03168083526001909101549190920181905290969095509350505050565b60006001600160a01b0382166110d85760405162461bcd60e51b815260206004820152600f60248201526e496e76616c6964206164647265737360881b604482015260640161022f565b60005b600254811015610d4357826001600160a01b031660028281548110611102576111026121f3565b60009182526020909120600290910201546001600160a01b03160361112a5750600192915050565b6001016110db565b60006060600061114184610baf565b905060001981036111645760405162461bcd60e51b815260040161022f90612356565b600060018281548110611179576111796121f3565b6000918252602091829020604080518082018252600290930290910180546001600160a01b031683526001810180548351818702810187019094528084529394919385830193928301828280156111f957602002820191906000526020600020905b81546001600160a01b031681526001909101906020018083116111db575b505050505081525050905080600001518160200151935093505050915091565b6000546001600160a01b031633146112435760405162461bcd60e51b815260040161022f9061227a565b6003805460ff168181111561125a5761125a611fbb565b036112ba5760405162461bcd60e51b815260206004820152602a60248201527f436f6e74726163742069732066696e616c697a65642c2063616e6e6f742072656044820152697365742076616c75657360b01b606482015260840161022f565b60045443106113175760405162461bcd60e51b8152602060048201526024808201527f526562616c616e636520626c6f636b6e756d62657220616c72656164792070616044820152631cdcd95960e21b606482015260840161022f565b61132360016000611e53565b61132f60026000611e74565b61133b60056000611e95565b6003805460ff19169055565b6001806003805460ff169081111561136157611361611fbb565b1461137e5760405162461bcd60e51b815260040161022f906122af565b61138782610c9f565b6113e95760405162461bcd60e51b815260206004820152602d60248201527f7a65726f6564206e6565647320746f206265207265676973746572656420626560448201526c199bdc9948185c1c1c9bdd985b609a1b606482015260840161022f565b813b15158061146557336001600160a01b038416146114565760405162461bcd60e51b815260206004820152602360248201527f7a65726f656441646472657373206973206e6f7420746865206d73672e73656e6044820152623232b960e91b606482015260840161022f565b6114608333611b9b565b505050565b60008061147185611acf565b9150915081516000036114c65760405162461bcd60e51b815260206004820152601a60248201527f61646d696e206c6973742063616e6e6f7420626520656d707479000000000000604482015260640161022f565b6114d03383611b48565b61151c5760405162461bcd60e51b815260206004820152601b60248201527f6d73672e73656e646572206973206e6f74207468652061646d696e0000000000604482015260640161022f565b6115268533611b9b565b5050505050565b6000546001600160a01b031633146115575760405162461bcd60e51b815260040161022f9061227a565b6000806003805460ff169081111561157157611571611fbb565b1461158e5760405162461bcd60e51b815260040161022f906122af565b600061159983610baf565b905060001981036115bc5760405162461bcd60e51b815260040161022f90612356565b600180546115cb9082906122e6565b815481106115db576115db6121f3565b9060005260206000209060020201600182815481106115fc576115fc6121f3565b60009182526020909120825460029092020180546001600160a01b0319166001600160a01b039092169190911781556001808301805461163f9284019190611ecf565b509050506001805480611654576116546122f9565b60008281526020812060026000199093019283020180546001600160a01b0319168155906116856001830182611f1b565b505090556040516001600160a01b03841681527f8a654c98d0a7856a8d216c621bb8073316efcaa2b65774d2050c4c1fc7a85a0c90602001610ab3565b6000805b600254811015610fd757600281815481106116e3576116e36121f3565b906000526020600020906002020160010154826117009190612343565b91506001016116c6565b6000546001600160a01b031633146117345760405162461bcd60e51b815260040161022f9061227a565b6002806003805460ff169081111561174e5761174e611fbb565b1461176b5760405162461bcd60e51b815260040161022f906122af565b600561177783826123d5565b506003805460ff1916811781556040517f8f8636c7757ca9b7d154e1d44ca90d8e8c885b9eac417c59bbf8eb7779ca6404916117b69160059190612495565b60405180910390a1600454431161182e5760405162461bcd60e51b815260206004820152603660248201527f436f6e74726163742063616e206f6e6c792066696e616c697a6520616674657260448201527520657865637574696e6720726562616c616e63696e6760501b606482015260840161022f565b5050565b6000546001600160a01b0316331461185c5760405162461bcd60e51b815260040161022f9061227a565b6000806003805460ff169081111561187657611876611fbb565b146118935760405162461bcd60e51b815260040161022f906122af565b61189c8361108e565b156118f95760405162461bcd60e51b815260206004820152602760248201527f416c6c6f6361746564206164647265737320697320616c7265616479207265676044820152661a5cdd195c995960ca1b606482015260840161022f565b816000036119495760405162461bcd60e51b815260206004820152601960248201527f416d6f756e742063616e6e6f742062652073657420746f203000000000000000604482015260640161022f565b6040805180820182526001600160a01b038581168083526020808401878152600280546001810182556000829052865191027f405787fa12a823e0f2b7631cc41b3ba8828b3321ca811111fa75cd3aa3bb5ace81018054929096166001600160a01b031990921691909117909455517f405787fa12a823e0f2b7631cc41b3ba8828b3321ca811111fa75cd3aa3bb5acf90930192909255835190815290810185905290917fab5b2126f71ee7e0b39eadc53fb5d08a8f6c68dc61795fa05ed7d176cd2665ed91015b60405180910390a150505050565b6000546001600160a01b03163314611a495760405162461bcd60e51b815260040161022f9061227a565b6107ed81611d93565b6000546001600160a01b03163314611a7c5760405162461bcd60e51b815260040161022f9061227a565b6001806003805460ff1690811115611a9657611a96611fbb565b14611ab35760405162461bcd60e51b815260040161022f906122af565b611abb610621565b600380546002919060ff1916600183610b68565b6060600080839050806001600160a01b0316631865c57d6040518163ffffffff1660e01b8152600401600060405180830381865afa158015611b15573d6000803e3d6000fd5b505050506040513d6000823e601f3d908101601f19168201604052611b3d919081019061252d565b909590945092505050565b6000805b8251811015611b9457828181518110611b6757611b676121f3565b60200260200101516001600160a01b0316846001600160a01b031603611b8c57600191505b600101611b4c565b5092915050565b6000611ba683610baf565b90506000198103611bc95760405162461bcd60e51b815260040161022f90612356565b600060018281548110611bde57611bde6121f3565b9060005260206000209060020201600101805480602002602001604051908101604052809291908181526020018280548015611c4357602002820191906000526020600020905b81546001600160a01b03168152600190910190602001808311611c25575b5050505050905060005b8151811015611ccb57836001600160a01b0316828281518110611c7257611c726121f3565b60200260200101516001600160a01b031603611cc35760405162461bcd60e51b815260206004820152601060248201526f105b1c9958591e48185c1c1c9bdd995960821b604482015260640161022f565b600101611c4d565b5060018281548110611cdf57611cdf6121f3565b600091825260208083206001600290930201820180548084018255908452922090910180546001600160a01b0386166001600160a01b031990911617905580547f80da462ebfbe41cfc9bc015e7a9a3c7a2a73dbccede72d8ceb583606c27f8f9091869186919086908110611d5657611d566121f3565b600091825260209182902060016002909202010154604080516001600160a01b039586168152949093169184019190915290820152606001611a11565b6001600160a01b038116611df85760405162461bcd60e51b815260206004820152602660248201527f4f776e61626c653a206e6577206f776e657220697320746865207a65726f206160448201526564647265737360d01b606482015260840161022f565b600080546040516001600160a01b03808516939216917f8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e091a3600080546001600160a01b0319166001600160a01b0392909216919091179055565b50805460008255600202906000526020600020908101906107ed9190611f39565b50805460008255600202906000526020600020908101906107ed9190611f67565b508054611ea19061230f565b6000825580601f10611eb1575050565b601f0160209004906000526020600020908101906107ed9190611f8d565b828054828255906000526020600020908101928215611f0f5760005260206000209182015b82811115611f0f578254825591600101919060010190611ef4565b50610fd7929150611f8d565b50805460008255906000526020600020908101906107ed9190611f8d565b80821115610fd75780546001600160a01b03191681556000611f5e6001830182611f1b565b50600201611f39565b5b80821115610fd75780546001600160a01b031916815560006001820155600201611f68565b5b80821115610fd75760008155600101611f8e565b600060208284031215611fb457600080fd5b5035919050565b634e487b7160e01b600052602160045260246000fd5b60048110611fef57634e487b7160e01b600052602160045260246000fd5b9052565b602081016120018284611fd1565b92915050565b6001600160a01b03811681146107ed57600080fd5b60006020828403121561202e57600080fd5b813561203981612007565b9392505050565b60006020808352835180602085015260005b8181101561206e57858101830151858201604001528201612052565b506000604082860101526040601f19601f8301168501019250505092915050565b6001600160a01b038381168252604060208084018290528451918401829052600092858201929091906060860190855b818110156120dd5785518516835294830194918301916001016120bf565b509098975050505050505050565b634e487b7160e01b600052604160045260246000fd5b604051601f8201601f1916810167ffffffffffffffff8111828210171561212a5761212a6120eb565b604052919050565b6000602080838503121561214557600080fd5b823567ffffffffffffffff8082111561215d57600080fd5b818501915085601f83011261217157600080fd5b813581811115612183576121836120eb565b612195601f8201601f19168501612101565b915080825286848285010111156121ab57600080fd5b8084840185840137600090820190930192909252509392505050565b600080604083850312156121da57600080fd5b82356121e581612007565b946020939093013593505050565b634e487b7160e01b600052603260045260246000fd5b60208082526022908201527f6d696e2072657175697265642061646d696e732073686f756c6420617070726f604082015261766560f01b606082015260800190565b634e487b7160e01b600052601160045260246000fd5b6000600182016122735761227361224b565b5060010190565b6020808252818101527f4f776e61626c653a2063616c6c6572206973206e6f7420746865206f776e6572604082015260600190565b6020808252601c908201527f4e6f7420696e207468652064657369676e617465642073746174757300000000604082015260600190565b818103818111156120015761200161224b565b634e487b7160e01b600052603160045260246000fd5b600181811c9082168061232357607f821691505b602082108103610d4357634e487b7160e01b600052602260045260246000fd5b808201808211156120015761200161224b565b60208082526015908201527416995c9bd959081b9bdd081c9959da5cdd195c9959605a1b604082015260600190565b601f821115611460576000816000526020600020601f850160051c810160208610156123ae5750805b601f850160051c820191505b818110156123cd578281556001016123ba565b505050505050565b815167ffffffffffffffff8111156123ef576123ef6120eb565b612403816123fd845461230f565b84612385565b602080601f83116001811461243857600084156124205750858301515b600019600386901b1c1916600185901b1785556123cd565b600085815260208120601f198616915b8281101561246757888601518255948401946001909101908401612448565b50858210156124855787850151600019600388901b60f8161c191681555b5050505050600190811b01905550565b6040815260008084546124a78161230f565b80604086015260606001808416600081146124c957600181146124e557612517565b60ff1985166060890152606084151560051b8901019550612517565b8960005260208060002060005b8681101561250d5781548b82018701529084019082016124f2565b8a01606001975050505b5050505050809150506120396020830184611fd1565b6000806040838503121561254057600080fd5b825167ffffffffffffffff8082111561255857600080fd5b818501915085601f83011261256c57600080fd5b8151602082821115612580576125806120eb565b8160051b9250612591818401612101565b82815292840181019281810190898511156125ab57600080fd5b948201945b848610156125d557855193506125c584612007565b83825294820194908201906125b0565b9790910151969896975050505050505056fea2646970667358221220662712b8ee1580fcb91be9c1daa06f67176928cd37faed2d599611381e78254764736f6c63430008190033",
+  "devdoc": {
+    "events": {
+      "AllocatedRegistered(address,uint256)": {
+        "details": "Emitted when an Allocated is registered"
+      },
+      "AllocatedRemoved(address)": {
+        "details": "Emitted when an Allocated is removed"
+      },
+      "Approved(address,address,uint256)": {
+        "details": "Emitted when an admin approves the zeroed address."
+      },
+      "ContractDeployed(uint8,uint256,uint256)": {
+        "details": "Emitted when the contract is deployed `rebalanceBlockNumber` is the target block number of the execution the rebalance in Core `deployedBlockNumber` is the current block number when its deployed"
+      },
+      "Finalized(string,uint8)": {
+        "details": "Emitted when the contract is finalized memo - is the result of the treasury fund rebalancing"
+      },
+      "StatusChanged(uint8)": {
+        "details": "Emitted when the contract status changes"
+      },
+      "ZeroedRegistered(address)": {
+        "details": "Emitted when a Zeroed is registered"
+      },
+      "ZeroedRemoved(address)": {
+        "details": "Emitted when a Zeroed is removed"
+      }
+    },
+    "kind": "dev",
+    "methods": {
+      "allocatedExists(address)": {
+        "details": "check whether _allocatedAddress is registered",
+        "params": {
+          "_allocatedAddress": "is the address of the allocated"
+        }
+      },
+      "approve(address)": {
+        "details": "zeroedAddress can be a EOA or a contract address. To approve:      If the zeroedAddress is a EOA, the msg.sender should be the EOA address      If the zeroedAddress is a Contract, the msg.sender should be one of the contract `admin`.      It uses the getState() function in the zeroedAddress contract to get the admin details.",
+        "params": {
+          "_zeroedAddress": "is the address of the zeroed"
+        }
+      },
+      "checkZeroedsApproved()": {
+        "details": "verify if quorom reached for the zeroed approvals"
+      },
+      "constructor": {
+        "params": {
+          "_rebalanceBlockNumber": "is the target block number of the execution the rebalance in Core"
+        }
+      },
+      "finalizeApproval()": {
+        "details": "finalizeApproval sets the status to Approved,      After this stage, approvals will be restricted."
+      },
+      "finalizeContract(string)": {
+        "details": "sets the status of the contract to Finalize. Once finalized the storage data of the contract cannot be modified",
+        "params": {
+          "_memo": "is the result of the rebalance after executing successfully in the core."
+        }
+      },
+      "finalizeRegistration()": {
+        "details": "finalizeRegistration sets the status to Registered,      After this stage, registrations will be restricted."
+      },
+      "getAllocated(address)": {
+        "details": "to get allocated details by allocatedAddress",
+        "params": {
+          "_allocatedAddress": "is the address of the allocated"
+        },
+        "returns": {
+          "_0": "allocated is the address of the allocated",
+          "_1": "amount is the fund allocated to the allocated"
+        }
+      },
+      "getAllocatedCount()": {
+        "details": "gets the length of allocateds list"
+      },
+      "getAllocatedIndex(address)": {
+        "details": "get index of the allocated in the allocateds array",
+        "params": {
+          "_allocatedAddress": "is the address of the allocated"
+        }
+      },
+      "getTreasuryAmount()": {
+        "details": "to calculate the sum of allocated funds",
+        "returns": {
+          "treasuryAmount": "the sum of funds allocated to allocateds"
+        }
+      },
+      "getZeroed(address)": {
+        "details": "to get zeroed details by zeroedAddress",
+        "params": {
+          "_zeroedAddress": "is the address of the zeroed"
+        }
+      },
+      "getZeroedCount()": {
+        "details": "gets the length of zeroeds list"
+      },
+      "getZeroedIndex(address)": {
+        "details": "get index of the zeroed in the zeroeds array",
+        "params": {
+          "_zeroedAddress": "is the address of the zeroed"
+        }
+      },
+      "isContractAddr(address)": {
+        "details": "Helper function to check the address is contract addr or EOA"
+      },
+      "isOwner()": {
+        "details": "Returns true if the caller is the current owner."
+      },
+      "owner()": {
+        "details": "Returns the address of the current owner."
+      },
+      "registerAllocated(address,uint256)": {
+        "details": "registers allocated address and its fund distribution",
+        "params": {
+          "_allocatedAddress": "is the address of the allocated",
+          "_amount": "is the fund to be allocated to the allocated"
+        }
+      },
+      "registerZeroed(address)": {
+        "details": "registers zeroed details",
+        "params": {
+          "_zeroedAddress": "is the address of the zeroed"
+        }
+      },
+      "removeAllocated(address)": {
+        "details": "remove the allocated details from the array",
+        "params": {
+          "_allocatedAddress": "is the address of the allocated"
+        }
+      },
+      "removeZeroed(address)": {
+        "details": "remove the zeroed details from the array",
+        "params": {
+          "_zeroedAddress": "is the address of the zeroed"
+        }
+      },
+      "renounceOwnership()": {
+        "details": "Leaves the contract without owner. It will not be possible to call `onlyOwner` functions anymore. Can only be called by the current owner. > Note: Renouncing ownership will leave the contract without an owner, thereby removing any functionality that is only available to the owner."
+      },
+      "reset()": {
+        "details": "resets all storage values to empty objects except targetBlockNumber"
+      },
+      "sumOfZeroedBalance()": {
+        "details": "to calculate the sum of zeroeds balances",
+        "returns": {
+          "zeroedsBalance": "the sum of balances of zeroeds"
+        }
+      },
+      "transferOwnership(address)": {
+        "details": "Transfers ownership of the contract to a new account (`newOwner`). Can only be called by the current owner."
+      },
+      "updateRebalanceBlocknumber(uint256)": {
+        "details": "updates rebalance block number",
+        "params": {
+          "_rebalanceBlockNumber": "is the updated target block number of the execution the rebalance in Core"
+        }
+      },
+      "zeroedExists(address)": {
+        "details": "check whether zeroedAddress is registered",
+        "params": {
+          "_zeroedAddress": "is the address of the zeroed"
+        }
+      }
+    },
+    "title": "Smart contract to record the rebalance of treasury funds. This contract is to mainly record the addresses which holds the treasury funds before and after rebalancing. It facilates approval and redistributing to new addresses. Core will execute the re-distribution by reading this contract.",
+    "version": 1
+  },
+  "userdoc": {
+    "kind": "user",
+    "methods": {
+      "constructor": {
+        "notice": "Constructor"
+      },
+      "zeroeds(uint256)": {
+        "notice": "Storage"
+      }
+    },
+    "version": 1
+  },
+  "storageLayout": {
+    "storage": [
+      {
+        "astId": 4,
+        "contract": "contracts/rebalance/TreasuryRebalanceV2.sol:TreasuryRebalanceV2",
+        "label": "_owner",
+        "offset": 0,
+        "slot": "0",
+        "type": "t_address"
+      },
+      {
+        "astId": 1465,
+        "contract": "contracts/rebalance/TreasuryRebalanceV2.sol:TreasuryRebalanceV2",
+        "label": "zeroeds",
+        "offset": 0,
+        "slot": "1",
+        "type": "t_array(t_struct(Zeroed)1399_storage)dyn_storage"
+      },
+      {
+        "astId": 1469,
+        "contract": "contracts/rebalance/TreasuryRebalanceV2.sol:TreasuryRebalanceV2",
+        "label": "allocateds",
+        "offset": 0,
+        "slot": "2",
+        "type": "t_array(t_struct(Allocated)1405_storage)dyn_storage"
+      },
+      {
+        "astId": 1472,
+        "contract": "contracts/rebalance/TreasuryRebalanceV2.sol:TreasuryRebalanceV2",
+        "label": "status",
+        "offset": 0,
+        "slot": "3",
+        "type": "t_enum(Status)1392"
+      },
+      {
+        "astId": 1474,
+        "contract": "contracts/rebalance/TreasuryRebalanceV2.sol:TreasuryRebalanceV2",
+        "label": "rebalanceBlockNumber",
+        "offset": 0,
+        "slot": "4",
+        "type": "t_uint256"
+      },
+      {
+        "astId": 1476,
+        "contract": "contracts/rebalance/TreasuryRebalanceV2.sol:TreasuryRebalanceV2",
+        "label": "memo",
+        "offset": 0,
+        "slot": "5",
+        "type": "t_string_storage"
+      }
+    ],
+    "types": {
+      "t_address": {
+        "encoding": "inplace",
+        "label": "address",
+        "numberOfBytes": "20"
+      },
+      "t_array(t_address)dyn_storage": {
+        "base": "t_address",
+        "encoding": "dynamic_array",
+        "label": "address[]",
+        "numberOfBytes": "32"
+      },
+      "t_array(t_struct(Allocated)1405_storage)dyn_storage": {
+        "base": "t_struct(Allocated)1405_storage",
+        "encoding": "dynamic_array",
+        "label": "struct TreasuryRebalanceV2.Allocated[]",
+        "numberOfBytes": "32"
+      },
+      "t_array(t_struct(Zeroed)1399_storage)dyn_storage": {
+        "base": "t_struct(Zeroed)1399_storage",
+        "encoding": "dynamic_array",
+        "label": "struct TreasuryRebalanceV2.Zeroed[]",
+        "numberOfBytes": "32"
+      },
+      "t_enum(Status)1392": {
+        "encoding": "inplace",
+        "label": "enum TreasuryRebalanceV2.Status",
+        "numberOfBytes": "1"
+      },
+      "t_string_storage": {
+        "encoding": "bytes",
+        "label": "string",
+        "numberOfBytes": "32"
+      },
+      "t_struct(Allocated)1405_storage": {
+        "encoding": "inplace",
+        "label": "struct TreasuryRebalanceV2.Allocated",
+        "members": [
+          {
+            "astId": 1402,
+            "contract": "contracts/rebalance/TreasuryRebalanceV2.sol:TreasuryRebalanceV2",
+            "label": "addr",
+            "offset": 0,
+            "slot": "0",
+            "type": "t_address"
+          },
+          {
+            "astId": 1404,
+            "contract": "contracts/rebalance/TreasuryRebalanceV2.sol:TreasuryRebalanceV2",
+            "label": "amount",
+            "offset": 0,
+            "slot": "1",
+            "type": "t_uint256"
+          }
+        ],
+        "numberOfBytes": "64"
+      },
+      "t_struct(Zeroed)1399_storage": {
+        "encoding": "inplace",
+        "label": "struct TreasuryRebalanceV2.Zeroed",
+        "members": [
+          {
+            "astId": 1395,
+            "contract": "contracts/rebalance/TreasuryRebalanceV2.sol:TreasuryRebalanceV2",
+            "label": "addr",
+            "offset": 0,
+            "slot": "0",
+            "type": "t_address"
+          },
+          {
+            "astId": 1398,
+            "contract": "contracts/rebalance/TreasuryRebalanceV2.sol:TreasuryRebalanceV2",
+            "label": "approvers",
+            "offset": 0,
+            "slot": "1",
+            "type": "t_array(t_address)dyn_storage"
+          }
+        ],
+        "numberOfBytes": "64"
+      },
+      "t_uint256": {
+        "encoding": "inplace",
+        "label": "uint256",
+        "numberOfBytes": "32"
+      }
+    }
+  }
+}

@@ -1,0 +1,968 @@
+{
+  "address": "0xF45c37c265f148894D6d9A4c066aFaAB00557c9c",
+  "abi": [
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "initialOwner",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "nonpayable",
+      "type": "constructor"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "owner",
+          "type": "address"
+        }
+      ],
+      "name": "OwnableInvalidOwner",
+      "type": "error"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "account",
+          "type": "address"
+        }
+      ],
+      "name": "OwnableUnauthorizedAccount",
+      "type": "error"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "uint256",
+          "name": "trackerId",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "trackStart",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "trackEnd",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256[]",
+          "name": "gcIds",
+          "type": "uint256[]"
+        }
+      ],
+      "name": "CreateTracker",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "previousOwner",
+          "type": "address"
+        },
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "newOwner",
+          "type": "address"
+        }
+      ],
+      "name": "OwnershipTransferred",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "uint256",
+          "name": "trackerId",
+          "type": "uint256"
+        },
+        {
+          "indexed": true,
+          "internalType": "uint256",
+          "name": "gcId",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "internalType": "address",
+          "name": "staking",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "stakingBalance",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "gcBalance",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "gcVote",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "totalVotes",
+          "type": "uint256"
+        }
+      ],
+      "name": "RefreshStake",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "uint256",
+          "name": "gcId",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "internalType": "address",
+          "name": "staking",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "address",
+          "name": "voter",
+          "type": "address"
+        }
+      ],
+      "name": "RefreshVoter",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "uint256",
+          "name": "trackerId",
+          "type": "uint256"
+        }
+      ],
+      "name": "RetireTracker",
+      "type": "event"
+    },
+    {
+      "inputs": [],
+      "name": "ADDRESS_BOOK_ADDRESS",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "CONTRACT_TYPE",
+      "outputs": [
+        {
+          "internalType": "string",
+          "name": "",
+          "type": "string"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "MIN_STAKE",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "REGISTRY_ADDRESS",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "VERSION",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "trackStart",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "trackEnd",
+          "type": "uint256"
+        }
+      ],
+      "name": "createTracker",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "trackerId",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "name": "gcIdToVoter",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "trackerId",
+          "type": "uint256"
+        }
+      ],
+      "name": "getAllTrackedGCs",
+      "outputs": [
+        {
+          "internalType": "uint256[]",
+          "name": "gcIds",
+          "type": "uint256[]"
+        },
+        {
+          "internalType": "uint256[]",
+          "name": "gcBalances",
+          "type": "uint256[]"
+        },
+        {
+          "internalType": "uint256[]",
+          "name": "gcVotes",
+          "type": "uint256[]"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getAllTrackerIds",
+      "outputs": [
+        {
+          "internalType": "uint256[]",
+          "name": "",
+          "type": "uint256[]"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getLastTrackerId",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getLiveTrackerIds",
+      "outputs": [
+        {
+          "internalType": "uint256[]",
+          "name": "",
+          "type": "uint256[]"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "trackerId",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "gcId",
+          "type": "uint256"
+        }
+      ],
+      "name": "getTrackedGC",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "gcBalance",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "gcVotes",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "trackerId",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "gcId",
+          "type": "uint256"
+        }
+      ],
+      "name": "getTrackedGCBalance",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "trackerId",
+          "type": "uint256"
+        }
+      ],
+      "name": "getTrackerSummary",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "trackStart",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "trackEnd",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "numGCs",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "totalVotes",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "numEligible",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "trackerId",
+          "type": "uint256"
+        },
+        {
+          "internalType": "address",
+          "name": "staking",
+          "type": "address"
+        }
+      ],
+      "name": "isCLPool",
+      "outputs": [
+        {
+          "internalType": "bool",
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "staking",
+          "type": "address"
+        }
+      ],
+      "name": "isCnStakingV2",
+      "outputs": [
+        {
+          "internalType": "bool",
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "owner",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "pool",
+          "type": "address"
+        }
+      ],
+      "name": "readCLPool",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "stakingTracker",
+          "type": "address"
+        },
+        {
+          "internalType": "uint256",
+          "name": "balance",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "staking",
+          "type": "address"
+        }
+      ],
+      "name": "readCnStaking",
+      "outputs": [
+        {
+          "internalType": "bool",
+          "name": "isV2",
+          "type": "bool"
+        },
+        {
+          "internalType": "uint256",
+          "name": "effectiveBalance",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "gcId",
+          "type": "uint256"
+        },
+        {
+          "internalType": "address",
+          "name": "stakingTracker",
+          "type": "address"
+        },
+        {
+          "internalType": "address",
+          "name": "voterAddress",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "staking",
+          "type": "address"
+        }
+      ],
+      "name": "refreshStake",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "staking",
+          "type": "address"
+        }
+      ],
+      "name": "refreshVoter",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "renounceOwnership",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "trackerId",
+          "type": "uint256"
+        },
+        {
+          "internalType": "address",
+          "name": "staking",
+          "type": "address"
+        }
+      ],
+      "name": "stakingToGCId",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "newOwner",
+          "type": "address"
+        }
+      ],
+      "name": "transferOwnership",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "name": "voterToGCId",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    }
+  ],
+  "transactionHash": "0xcdfe8f2b17825b6a8f178b79226c0bf94a920f3e5e21d608fe176118e8c0709b",
+  "receipt": {
+    "to": null,
+    "from": "0x86a08e68Ebd2EdDa0d41f6965b90d9daeF62461d",
+    "contractAddress": "0xF45c37c265f148894D6d9A4c066aFaAB00557c9c",
+    "transactionIndex": 5,
+    "gasUsed": "2696523",
+    "logsBloom": "0x00000000000000000000000000000000010000000004000000800000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001000000000000000000000100000000000000020000000000000000000800000000000000000000000000000000420000000000000000000000000000000000000000000000000000000000000000080000000000000000000000000000000000000000000000000001000000000000000000000000000000000000000000000000000000000000000000000020000000000000000000000000000000000000000000000000000000000000000000",
+    "blockHash": "0x900c3c53f7968ae5c420768fc73fbabcb39458dab76e9203ae3e01e792606b0b",
+    "transactionHash": "0xcdfe8f2b17825b6a8f178b79226c0bf94a920f3e5e21d608fe176118e8c0709b",
+    "logs": [
+      {
+        "transactionIndex": 5,
+        "blockNumber": 187738839,
+        "transactionHash": "0xcdfe8f2b17825b6a8f178b79226c0bf94a920f3e5e21d608fe176118e8c0709b",
+        "address": "0xF45c37c265f148894D6d9A4c066aFaAB00557c9c",
+        "topics": [
+          "0x8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e0",
+          "0x0000000000000000000000000000000000000000000000000000000000000000",
+          "0x000000000000000000000000ca4ef926634a530f12e55a0aee87f195a7b22aa3"
+        ],
+        "data": "0x",
+        "logIndex": 1,
+        "blockHash": "0x900c3c53f7968ae5c420768fc73fbabcb39458dab76e9203ae3e01e792606b0b"
+      }
+    ],
+    "blockNumber": 187738839,
+    "cumulativeGasUsed": "3029231",
+    "status": 1,
+    "byzantium": true
+  },
+  "args": [
+    "0xca4ef926634a530f12e55a0aee87f195a7b22aa3"
+  ],
+  "numDeployments": 1,
+  "solcInputHash": "a503cb00ee719805b19c1b39315bafcb",
+  "metadata": "{\"compiler\":{\"version\":\"0.8.25+commit.b61c2a91\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"inputs\":[{\"internalType\":\"address\",\"name\":\"initialOwner\",\"type\":\"address\"}],\"stateMutability\":\"nonpayable\",\"type\":\"constructor\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"owner\",\"type\":\"address\"}],\"name\":\"OwnableInvalidOwner\",\"type\":\"error\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"account\",\"type\":\"address\"}],\"name\":\"OwnableUnauthorizedAccount\",\"type\":\"error\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"uint256\",\"name\":\"trackerId\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"trackStart\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"trackEnd\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256[]\",\"name\":\"gcIds\",\"type\":\"uint256[]\"}],\"name\":\"CreateTracker\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"previousOwner\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"newOwner\",\"type\":\"address\"}],\"name\":\"OwnershipTransferred\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"uint256\",\"name\":\"trackerId\",\"type\":\"uint256\"},{\"indexed\":true,\"internalType\":\"uint256\",\"name\":\"gcId\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"address\",\"name\":\"staking\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"stakingBalance\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"gcBalance\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"gcVote\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"totalVotes\",\"type\":\"uint256\"}],\"name\":\"RefreshStake\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"uint256\",\"name\":\"gcId\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"address\",\"name\":\"staking\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"address\",\"name\":\"voter\",\"type\":\"address\"}],\"name\":\"RefreshVoter\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"uint256\",\"name\":\"trackerId\",\"type\":\"uint256\"}],\"name\":\"RetireTracker\",\"type\":\"event\"},{\"inputs\":[],\"name\":\"ADDRESS_BOOK_ADDRESS\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"CONTRACT_TYPE\",\"outputs\":[{\"internalType\":\"string\",\"name\":\"\",\"type\":\"string\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"MIN_STAKE\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"REGISTRY_ADDRESS\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"VERSION\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"trackStart\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"trackEnd\",\"type\":\"uint256\"}],\"name\":\"createTracker\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"trackerId\",\"type\":\"uint256\"}],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"name\":\"gcIdToVoter\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"trackerId\",\"type\":\"uint256\"}],\"name\":\"getAllTrackedGCs\",\"outputs\":[{\"internalType\":\"uint256[]\",\"name\":\"gcIds\",\"type\":\"uint256[]\"},{\"internalType\":\"uint256[]\",\"name\":\"gcBalances\",\"type\":\"uint256[]\"},{\"internalType\":\"uint256[]\",\"name\":\"gcVotes\",\"type\":\"uint256[]\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getAllTrackerIds\",\"outputs\":[{\"internalType\":\"uint256[]\",\"name\":\"\",\"type\":\"uint256[]\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getLastTrackerId\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getLiveTrackerIds\",\"outputs\":[{\"internalType\":\"uint256[]\",\"name\":\"\",\"type\":\"uint256[]\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"trackerId\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"gcId\",\"type\":\"uint256\"}],\"name\":\"getTrackedGC\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"gcBalance\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"gcVotes\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"trackerId\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"gcId\",\"type\":\"uint256\"}],\"name\":\"getTrackedGCBalance\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"trackerId\",\"type\":\"uint256\"}],\"name\":\"getTrackerSummary\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"trackStart\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"trackEnd\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"numGCs\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"totalVotes\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"numEligible\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"trackerId\",\"type\":\"uint256\"},{\"internalType\":\"address\",\"name\":\"staking\",\"type\":\"address\"}],\"name\":\"isCLPool\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"staking\",\"type\":\"address\"}],\"name\":\"isCnStakingV2\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"owner\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"pool\",\"type\":\"address\"}],\"name\":\"readCLPool\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"stakingTracker\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"balance\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"staking\",\"type\":\"address\"}],\"name\":\"readCnStaking\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"isV2\",\"type\":\"bool\"},{\"internalType\":\"uint256\",\"name\":\"effectiveBalance\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"gcId\",\"type\":\"uint256\"},{\"internalType\":\"address\",\"name\":\"stakingTracker\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"voterAddress\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"staking\",\"type\":\"address\"}],\"name\":\"refreshStake\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"staking\",\"type\":\"address\"}],\"name\":\"refreshVoter\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"renounceOwnership\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"trackerId\",\"type\":\"uint256\"},{\"internalType\":\"address\",\"name\":\"staking\",\"type\":\"address\"}],\"name\":\"stakingToGCId\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"newOwner\",\"type\":\"address\"}],\"name\":\"transferOwnership\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"name\":\"voterToGCId\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"}],\"devdoc\":{\"errors\":{\"OwnableInvalidOwner(address)\":[{\"details\":\"The owner is not a valid owner account. (eg. `address(0)`)\"}],\"OwnableUnauthorizedAccount(address)\":[{\"details\":\"The caller account is not authorized to perform an operation.\"}]},\"kind\":\"dev\",\"methods\":{\"VERSION()\":{\"details\":\"It remains 1 for the compatibility with the previous version.\"},\"createTracker(uint256,uint256)\":{\"details\":\"Creates a new Tracker and populate initial values from AddressBook Only allowed to the contract owner.\"},\"isCnStakingV2(address)\":{\"details\":\"Test if the given contract is a CnStakingV2 instance Does not check if the contract is registered in AddressBook.\"},\"owner()\":{\"details\":\"Returns the address of the current owner.\"},\"readCLPool(address)\":{\"details\":\"Read balance from CLPool\"},\"readCnStaking(address)\":{\"details\":\"Read various fields from a CnStaking contract\"},\"refreshStake(address)\":{\"details\":\"Re-evaluate Tracker contents related to the staking contract Anyone can call this function, but `staking` must be a staking contract registered in tracker.\"},\"refreshVoter(address)\":{\"details\":\"Re-evaluate voter account mapping related to the staking contract Anyone can call this function, but `staking` must be a staking contract registered to the current AddressBook. Updates the voter account of the GC of the `staking` with respect to the current AddressBook. If the GC already had a voter account, the account will be unregistered. If the new voter account is already appointed for another GC, this function reverts.\"},\"renounceOwnership()\":{\"details\":\"Leaves the contract without owner. It will not be possible to call `onlyOwner` functions. Can only be called by the current owner. NOTE: Renouncing ownership will leave the contract without an owner, thereby disabling any functionality that is only available to the owner.\"},\"transferOwnership(address)\":{\"details\":\"Transfers ownership of the contract to a new account (`newOwner`). Can only be called by the current owner.\"}},\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1}},\"settings\":{\"compilationTarget\":{\"contracts/consensus/StakingTrackerV2/StakingTrackerV2.sol\":\"StakingTrackerV2\"},\"evmVersion\":\"paris\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\",\"useLiteralContent\":true},\"optimizer\":{\"enabled\":true,\"runs\":200},\"remappings\":[]},\"sources\":{\"contracts/consensus/IStakingTracker.sol\":{\"content\":\"// Copyright 2022 The klaytn Authors\\n// This file is part of the klaytn library.\\n//\\n// The klaytn library is free software: you can redistribute it and/or modify\\n// it under the terms of the GNU Lesser General Public License as published by\\n// the Free Software Foundation, either version 3 of the License, or\\n// (at your option) any later version.\\n//\\n// The klaytn library is distributed in the hope that it will be useful,\\n// but WITHOUT ANY WARRANTY; without even the implied warranty of\\n// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the\\n// GNU Lesser General Public License for more details.\\n//\\n// You should have received a copy of the GNU Lesser General Public License\\n// along with the klaytn library. If not, see <http://www.gnu.org/licenses/>.\\n\\n// SPDX-License-Identifier: LGPL-3.0-only\\npragma solidity ^0.8.0;\\n\\ninterface IStakingTracker {\\n    // Events\\n    event CreateTracker(uint256 indexed trackerId, uint256 trackStart, uint256 trackEnd, uint256[] gcIds);\\n    event RetireTracker(uint256 indexed trackerId);\\n    event RefreshStake(\\n        uint256 indexed trackerId,\\n        uint256 indexed gcId,\\n        address staking,\\n        uint256 stakingBalance,\\n        uint256 gcBalance,\\n        uint256 gcVote,\\n        uint256 totalVotes\\n    );\\n    event RefreshVoter(uint256 indexed gcId, address staking, address voter);\\n\\n    // Constants\\n    function CONTRACT_TYPE() external view returns (string memory);\\n\\n    function VERSION() external view returns (uint256);\\n\\n    function ADDRESS_BOOK_ADDRESS() external view returns (address);\\n\\n    function MIN_STAKE() external view returns (uint256);\\n\\n    // Mutators\\n    function createTracker(uint256 trackStart, uint256 trackEnd) external returns (uint256 trackerId);\\n\\n    function refreshStake(address staking) external;\\n\\n    function refreshVoter(address staking) external;\\n\\n    // Getters\\n    function getLastTrackerId() external view returns (uint256);\\n\\n    function getAllTrackerIds() external view returns (uint256[] memory);\\n\\n    function getLiveTrackerIds() external view returns (uint256[] memory);\\n\\n    function getTrackerSummary(\\n        uint256 trackerId\\n    )\\n        external\\n        view\\n        returns (uint256 trackStart, uint256 trackEnd, uint256 numGCs, uint256 totalVotes, uint256 numEligible);\\n\\n    function getTrackedGC(uint256 trackerId, uint256 gcId) external view returns (uint256 gcBalance, uint256 gcVotes);\\n\\n    function getAllTrackedGCs(\\n        uint256 trackerId\\n    ) external view returns (uint256[] memory gcIds, uint256[] memory gcBalances, uint256[] memory gcVotes);\\n\\n    function stakingToGCId(uint256 trackerId, address staking) external view returns (uint256 gcId);\\n\\n    function voterToGCId(address voter) external view returns (uint256 gcId);\\n\\n    function gcIdToVoter(uint256 gcId) external view returns (address voter);\\n}\\n\",\"keccak256\":\"0x8bbd03791b0c5b1644b1ee47a978d0ab8542f44e2b58bf112e548565f36bc466\",\"license\":\"LGPL-3.0-only\"},\"contracts/consensus/StakingTrackerV2/IStakingTrackerV2.sol\":{\"content\":\"// Copyright 2024 The kaia Authors\\n// This file is part of the kaia library.\\n//\\n// The kaia library is free software: you can redistribute it and/or modify\\n// it under the terms of the GNU Lesser General Public License as published by\\n// the Free Software Foundation, either version 3 of the License, or\\n// (at your option) any later version.\\n//\\n// The kaia library is distributed in the hope that it will be useful,\\n// but WITHOUT ANY WARRANTY; without even the implied warranty of\\n// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the\\n// GNU Lesser General Public License for more details.\\n//\\n// You should have received a copy of the GNU Lesser General Public License\\n// along with the kaia library. If not, see <http://www.gnu.org/licenses/>.\\n\\n// SPDX-License-Identifier: LGPL-3.0-only\\npragma solidity 0.8.25;\\n\\nimport \\\"../IStakingTracker.sol\\\";\\n\\ninterface IStakingTrackerV2 is IStakingTracker {\\n    // Constants\\n    function REGISTRY_ADDRESS() external view returns (address);\\n\\n    // Getters\\n    function getTrackedGCBalance(uint256 trackerId, uint256 gcId) external view returns (uint256, uint256);\\n\\n    function isCLPool(uint256 trackerId, address staking) external view returns (bool);\\n}\\n\",\"keccak256\":\"0x9bd7a4f0c42697eae793c6efdf7e5bffe58eff4f6be86727b0afbc6dd68018cc\",\"license\":\"LGPL-3.0-only\"},\"contracts/consensus/StakingTrackerV2/StakingTrackerV2.sol\":{\"content\":\"// Copyright 2024 The kaia Authors\\n// This file is part of the kaia library.\\n//\\n// The kaia library is free software: you can redistribute it and/or modify\\n// it under the terms of the GNU Lesser General Public License as published by\\n// the Free Software Foundation, either version 3 of the License, or\\n// (at your option) any later version.\\n//\\n// The kaia library is distributed in the hope that it will be useful,\\n// but WITHOUT ANY WARRANTY; without even the implied warranty of\\n// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the\\n// GNU Lesser General Public License for more details.\\n//\\n// You should have received a copy of the GNU Lesser General Public License\\n// along with the kaia library. If not, see <http://www.gnu.org/licenses/>.\\n\\n// SPDX-License-Identifier: LGPL-3.0-only\\npragma solidity 0.8.25;\\n\\nimport \\\"openzeppelin-contracts-5.0/access/Ownable.sol\\\";\\nimport \\\"./IStakingTrackerV2.sol\\\";\\n\\ncontract StakingTrackerV2 is IStakingTrackerV2, Ownable {\\n    /* ========== STATE VARIABLES ========== */\\n\\n    struct Tracker {\\n        // Block range for tracking.\\n        // Updates only occur when: trackStart <= block.number < trackEnd\\n        uint256 trackStart;\\n        uint256 trackEnd;\\n        // Governance Council (GC) tracking\\n        // Set at createTracker() and remains immutable\\n        uint256[] gcIds;\\n        mapping(uint256 => bool) gcExists;\\n        mapping(address => uint256) stakingToGCId;\\n        // Balance tracking\\n        // Initially set at createTracker(), updated via refreshStake() until trackEnd\\n        mapping(address => uint256) stakingBalances; // All staking contract balances (CnStaking + CLPool)\\n        mapping(uint256 => uint256) cnStakingBalances; // CnStaking-specific balances per GC\\n        mapping(address => bool) isCLPool; // Identifies CnStaking vs CLPool contracts. Mark CLPool to save gas\\n        mapping(uint256 => uint256) gcBalances; // Total GC balances (CnStaking + CLPool combined)\\n        // Voting power tracking\\n        // Updated via refreshStake() until trackEnd\\n        mapping(uint256 => uint256) gcVotes; // Voting power per GC\\n        uint256 totalVotes; // Sum of all GC voting power\\n        uint256 numEligible; // Count of GCs meeting minimum stake requirement\\n    }\\n\\n    // Store tracker objects\\n    mapping(uint256 => Tracker) internal trackers; // indexed by trackerId\\n    uint256[] internal allTrackerIds; // append-only list of trackerIds\\n    uint256[] internal liveTrackerIds; // trackerIds with block.number < trackEnd. Not in order.\\n\\n    // 1-to-1 mapping between gcId and voter account\\n    mapping(uint256 => address) public override gcIdToVoter;\\n    mapping(address => uint256) public override voterToGCId;\\n\\n    /* ========== CONSTANTS ========== */\\n\\n    function CONTRACT_TYPE() external view virtual override returns (string memory) {\\n        return \\\"StakingTracker\\\";\\n    }\\n\\n    /// @dev It remains 1 for the compatibility with the previous version.\\n    function VERSION() external view virtual override returns (uint256) {\\n        return 1;\\n    }\\n\\n    function ADDRESS_BOOK_ADDRESS() public view virtual override returns (address) {\\n        return 0x0000000000000000000000000000000000000400;\\n    }\\n\\n    function REGISTRY_ADDRESS() public view virtual override returns (address) {\\n        return 0x0000000000000000000000000000000000000401;\\n    }\\n\\n    function MIN_STAKE() public view virtual override returns (uint256) {\\n        return 5000000 ether;\\n    }\\n\\n    /* ========== CONSTRUCTOR ========== */\\n\\n    constructor(address initialOwner) Ownable(initialOwner) {}\\n\\n    /* ========== INITIALIZER ========== */\\n\\n    /// @dev Creates a new Tracker and populate initial values from AddressBook\\n    /// Only allowed to the contract owner.\\n    function createTracker(\\n        uint256 trackStart,\\n        uint256 trackEnd\\n    ) public virtual override onlyOwner returns (uint256 trackerId) {\\n        trackerId = getLastTrackerId() + 1;\\n        allTrackerIds.push(trackerId);\\n        liveTrackerIds.push(trackerId);\\n\\n        Tracker storage tracker = trackers[trackerId];\\n        tracker.trackStart = trackStart;\\n        tracker.trackEnd = trackEnd;\\n\\n        _populateTracker(trackerId);\\n\\n        emit CreateTracker(trackerId, trackStart, trackEnd, tracker.gcIds);\\n        return trackerId;\\n    }\\n\\n    function _populateTracker(uint256 trackerId) private {\\n        _populateFromAddressBook(trackerId);\\n        _populateFromCLRegistry(trackerId);\\n\\n        _calcAllVotes(trackerId);\\n    }\\n\\n    /// @dev Populate a tracker with staking balances from AddressBook\\n    function _populateFromAddressBook(uint256 trackerId) private {\\n        Tracker storage tracker = trackers[trackerId];\\n\\n        (, address[] memory stakingContracts, ) = _getAddressBookLists();\\n\\n        for (uint256 i = 0; i < stakingContracts.length; i++) {\\n            address staking = stakingContracts[i];\\n            (bool isV2, uint256 balance, uint256 gcId, address stakingTracker, ) = readCnStaking(staking);\\n\\n            if (!isV2) {\\n                // Ignore V1 contract\\n                continue;\\n            }\\n            if (stakingTracker != address(this)) {\\n                // Ignore CnStaking that does not point to this StakingTracker.\\n                // Hinders an attack where the CnStaking evades real-time voting\\n                // power calculation via staking withdrawal.\\n                continue;\\n            }\\n\\n            if (!tracker.gcExists[gcId]) {\\n                tracker.gcExists[gcId] = true;\\n                tracker.gcIds.push(gcId);\\n            }\\n\\n            tracker.stakingToGCId[staking] = gcId;\\n            tracker.stakingBalances[staking] = balance;\\n            tracker.cnStakingBalances[gcId] += balance;\\n            tracker.gcBalances[gcId] += balance;\\n        }\\n    }\\n\\n    /// @dev Populate a tracker with staking balances from CLRegistry\\n    function _populateFromCLRegistry(uint256 trackerId) private {\\n        Tracker storage tracker = trackers[trackerId];\\n\\n        (uint256[] memory gcIds, address[] memory pools) = _getCLRegistryLists();\\n\\n        for (uint256 i = 0; i < pools.length; i++) {\\n            (uint256 gcId, address pool) = (gcIds[i], pools[i]);\\n            (address stakingTracker, uint256 balance) = readCLPool(pool);\\n\\n            if (!tracker.gcExists[gcId]) {\\n                // Ignore non-existent GCs\\n                continue;\\n            }\\n            if (stakingTracker != address(this)) {\\n                // Ignore CLPool that does not point to this StakingTracker.\\n                continue;\\n            }\\n\\n            tracker.isCLPool[pool] = true;\\n            tracker.stakingToGCId[pool] = gcId;\\n            tracker.stakingBalances[pool] = balance;\\n            tracker.gcBalances[gcId] += balance;\\n        }\\n    }\\n\\n    /// @dev Populate a tracker with voting powers\\n    function _calcAllVotes(uint256 trackerId) private {\\n        Tracker storage tracker = trackers[trackerId];\\n\\n        uint256 numEligible = 0;\\n        uint256 totalVotes = 0;\\n\\n        for (uint256 i = 0; i < tracker.gcIds.length; i++) {\\n            uint256 gcId = tracker.gcIds[i];\\n            if (tracker.cnStakingBalances[gcId] >= MIN_STAKE()) {\\n                numEligible++;\\n            }\\n        }\\n        tracker.numEligible = numEligible;\\n\\n        for (uint256 i = 0; i < tracker.gcIds.length; i++) {\\n            uint256 gcId = tracker.gcIds[i];\\n            uint256 votes = _calcVotes(trackerId, gcId);\\n            tracker.gcVotes[gcId] = votes;\\n            totalVotes += votes;\\n        }\\n\\n        tracker.totalVotes = totalVotes; // only write final result to save gas\\n    }\\n\\n    /* ========== UPDATE TRACKER ========== */\\n\\n    /// @dev Re-evaluate Tracker contents related to the staking contract\\n    /// Anyone can call this function, but `staking` must be a staking contract\\n    /// registered in tracker.\\n    function refreshStake(address staking) external virtual override {\\n        uint256 i = 0;\\n        while (i < liveTrackerIds.length) {\\n            uint256 currId = liveTrackerIds[i];\\n\\n            // Remove expired tracker as soon as we discover it\\n            if (!_isTrackerLive(currId)) {\\n                uint256 lastId = liveTrackerIds[liveTrackerIds.length - 1];\\n                liveTrackerIds[i] = lastId;\\n                liveTrackerIds.pop();\\n                emit RetireTracker(currId);\\n                continue;\\n            }\\n\\n            _updateTracker(currId, staking);\\n            i++;\\n        }\\n    }\\n\\n    /// @dev Re-evaluate balances and subsequently voting power\\n    function _updateTracker(uint256 trackerId, address staking) private {\\n        Tracker storage tracker = trackers[trackerId];\\n\\n        uint256 gcId = tracker.stakingToGCId[staking];\\n        if (gcId == 0) {\\n            return;\\n        }\\n\\n        // Update general staking balances and GC balances and determine if recalculating all votes is necessary\\n        (uint256 newBalance, bool recalcAllVotes) = _updateBalances(trackerId, gcId, staking);\\n\\n        if (recalcAllVotes) {\\n            _updateAllVotes(trackerId, gcId);\\n        } else {\\n            _updateVotes(trackerId, gcId);\\n        }\\n\\n        emit RefreshStake(\\n            trackerId,\\n            gcId,\\n            staking,\\n            newBalance,\\n            tracker.gcBalances[gcId],\\n            tracker.gcVotes[gcId],\\n            tracker.totalVotes\\n        );\\n    }\\n\\n    /// @dev Update general staking balances and GC balances and determine if recalculating all votes is necessary\\n    function _updateBalances(\\n        uint256 trackerId,\\n        uint256 gcId,\\n        address cnStakingOrCLPool\\n    ) private returns (uint256 newBalance, bool recalcAllVotes) {\\n        Tracker storage tracker = trackers[trackerId];\\n        bool isCL = tracker.isCLPool[cnStakingOrCLPool];\\n\\n        uint256 oldBalance = tracker.stakingBalances[cnStakingOrCLPool];\\n        newBalance = _readStakingBalance(isCL, cnStakingOrCLPool);\\n\\n        tracker.stakingBalances[cnStakingOrCLPool] = newBalance;\\n        tracker.gcBalances[gcId] = tracker.gcBalances[gcId] - oldBalance + newBalance;\\n\\n        if (!isCL) {\\n            uint256 oldCnStakingBalance = tracker.cnStakingBalances[gcId];\\n            uint256 newCnStakingBalance = oldCnStakingBalance - oldBalance + newBalance;\\n            tracker.cnStakingBalances[gcId] = newCnStakingBalance;\\n            recalcAllVotes = _shouldRecalcAllVotes(oldCnStakingBalance, newCnStakingBalance);\\n        }\\n\\n        return (newBalance, recalcAllVotes);\\n    }\\n\\n    /// @dev Update the voting power of every GC\\n    function _updateAllVotes(uint256 trackerId, uint256 gcId) private {\\n        Tracker storage tracker = trackers[trackerId];\\n\\n        bool wasEligible = tracker.cnStakingBalances[gcId] < MIN_STAKE();\\n        if (wasEligible) {\\n            // eligible -> not eligible\\n            tracker.numEligible -= 1;\\n        } else {\\n            // not eligible -> eligible\\n            tracker.numEligible += 1;\\n        }\\n\\n        _recalcAllVotes(trackerId);\\n    }\\n\\n    /// @dev Update votes\\n    function _updateVotes(uint256 trackerId, uint256 gcId) private {\\n        Tracker storage tracker = trackers[trackerId];\\n\\n        uint256 oldVotes = tracker.gcVotes[gcId];\\n        uint256 newVotes = _calcVotes(trackerId, gcId);\\n\\n        tracker.gcVotes[gcId] = newVotes;\\n        tracker.totalVotes = tracker.totalVotes - oldVotes + newVotes;\\n    }\\n\\n    /// @dev Determine if recalculating all votes is necessary\\n    function _shouldRecalcAllVotes(\\n        uint256 oldCnStakingBalance,\\n        uint256 newCnStakingBalance\\n    ) private view returns (bool) {\\n        bool wasEligible = oldCnStakingBalance >= MIN_STAKE();\\n        bool isEligible = newCnStakingBalance >= MIN_STAKE();\\n        return wasEligible != isEligible;\\n    }\\n\\n    /// @dev Recalculate votes with new numEligible\\n    /// Assume numEligible is already updated at tracker.numEligible\\n    function _recalcAllVotes(uint256 trackerId) private {\\n        Tracker storage tracker = trackers[trackerId];\\n\\n        uint256 totalVotes = tracker.totalVotes;\\n        for (uint256 i = 0; i < tracker.gcIds.length; i++) {\\n            uint256 gcId = tracker.gcIds[i];\\n            uint256 oldVotes = tracker.gcVotes[gcId];\\n            uint256 newVotes = _calcVotes(trackerId, gcId);\\n\\n            if (oldVotes != newVotes) {\\n                tracker.gcVotes[gcId] = newVotes;\\n                totalVotes -= oldVotes;\\n                totalVotes += newVotes;\\n            }\\n        }\\n\\n        tracker.totalVotes = totalVotes; // only write final result to save gas\\n    }\\n\\n    /* ========== UPDATE VOTER ========== */\\n\\n    /// @dev Re-evaluate voter account mapping related to the staking contract\\n    /// Anyone can call this function, but `staking` must be a staking contract\\n    /// registered to the current AddressBook.\\n    ///\\n    /// Updates the voter account of the GC of the `staking` with respect to\\n    /// the current AddressBook.\\n    ///\\n    /// If the GC already had a voter account, the account will be unregistered.\\n    /// If the new voter account is already appointed for another GC,\\n    /// this function reverts.\\n    function refreshVoter(address staking) external virtual override {\\n        (, address[] memory stakingContracts, ) = _getAddressBookLists();\\n        bool stakingInAddressBook = false;\\n        for (uint256 i = 0; i < stakingContracts.length; i++) {\\n            if (stakingContracts[i] == staking) {\\n                stakingInAddressBook = true;\\n                break;\\n            }\\n        }\\n        require(stakingInAddressBook, \\\"Not a staking contract\\\");\\n\\n        (bool isV2, , uint256 gcId, , address newVoter) = readCnStaking(staking);\\n        require(isV2, \\\"Invalid CnStaking contract\\\");\\n\\n        _updateVoter(gcId, newVoter);\\n\\n        emit RefreshVoter(gcId, staking, newVoter);\\n    }\\n\\n    function _updateVoter(uint256 gcId, address newVoter) private {\\n        // Unlink existing two-way mapping\\n        address oldVoter = gcIdToVoter[gcId];\\n        if (oldVoter != address(0)) {\\n            voterToGCId[oldVoter] = 0;\\n            gcIdToVoter[gcId] = address(0);\\n        }\\n\\n        // Create new mapping\\n        if (newVoter != address(0)) {\\n            require(voterToGCId[newVoter] == 0, \\\"Voter address already taken\\\");\\n            voterToGCId[newVoter] = gcId;\\n            gcIdToVoter[gcId] = newVoter;\\n        }\\n    }\\n\\n    /* ========== HELPER FUNCTIONS ========== */\\n\\n    /// @dev Calculate voting power from staking amounts.\\n    /// One integer vote is granted for each MIN_STAKE() balance. But the number of votes\\n    /// is at most ([number of eligible GCs] - 1).\\n    function _calcVotes(uint256 trackerId, uint256 gcId) internal view returns (uint256) {\\n        Tracker storage tracker = trackers[trackerId];\\n        uint256 cnStakingBalance = tracker.cnStakingBalances[gcId];\\n        uint256 balance = tracker.gcBalances[gcId];\\n        uint256 numEligible = tracker.numEligible;\\n\\n        if (cnStakingBalance < MIN_STAKE()) {\\n            return 0;\\n        }\\n\\n        uint256 voteCap = 1;\\n        if (numEligible > 1) {\\n            voteCap = numEligible - 1;\\n        }\\n\\n        uint256 votes = balance / MIN_STAKE();\\n        if (votes > voteCap) {\\n            votes = voteCap;\\n        }\\n        return votes;\\n    }\\n\\n    /// @dev Query the 3-tuples (node, staking, reward) from AddressBook\\n    function _getAddressBookLists()\\n        internal\\n        view\\n        returns (address[] memory nodeIds, address[] memory stakingContracts, address[] memory rewardAddrs)\\n    {\\n        (nodeIds, stakingContracts, rewardAddrs /* kgf */ /* kir */, , ) = IAddressBook(ADDRESS_BOOK_ADDRESS())\\n            .getAllAddressInfo();\\n        require(nodeIds.length == stakingContracts.length && nodeIds.length == rewardAddrs.length, \\\"Invalid data\\\");\\n    }\\n\\n    /// @dev Get the address of the CLRegistry\\n    function _getCLRegistryAddress() internal view returns (address) {\\n        return IRegistry(REGISTRY_ADDRESS()).getActiveAddr(\\\"CLRegistry\\\");\\n    }\\n\\n    /// @dev Get the address of the Wrapped Kaia\\n    function _getWKaiaAddress() internal view returns (address) {\\n        return IRegistry(REGISTRY_ADDRESS()).getActiveAddr(\\\"WrappedKaia\\\");\\n    }\\n\\n    /// @dev Query the 2-tuples (gcId, pool) from CLRegistry\\n    /// Returns empty arrays if CLRegistry is not found\\n    function _getCLRegistryLists() internal view returns (uint256[] memory gcIds, address[] memory pools) {\\n        address clRegistry = _getCLRegistryAddress();\\n        if (clRegistry == address(0)) {\\n            return (gcIds, pools);\\n        }\\n        (, gcIds, pools) = ICLRegistry(clRegistry).getAllCLs();\\n        require(gcIds.length == pools.length, \\\"Invalid data\\\");\\n    }\\n\\n    /// @dev Read staking balance from staking contract\\n    function _readStakingBalance(bool isCL, address staking) internal view returns (uint256 balance) {\\n        if (isCL) {\\n            (, balance) = readCLPool(staking);\\n        } else {\\n            (, balance, , , ) = readCnStaking(staking);\\n        }\\n    }\\n\\n    /// @dev Determine if given tracker is updatable with respect to current block.\\n    function _isTrackerLive(uint256 trackerId) internal view returns (bool) {\\n        Tracker storage tracker = trackers[trackerId];\\n        return (tracker.trackStart <= block.number && block.number < tracker.trackEnd);\\n    }\\n\\n    /// @dev Test if the given contract is a CnStakingV2 instance\\n    /// Does not check if the contract is registered in AddressBook.\\n    function isCnStakingV2(address staking) public view returns (bool) {\\n        bool ok;\\n        bytes memory out;\\n\\n        (ok, out) = staking.staticcall(abi.encodeWithSignature(\\\"CONTRACT_TYPE()\\\"));\\n        if (!ok || out.length == 0) {\\n            return false;\\n        }\\n        string memory _type = abi.decode(out, (string));\\n        if (keccak256(bytes(_type)) != keccak256(bytes(\\\"CnStakingContract\\\"))) {\\n            return false;\\n        }\\n\\n        (ok, out) = staking.staticcall(abi.encodeWithSignature(\\\"VERSION()\\\"));\\n        if (!ok || out.length == 0) {\\n            return false;\\n        }\\n        uint256 _version = abi.decode(out, (uint256));\\n        if (_version < 2) {\\n            return false;\\n        }\\n\\n        return true;\\n    }\\n\\n    /// @dev Read various fields from a CnStaking contract\\n    function readCnStaking(\\n        address staking\\n    )\\n        public\\n        view\\n        virtual\\n        returns (bool isV2, uint256 effectiveBalance, uint256 gcId, address stakingTracker, address voterAddress)\\n    {\\n        if (isCnStakingV2(staking)) {\\n            return (\\n                true,\\n                staking.balance - ICnStakingV2(staking).unstaking(),\\n                ICnStakingV2(staking).gcId(),\\n                ICnStakingV2(staking).stakingTracker(),\\n                ICnStakingV2(staking).voterAddress()\\n            );\\n        }\\n        return (false, 0, 0, address(0), address(0));\\n    }\\n\\n    /// @dev Read balance from CLPool\\n    function readCLPool(address pool) public view virtual returns (address stakingTracker, uint256 balance) {\\n        address wKaia = _getWKaiaAddress();\\n        if (wKaia != address(0)) {\\n            balance = IERC20(wKaia).balanceOf(pool);\\n        }\\n        stakingTracker = ICLPool(pool).stakingTracker();\\n    }\\n\\n    /* ========== GETTERS ========== */\\n\\n    function getLastTrackerId() public view override returns (uint256) {\\n        return allTrackerIds.length;\\n    }\\n\\n    function getAllTrackerIds() external view override returns (uint256[] memory) {\\n        return allTrackerIds;\\n    }\\n\\n    function getLiveTrackerIds() external view override returns (uint256[] memory) {\\n        return liveTrackerIds;\\n    }\\n\\n    function getTrackerSummary(\\n        uint256 trackerId\\n    )\\n        public\\n        view\\n        override\\n        returns (uint256 trackStart, uint256 trackEnd, uint256 numGCs, uint256 totalVotes, uint256 numEligible)\\n    {\\n        Tracker storage tracker = trackers[trackerId];\\n        return (tracker.trackStart, tracker.trackEnd, tracker.gcIds.length, tracker.totalVotes, tracker.numEligible);\\n    }\\n\\n    function getTrackedGC(\\n        uint256 trackerId,\\n        uint256 gcId\\n    ) external view override returns (uint256 gcBalance, uint256 gcVotes) {\\n        Tracker storage tracker = trackers[trackerId];\\n        return (tracker.gcBalances[gcId], tracker.gcVotes[gcId]);\\n    }\\n\\n    function getTrackedGCBalance(uint256 trackerId, uint256 gcId) external view override returns (uint256, uint256) {\\n        Tracker storage tracker = trackers[trackerId];\\n        return (tracker.cnStakingBalances[gcId], tracker.gcBalances[gcId]);\\n    }\\n\\n    function getAllTrackedGCs(\\n        uint256 trackerId\\n    ) public view override returns (uint256[] memory gcIds, uint256[] memory gcBalances, uint256[] memory gcVotes) {\\n        Tracker storage tracker = trackers[trackerId];\\n        uint256 numGCs = tracker.gcIds.length;\\n        gcIds = tracker.gcIds;\\n\\n        gcBalances = new uint256[](numGCs);\\n        gcVotes = new uint256[](numGCs);\\n        for (uint256 i = 0; i < numGCs; i++) {\\n            uint256 gcId = tracker.gcIds[i];\\n            gcBalances[i] = tracker.gcBalances[gcId];\\n            gcVotes[i] = tracker.gcVotes[gcId];\\n        }\\n    }\\n\\n    function stakingToGCId(uint256 trackerId, address staking) external view override returns (uint256) {\\n        Tracker storage tracker = trackers[trackerId];\\n        return tracker.stakingToGCId[staking];\\n    }\\n\\n    function isCLPool(uint256 trackerId, address staking) external view override returns (bool) {\\n        Tracker storage tracker = trackers[trackerId];\\n        return tracker.isCLPool[staking];\\n    }\\n}\\n\\ninterface IAddressBook {\\n    function getAllAddressInfo()\\n        external\\n        view\\n        returns (address[] memory, address[] memory, address[] memory, address, address);\\n}\\n\\ninterface ICnStakingV2 {\\n    function VERSION() external view returns (uint256);\\n\\n    function rewardAddress() external view returns (address);\\n\\n    function stakingTracker() external view returns (address);\\n\\n    function voterAddress() external view returns (address);\\n\\n    function gcId() external view returns (uint256);\\n\\n    function unstaking() external view returns (uint256);\\n}\\n\\ninterface IRegistry {\\n    function getActiveAddr(string memory name) external view returns (address);\\n}\\n\\ninterface ICLRegistry {\\n    function getAllCLs() external view returns (address[] memory, uint256[] memory, address[] memory);\\n}\\n\\ninterface ICLPool {\\n    function stakingTracker() external view returns (address);\\n}\\n\\ninterface IERC20 {\\n    function balanceOf(address account) external view returns (uint256);\\n}\\n\",\"keccak256\":\"0xbd21e8ed966b96487b94569039a545ac6e1a5ece7712fe65f0bd8c764d8bf98b\",\"license\":\"LGPL-3.0-only\"},\"openzeppelin-contracts-5.0/access/Ownable.sol\":{\"content\":\"// SPDX-License-Identifier: MIT\\n// OpenZeppelin Contracts (last updated v5.0.0) (access/Ownable.sol)\\n\\npragma solidity ^0.8.20;\\n\\nimport {Context} from \\\"../utils/Context.sol\\\";\\n\\n/**\\n * @dev Contract module which provides a basic access control mechanism, where\\n * there is an account (an owner) that can be granted exclusive access to\\n * specific functions.\\n *\\n * The initial owner is set to the address provided by the deployer. This can\\n * later be changed with {transferOwnership}.\\n *\\n * This module is used through inheritance. It will make available the modifier\\n * `onlyOwner`, which can be applied to your functions to restrict their use to\\n * the owner.\\n */\\nabstract contract Ownable is Context {\\n    address private _owner;\\n\\n    /**\\n     * @dev The caller account is not authorized to perform an operation.\\n     */\\n    error OwnableUnauthorizedAccount(address account);\\n\\n    /**\\n     * @dev The owner is not a valid owner account. (eg. `address(0)`)\\n     */\\n    error OwnableInvalidOwner(address owner);\\n\\n    event OwnershipTransferred(address indexed previousOwner, address indexed newOwner);\\n\\n    /**\\n     * @dev Initializes the contract setting the address provided by the deployer as the initial owner.\\n     */\\n    constructor(address initialOwner) {\\n        if (initialOwner == address(0)) {\\n            revert OwnableInvalidOwner(address(0));\\n        }\\n        _transferOwnership(initialOwner);\\n    }\\n\\n    /**\\n     * @dev Throws if called by any account other than the owner.\\n     */\\n    modifier onlyOwner() {\\n        _checkOwner();\\n        _;\\n    }\\n\\n    /**\\n     * @dev Returns the address of the current owner.\\n     */\\n    function owner() public view virtual returns (address) {\\n        return _owner;\\n    }\\n\\n    /**\\n     * @dev Throws if the sender is not the owner.\\n     */\\n    function _checkOwner() internal view virtual {\\n        if (owner() != _msgSender()) {\\n            revert OwnableUnauthorizedAccount(_msgSender());\\n        }\\n    }\\n\\n    /**\\n     * @dev Leaves the contract without owner. It will not be possible to call\\n     * `onlyOwner` functions. Can only be called by the current owner.\\n     *\\n     * NOTE: Renouncing ownership will leave the contract without an owner,\\n     * thereby disabling any functionality that is only available to the owner.\\n     */\\n    function renounceOwnership() public virtual onlyOwner {\\n        _transferOwnership(address(0));\\n    }\\n\\n    /**\\n     * @dev Transfers ownership of the contract to a new account (`newOwner`).\\n     * Can only be called by the current owner.\\n     */\\n    function transferOwnership(address newOwner) public virtual onlyOwner {\\n        if (newOwner == address(0)) {\\n            revert OwnableInvalidOwner(address(0));\\n        }\\n        _transferOwnership(newOwner);\\n    }\\n\\n    /**\\n     * @dev Transfers ownership of the contract to a new account (`newOwner`).\\n     * Internal function without access restriction.\\n     */\\n    function _transferOwnership(address newOwner) internal virtual {\\n        address oldOwner = _owner;\\n        _owner = newOwner;\\n        emit OwnershipTransferred(oldOwner, newOwner);\\n    }\\n}\\n\",\"keccak256\":\"0xff6d0bb2e285473e5311d9d3caacb525ae3538a80758c10649a4d61029b017bb\",\"license\":\"MIT\"},\"openzeppelin-contracts-5.0/utils/Context.sol\":{\"content\":\"// SPDX-License-Identifier: MIT\\n// OpenZeppelin Contracts (last updated v5.0.1) (utils/Context.sol)\\n\\npragma solidity ^0.8.20;\\n\\n/**\\n * @dev Provides information about the current execution context, including the\\n * sender of the transaction and its data. While these are generally available\\n * via msg.sender and msg.data, they should not be accessed in such a direct\\n * manner, since when dealing with meta-transactions the account sending and\\n * paying for execution may not be the actual sender (as far as an application\\n * is concerned).\\n *\\n * This contract is only required for intermediate, library-like contracts.\\n */\\nabstract contract Context {\\n    function _msgSender() internal view virtual returns (address) {\\n        return msg.sender;\\n    }\\n\\n    function _msgData() internal view virtual returns (bytes calldata) {\\n        return msg.data;\\n    }\\n\\n    function _contextSuffixLength() internal view virtual returns (uint256) {\\n        return 0;\\n    }\\n}\\n\",\"keccak256\":\"0x493033a8d1b176a037b2cc6a04dad01a5c157722049bbecf632ca876224dd4b2\",\"license\":\"MIT\"}},\"version\":1}",
+  "bytecode": "0x608060405234801561001057600080fd5b506040516122b23803806122b283398101604081905261002f916100be565b806001600160a01b03811661005e57604051631e4fbdf760e01b81526000600482015260240160405180910390fd5b6100678161006e565b50506100ee565b600080546001600160a01b038381166001600160a01b0319831681178455604051919092169283917f8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e09190a35050565b6000602082840312156100d057600080fd5b81516001600160a01b03811681146100e757600080fd5b9392505050565b6121b5806100fd6000396000f3fe608060405234801561001057600080fd5b50600436106101735760003560e01c8063aad8cb3f116100de578063dac189b811610097578063f2fde38b11610071578063f2fde38b1461046c578063f60c8c291461047f578063f85b7bba146104b1578063ffa1ad74146104c457600080fd5b8063dac189b814610433578063e2ec3a581461043b578063f2f2f49b1461046457600080fd5b8063aad8cb3f1461039d578063bd3bf7f3146103b0578063c4efadfb146103b8578063c8ffc3bb146103cd578063cb1c2b5c1461041a578063d4377d4d1461042b57600080fd5b806351afc36c1161013057806351afc36c146102b45780635605a4e5146102f05780636a94f18b14610305578063715018a61461034e578063870a53ff146103565780638da5cb5b1461037857600080fd5b806301d057c1146101785780630294a8971461019e5780633c7fff46146101d857806343c235a7146102135780634b6a94cc146102645780634f471c0214610294575b600080fd5b61018b610186366004611ba3565b6104cb565b6040519081526020015b60405180910390f35b61018b6101ac366004611bda565b60008281526001602090815260408083206001600160a01b038516845260040190915290205492915050565b6101eb6101e6366004611c0a565b6105ad565b604080519586526020860194909452928401919091526060830152608082015260a001610195565b61024f610221366004611ba3565b6000918252600160209081526040808420928452600683018252808420546008909301909152909120549091565b60408051928352602083019190915201610195565b604080518082018252600e81526d29ba30b5b4b733aa3930b1b5b2b960911b602082015290516101959190611c47565b61018b6102a2366004611c7a565b60056020526000908152604090205481565b61024f6102c2366004611ba3565b6000918252600160209081526040808420928452600883018252808420546009909301909152909120549091565b6103036102fe366004611c7a565b6105e2565b005b610318610313366004611c7a565b6106eb565b6040805195151586526020860194909452928401919091526001600160a01b03908116606084015216608082015260a001610195565b6103036108c1565b610369610364366004611c0a565b6108d5565b60405161019593929190611cd3565b6000546001600160a01b03165b6040516001600160a01b039091168152602001610195565b6103036103ab366004611c7a565b610a70565b610401610385565b6103c0610bd4565b6040516101959190611d16565b61040a6103db366004611bda565b60008281526001602090815260408083206001600160a01b038516845260070190915290205460ff1692915050565b6040519015158152602001610195565b6a0422ca8b0a00a42500000061018b565b6103c0610c2c565b60025461018b565b610385610449366004611c0a565b6004602052600090815260409020546001600160a01b031681565b610400610385565b61030361047a366004611c7a565b610c82565b61049261048d366004611c7a565b610cc0565b604080516001600160a01b039093168352602083019190915201610195565b61040a6104bf366004611c7a565b610db4565b600161018b565b60006104d5610fb1565b6002546104e3906001611d3f565b6002805460018181019092557f405787fa12a823e0f2b7631cc41b3ba8828b3321ca811111fa75cd3aa3bb5ace01829055600380548083019091557fc2575a0e9e593c00f959f8c92f12db2869c3395a3b0502d05e2516446f71f85b01829055600082815260208290526040902085815590810184905590915061056682610fde565b817fa99a778a0f1ab0a253c5e2aa8ff583bd28a4e9b81e7cf6e053f685f683f077d185858460020160405161059d93929190611d52565b60405180910390a2505b92915050565b60008181526001602081905260409091208054918101546002820154600a830154600b90930154919290915b91939590929450565b60005b6003548110156106e75760006003828154811061060457610604611dae565b9060005260206000200154905061061a81610ff9565b6106ca57600380546000919061063290600190611dc4565b8154811061064257610642611dae565b90600052602060002001549050806003848154811061066357610663611dae565b600091825260209091200155600380548061068057610680611dd7565b60019003818190600052602060002001600090559055817f9e6e7ff15b559bab9c50f497e4c7697d608282d32244b6e922892cf01bb2f7df60405160405180910390a250506105e5565b6106d48184611022565b816106de81611ded565b925050506105e5565b5050565b60008060008060006106fc86610db4565b156108ad576001866001600160a01b031663630b11466040518163ffffffff1660e01b8152600401602060405180830381865afa158015610741573d6000803e3d6000fd5b505050506040513d601f19601f820116820180604052508101906107659190611e06565b610779906001600160a01b03891631611dc4565b876001600160a01b0316636d2714db6040518163ffffffff1660e01b8152600401602060405180830381865afa1580156107b7573d6000803e3d6000fd5b505050506040513d601f19601f820116820180604052508101906107db9190611e06565b886001600160a01b0316628c477a6040518163ffffffff1660e01b8152600401602060405180830381865afa158015610818573d6000803e3d6000fd5b505050506040513d601f19601f8201168201806040525081019061083c9190611e1f565b896001600160a01b031663992ac9fa6040518163ffffffff1660e01b8152600401602060405180830381865afa15801561087a573d6000803e3d6000fd5b505050506040513d601f19601f8201168201806040525081019061089e9190611e1f565b945094509450945094506105d9565b506000958695508594508493508392509050565b6108c9610fb1565b6108d3600061110d565b565b600081815260016020908152604091829020600281018054845181850281018501909552808552606094859485949390839083018282801561093657602002820191906000526020600020905b815481526020019060010190808311610922575b505050505094508067ffffffffffffffff81111561095657610956611e3c565b60405190808252806020026020018201604052801561097f578160200160208202803683370190505b5093508067ffffffffffffffff81111561099b5761099b611e3c565b6040519080825280602002602001820160405280156109c4578160200160208202803683370190505b50925060005b81811015610a665760008360020182815481106109e9576109e9611dae565b9060005260206000200154905083600801600082815260200190815260200160002054868381518110610a1e57610a1e611dae565b60200260200101818152505083600901600082815260200190815260200160002054858381518110610a5257610a52611dae565b6020908102919091010152506001016109ca565b5050509193909250565b6000610a7a61115d565b509150506000805b8251811015610ace57836001600160a01b0316838281518110610aa757610aa7611dae565b60200260200101516001600160a01b031603610ac65760019150610ace565b600101610a82565b5080610b1a5760405162461bcd60e51b8152602060048201526016602482015275139bdd0818481cdd185ada5b99c818dbdb9d1c9858dd60521b60448201526064015b60405180910390fd5b6000806000610b28866106eb565b945050935050925082610b7d5760405162461bcd60e51b815260206004820152601a60248201527f496e76616c696420436e5374616b696e6720636f6e74726163740000000000006044820152606401610b11565b610b878282611225565b604080516001600160a01b0380891682528316602082015283917f6734527732bd32c7303b2d45bd8e1a2f64f45d0439e14c01d6dd46b5d276e58d910160405180910390a2505050505050565b60606002805480602002602001604051908101604052809291908181526020018280548015610c2257602002820191906000526020600020905b815481526020019060010190808311610c0e575b5050505050905090565b60606003805480602002602001604051908101604052809291908181526020018280548015610c225760200282019190600052602060002090815481526020019060010190808311610c0e575050505050905090565b610c8a610fb1565b6001600160a01b038116610cb457604051631e4fbdf760e01b815260006004820152602401610b11565b610cbd8161110d565b50565b6000806000610ccd61132e565b90506001600160a01b03811615610d4b576040516370a0823160e01b81526001600160a01b0385811660048301528216906370a0823190602401602060405180830381865afa158015610d24573d6000803e3d6000fd5b505050506040513d601f19601f82011682018060405250810190610d489190611e06565b91505b836001600160a01b0316628c477a6040518163ffffffff1660e01b8152600401602060405180830381865afa158015610d88573d6000803e3d6000fd5b505050506040513d601f19601f82011682018060405250810190610dac9190611e1f565b925050915091565b60408051600481526024810182526020810180516001600160e01b03166312daa53360e21b179052905160009182916060916001600160a01b03861691610dfb9190611e52565b600060405180830381855afa9150503d8060008114610e36576040519150601f19603f3d011682016040523d82523d6000602084013e610e3b565b606091505b509092509050811580610e4d57508051155b15610e5c575060009392505050565b600081806020019051810190610e729190611e9f565b60408051808201909152601181527010db94dd185ada5b99d0dbdb9d1c9858dd607a1b6020918201528151908201209091507fa2f5d64a9f0bcdeed97e196203f5a8c1a5c8293988b625b7925686d30805508214610ed557506000949350505050565b60408051600481526024810182526020810180516001600160e01b03166001621794a360e21b031917905290516001600160a01b03871691610f1691611e52565b600060405180830381855afa9150503d8060008114610f51576040519150601f19603f3d011682016040523d82523d6000602084013e610f56565b606091505b509093509150821580610f6857508151155b15610f7857506000949350505050565b600082806020019051810190610f8e9190611e06565b90506002811015610fa55750600095945050505050565b50600195945050505050565b6000546001600160a01b031633146108d35760405163118cdaa760e01b8152336004820152602401610b11565b610fe7816113b4565b610ff08161150c565b610cbd8161162f565b60008181526001602052604081208054431080159061101b5750806001015443105b9392505050565b60008281526001602090815260408083206001600160a01b03851684526004810190925282205490918190036110585750505050565b600080611066868487611730565b91509150801561107f5761107a8684611831565b611089565b61108986846118aa565b60008381526008850160209081526040808320546009880183529281902054600a88015482516001600160a01b038b16815293840187905283830194909452606083015260808201929092529051849188917fdb84b66602d6a1eb74094da1da947e3d5896fc08ebc7770e271dbc61e44667719181900360a00190a3505050505050565b600080546001600160a01b038381166001600160a01b0319831681178455604051919092169283917f8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e09190a35050565b606080806104006001600160a01b031663160370b86040518163ffffffff1660e01b8152600401600060405180830381865afa1580156111a1573d6000803e3d6000fd5b505050506040513d6000823e601f3d908101601f191682016040526111c99190810190611fcf565b50508151835193965091945092501480156111e5575080518351145b6112205760405162461bcd60e51b815260206004820152600c60248201526b496e76616c6964206461746160a01b6044820152606401610b11565b909192565b6000828152600460205260409020546001600160a01b0316801561127a576001600160a01b03811660009081526005602090815260408083208390558583526004909152902080546001600160a01b03191690555b6001600160a01b03821615611329576001600160a01b038216600090815260056020526040902054156112ef5760405162461bcd60e51b815260206004820152601b60248201527f566f746572206164647265737320616c72656164792074616b656e00000000006044820152606401610b11565b6001600160a01b03821660008181526005602090815260408083208790558683526004909152902080546001600160a01b03191690911790555b505050565b60405163e2693e3f60e01b815260206004820152600b60248201526a577261707065644b61696160a81b60448201526000906104019063e2693e3f906064015b602060405180830381865afa15801561138b573d6000803e3d6000fd5b505050506040513d601f19601f820116820180604052508101906113af9190611e1f565b905090565b6000818152600160205260408120906113cb61115d565b5091505060005b81518110156115065760008282815181106113ef576113ef611dae565b60200260200101519050600080600080611408856106eb565b509350935093509350836114205750505050506114fe565b6001600160a01b038116301461143a5750505050506114fe565b600082815260038901602052604090205460ff1661148657600082815260038901602090815260408220805460ff1916600190811790915560028b018054918201815583529120018290555b6001600160a01b0385166000908152600489016020908152604080832085905560058b01825280832086905584835260068b01909152812080548592906114ce908490611d3f565b90915550506000828152600889016020526040812080548592906114f3908490611d3f565b909155505050505050505b6001016113d2565b50505050565b60008181526001602052604081209080611524611915565b9150915060005b81518110156116285760008084838151811061154957611549611dae565b602002602001015184848151811061156357611563611dae565b60200260200101519150915060008061157b83610cc0565b600086815260038b016020526040902054919350915060ff166115a15750505050611620565b6001600160a01b03821630146115ba5750505050611620565b6001600160a01b03831660009081526007890160209081526040808320805460ff1916600117905560048b01825280832087905560058b01825280832084905586835260088b0190915281208054839290611616908490611d3f565b9091555050505050505b60010161152b565b5050505050565b60008181526001602052604081209080805b60028401548110156116b057600084600201828154811061166457611664611dae565b906000526020600020015490506116836a0422ca8b0a00a42500000090565b6000828152600687016020526040902054106116a757836116a381611ded565b9450505b50600101611641565b50600b830182905560005b60028401548110156117225760008460020182815481106116de576116de611dae565b9060005260206000200154905060006116f787836119ea565b6000838152600988016020526040902081905590506117168185611d3f565b935050506001016116bb565b50600a909201919091555050565b60008381526001602090815260408083206001600160a01b0385168452600781018352818420546005820190935290832054839260ff16906117728287611a83565b6001600160a01b038716600090815260058501602090815260408083208490558a83526008870190915290205490955085906117af908390611dc4565b6117b99190611d3f565b60008881526008850160205260409020558161182657600087815260068401602052604081205490866117ec8484611dc4565b6117f69190611d3f565b60008a8152600687016020526040902081905590506a0422ca8b0a00a42500000080831015908210151415955050505b505050935093915050565b6000828152600160205260408120906a0422ca8b0a00a4250000006000848152600684016020526040902054109050801561188657600182600b01600082825461187b9190611dc4565b909155506118a19050565b600182600b01600082825461189b9190611d3f565b90915550505b61150684611ab2565b60008281526001602090815260408083208484526009810190925282205490916118d485856119ea565b60008581526009850160205260409020819055600a84015490915081906118fc908490611dc4565b6119069190611d3f565b83600a01819055505050505050565b6060806000611922611b60565b90506001600160a01b03811661193757509091565b806001600160a01b03166390599c076040518163ffffffff1660e01b8152600401600060405180830381865afa158015611975573d6000803e3d6000fd5b505050506040513d6000823e601f3d908101601f1916820160405261199d9190810190612080565b805182519296509094501490506119e55760405162461bcd60e51b815260206004820152600c60248201526b496e76616c6964206461746160a01b6044820152606401610b11565b509091565b6000828152600160209081526040808320848452600681018352818420546008820190935290832054600b8201549192916a0422ca8b0a00a425000000831015611a3b5760009450505050506105a7565b600180821115611a5357611a50600183611dc4565b90505b6000611a6a6a0422ca8b0a00a4250000008561215d565b905081811115611a775750805b98975050505050505050565b60008215611a9d57611a9482610cc0565b91506105a79050565b611aa6826106eb565b50919695505050505050565b6000818152600160205260408120600a81015490915b6002830154811015611b56576000836002018281548110611aeb57611aeb611dae565b600091825260208083209091015480835260098701909152604082205490925090611b1687846119ea565b9050808214611b4b5760008381526009870160205260409020819055611b3c8286611dc4565b9450611b488186611d3f565b94505b505050600101611ac8565b50600a9091015550565b60405163e2693e3f60e01b815260206004820152600a602482015269434c526567697374727960b01b60448201526000906104019063e2693e3f9060640161136e565b60008060408385031215611bb657600080fd5b50508035926020909101359150565b6001600160a01b0381168114610cbd57600080fd5b60008060408385031215611bed57600080fd5b823591506020830135611bff81611bc5565b809150509250929050565b600060208284031215611c1c57600080fd5b5035919050565b60005b83811015611c3e578181015183820152602001611c26565b50506000910152565b6020815260008251806020840152611c66816040850160208701611c23565b601f01601f19169190910160400192915050565b600060208284031215611c8c57600080fd5b813561101b81611bc5565b60008151808452602080850194506020840160005b83811015611cc857815187529582019590820190600101611cac565b509495945050505050565b606081526000611ce66060830186611c97565b8281036020840152611cf88186611c97565b90508281036040840152611d0c8185611c97565b9695505050505050565b60208152600061101b6020830184611c97565b634e487b7160e01b600052601160045260246000fd5b808201808211156105a7576105a7611d29565b600060608201858352602085602085015260606040850152818554808452608086019150866000526020600020935060005b81811015611da057845483526001948501949284019201611d84565b509098975050505050505050565b634e487b7160e01b600052603260045260246000fd5b818103818111156105a7576105a7611d29565b634e487b7160e01b600052603160045260246000fd5b600060018201611dff57611dff611d29565b5060010190565b600060208284031215611e1857600080fd5b5051919050565b600060208284031215611e3157600080fd5b815161101b81611bc5565b634e487b7160e01b600052604160045260246000fd5b60008251611e64818460208701611c23565b9190910192915050565b604051601f8201601f1916810167ffffffffffffffff81118282101715611e9757611e97611e3c565b604052919050565b600060208284031215611eb157600080fd5b815167ffffffffffffffff80821115611ec957600080fd5b818401915084601f830112611edd57600080fd5b815181811115611eef57611eef611e3c565b611f02601f8201601f1916602001611e6e565b9150808252856020828501011115611f1957600080fd5b611f2a816020840160208601611c23565b50949350505050565b600067ffffffffffffffff821115611f4d57611f4d611e3c565b5060051b60200190565b600082601f830112611f6857600080fd5b81516020611f7d611f7883611f33565b611e6e565b8083825260208201915060208460051b870101935086841115611f9f57600080fd5b602086015b84811015611fc4578051611fb781611bc5565b8352918301918301611fa4565b509695505050505050565b600080600080600060a08688031215611fe757600080fd5b855167ffffffffffffffff80821115611fff57600080fd5b61200b89838a01611f57565b9650602088015191508082111561202157600080fd5b61202d89838a01611f57565b9550604088015191508082111561204357600080fd5b5061205088828901611f57565b935050606086015161206181611bc5565b608087015190925061207281611bc5565b809150509295509295909350565b60008060006060848603121561209557600080fd5b835167ffffffffffffffff808211156120ad57600080fd5b6120b987838801611f57565b94506020915081860151818111156120d057600080fd5b8601601f810188136120e157600080fd5b80516120ef611f7882611f33565b81815260059190911b8201840190848101908a83111561210e57600080fd5b928501925b8284101561212c57835182529285019290850190612113565b60408a015190975094505050508082111561214657600080fd5b5061215386828701611f57565b9150509250925092565b60008261217a57634e487b7160e01b600052601260045260246000fd5b50049056fea26469706673582212202116f67d955a792507b91b25967a0c953b77fd0f122ec15c9a0d3365d4d5437864736f6c63430008190033",
+  "deployedBytecode": "0x608060405234801561001057600080fd5b50600436106101735760003560e01c8063aad8cb3f116100de578063dac189b811610097578063f2fde38b11610071578063f2fde38b1461046c578063f60c8c291461047f578063f85b7bba146104b1578063ffa1ad74146104c457600080fd5b8063dac189b814610433578063e2ec3a581461043b578063f2f2f49b1461046457600080fd5b8063aad8cb3f1461039d578063bd3bf7f3146103b0578063c4efadfb146103b8578063c8ffc3bb146103cd578063cb1c2b5c1461041a578063d4377d4d1461042b57600080fd5b806351afc36c1161013057806351afc36c146102b45780635605a4e5146102f05780636a94f18b14610305578063715018a61461034e578063870a53ff146103565780638da5cb5b1461037857600080fd5b806301d057c1146101785780630294a8971461019e5780633c7fff46146101d857806343c235a7146102135780634b6a94cc146102645780634f471c0214610294575b600080fd5b61018b610186366004611ba3565b6104cb565b6040519081526020015b60405180910390f35b61018b6101ac366004611bda565b60008281526001602090815260408083206001600160a01b038516845260040190915290205492915050565b6101eb6101e6366004611c0a565b6105ad565b604080519586526020860194909452928401919091526060830152608082015260a001610195565b61024f610221366004611ba3565b6000918252600160209081526040808420928452600683018252808420546008909301909152909120549091565b60408051928352602083019190915201610195565b604080518082018252600e81526d29ba30b5b4b733aa3930b1b5b2b960911b602082015290516101959190611c47565b61018b6102a2366004611c7a565b60056020526000908152604090205481565b61024f6102c2366004611ba3565b6000918252600160209081526040808420928452600883018252808420546009909301909152909120549091565b6103036102fe366004611c7a565b6105e2565b005b610318610313366004611c7a565b6106eb565b6040805195151586526020860194909452928401919091526001600160a01b03908116606084015216608082015260a001610195565b6103036108c1565b610369610364366004611c0a565b6108d5565b60405161019593929190611cd3565b6000546001600160a01b03165b6040516001600160a01b039091168152602001610195565b6103036103ab366004611c7a565b610a70565b610401610385565b6103c0610bd4565b6040516101959190611d16565b61040a6103db366004611bda565b60008281526001602090815260408083206001600160a01b038516845260070190915290205460ff1692915050565b6040519015158152602001610195565b6a0422ca8b0a00a42500000061018b565b6103c0610c2c565b60025461018b565b610385610449366004611c0a565b6004602052600090815260409020546001600160a01b031681565b610400610385565b61030361047a366004611c7a565b610c82565b61049261048d366004611c7a565b610cc0565b604080516001600160a01b039093168352602083019190915201610195565b61040a6104bf366004611c7a565b610db4565b600161018b565b60006104d5610fb1565b6002546104e3906001611d3f565b6002805460018181019092557f405787fa12a823e0f2b7631cc41b3ba8828b3321ca811111fa75cd3aa3bb5ace01829055600380548083019091557fc2575a0e9e593c00f959f8c92f12db2869c3395a3b0502d05e2516446f71f85b01829055600082815260208290526040902085815590810184905590915061056682610fde565b817fa99a778a0f1ab0a253c5e2aa8ff583bd28a4e9b81e7cf6e053f685f683f077d185858460020160405161059d93929190611d52565b60405180910390a2505b92915050565b60008181526001602081905260409091208054918101546002820154600a830154600b90930154919290915b91939590929450565b60005b6003548110156106e75760006003828154811061060457610604611dae565b9060005260206000200154905061061a81610ff9565b6106ca57600380546000919061063290600190611dc4565b8154811061064257610642611dae565b90600052602060002001549050806003848154811061066357610663611dae565b600091825260209091200155600380548061068057610680611dd7565b60019003818190600052602060002001600090559055817f9e6e7ff15b559bab9c50f497e4c7697d608282d32244b6e922892cf01bb2f7df60405160405180910390a250506105e5565b6106d48184611022565b816106de81611ded565b925050506105e5565b5050565b60008060008060006106fc86610db4565b156108ad576001866001600160a01b031663630b11466040518163ffffffff1660e01b8152600401602060405180830381865afa158015610741573d6000803e3d6000fd5b505050506040513d601f19601f820116820180604052508101906107659190611e06565b610779906001600160a01b03891631611dc4565b876001600160a01b0316636d2714db6040518163ffffffff1660e01b8152600401602060405180830381865afa1580156107b7573d6000803e3d6000fd5b505050506040513d601f19601f820116820180604052508101906107db9190611e06565b886001600160a01b0316628c477a6040518163ffffffff1660e01b8152600401602060405180830381865afa158015610818573d6000803e3d6000fd5b505050506040513d601f19601f8201168201806040525081019061083c9190611e1f565b896001600160a01b031663992ac9fa6040518163ffffffff1660e01b8152600401602060405180830381865afa15801561087a573d6000803e3d6000fd5b505050506040513d601f19601f8201168201806040525081019061089e9190611e1f565b945094509450945094506105d9565b506000958695508594508493508392509050565b6108c9610fb1565b6108d3600061110d565b565b600081815260016020908152604091829020600281018054845181850281018501909552808552606094859485949390839083018282801561093657602002820191906000526020600020905b815481526020019060010190808311610922575b505050505094508067ffffffffffffffff81111561095657610956611e3c565b60405190808252806020026020018201604052801561097f578160200160208202803683370190505b5093508067ffffffffffffffff81111561099b5761099b611e3c565b6040519080825280602002602001820160405280156109c4578160200160208202803683370190505b50925060005b81811015610a665760008360020182815481106109e9576109e9611dae565b9060005260206000200154905083600801600082815260200190815260200160002054868381518110610a1e57610a1e611dae565b60200260200101818152505083600901600082815260200190815260200160002054858381518110610a5257610a52611dae565b6020908102919091010152506001016109ca565b5050509193909250565b6000610a7a61115d565b509150506000805b8251811015610ace57836001600160a01b0316838281518110610aa757610aa7611dae565b60200260200101516001600160a01b031603610ac65760019150610ace565b600101610a82565b5080610b1a5760405162461bcd60e51b8152602060048201526016602482015275139bdd0818481cdd185ada5b99c818dbdb9d1c9858dd60521b60448201526064015b60405180910390fd5b6000806000610b28866106eb565b945050935050925082610b7d5760405162461bcd60e51b815260206004820152601a60248201527f496e76616c696420436e5374616b696e6720636f6e74726163740000000000006044820152606401610b11565b610b878282611225565b604080516001600160a01b0380891682528316602082015283917f6734527732bd32c7303b2d45bd8e1a2f64f45d0439e14c01d6dd46b5d276e58d910160405180910390a2505050505050565b60606002805480602002602001604051908101604052809291908181526020018280548015610c2257602002820191906000526020600020905b815481526020019060010190808311610c0e575b5050505050905090565b60606003805480602002602001604051908101604052809291908181526020018280548015610c225760200282019190600052602060002090815481526020019060010190808311610c0e575050505050905090565b610c8a610fb1565b6001600160a01b038116610cb457604051631e4fbdf760e01b815260006004820152602401610b11565b610cbd8161110d565b50565b6000806000610ccd61132e565b90506001600160a01b03811615610d4b576040516370a0823160e01b81526001600160a01b0385811660048301528216906370a0823190602401602060405180830381865afa158015610d24573d6000803e3d6000fd5b505050506040513d601f19601f82011682018060405250810190610d489190611e06565b91505b836001600160a01b0316628c477a6040518163ffffffff1660e01b8152600401602060405180830381865afa158015610d88573d6000803e3d6000fd5b505050506040513d601f19601f82011682018060405250810190610dac9190611e1f565b925050915091565b60408051600481526024810182526020810180516001600160e01b03166312daa53360e21b179052905160009182916060916001600160a01b03861691610dfb9190611e52565b600060405180830381855afa9150503d8060008114610e36576040519150601f19603f3d011682016040523d82523d6000602084013e610e3b565b606091505b509092509050811580610e4d57508051155b15610e5c575060009392505050565b600081806020019051810190610e729190611e9f565b60408051808201909152601181527010db94dd185ada5b99d0dbdb9d1c9858dd607a1b6020918201528151908201209091507fa2f5d64a9f0bcdeed97e196203f5a8c1a5c8293988b625b7925686d30805508214610ed557506000949350505050565b60408051600481526024810182526020810180516001600160e01b03166001621794a360e21b031917905290516001600160a01b03871691610f1691611e52565b600060405180830381855afa9150503d8060008114610f51576040519150601f19603f3d011682016040523d82523d6000602084013e610f56565b606091505b509093509150821580610f6857508151155b15610f7857506000949350505050565b600082806020019051810190610f8e9190611e06565b90506002811015610fa55750600095945050505050565b50600195945050505050565b6000546001600160a01b031633146108d35760405163118cdaa760e01b8152336004820152602401610b11565b610fe7816113b4565b610ff08161150c565b610cbd8161162f565b60008181526001602052604081208054431080159061101b5750806001015443105b9392505050565b60008281526001602090815260408083206001600160a01b03851684526004810190925282205490918190036110585750505050565b600080611066868487611730565b91509150801561107f5761107a8684611831565b611089565b61108986846118aa565b60008381526008850160209081526040808320546009880183529281902054600a88015482516001600160a01b038b16815293840187905283830194909452606083015260808201929092529051849188917fdb84b66602d6a1eb74094da1da947e3d5896fc08ebc7770e271dbc61e44667719181900360a00190a3505050505050565b600080546001600160a01b038381166001600160a01b0319831681178455604051919092169283917f8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e09190a35050565b606080806104006001600160a01b031663160370b86040518163ffffffff1660e01b8152600401600060405180830381865afa1580156111a1573d6000803e3d6000fd5b505050506040513d6000823e601f3d908101601f191682016040526111c99190810190611fcf565b50508151835193965091945092501480156111e5575080518351145b6112205760405162461bcd60e51b815260206004820152600c60248201526b496e76616c6964206461746160a01b6044820152606401610b11565b909192565b6000828152600460205260409020546001600160a01b0316801561127a576001600160a01b03811660009081526005602090815260408083208390558583526004909152902080546001600160a01b03191690555b6001600160a01b03821615611329576001600160a01b038216600090815260056020526040902054156112ef5760405162461bcd60e51b815260206004820152601b60248201527f566f746572206164647265737320616c72656164792074616b656e00000000006044820152606401610b11565b6001600160a01b03821660008181526005602090815260408083208790558683526004909152902080546001600160a01b03191690911790555b505050565b60405163e2693e3f60e01b815260206004820152600b60248201526a577261707065644b61696160a81b60448201526000906104019063e2693e3f906064015b602060405180830381865afa15801561138b573d6000803e3d6000fd5b505050506040513d601f19601f820116820180604052508101906113af9190611e1f565b905090565b6000818152600160205260408120906113cb61115d565b5091505060005b81518110156115065760008282815181106113ef576113ef611dae565b60200260200101519050600080600080611408856106eb565b509350935093509350836114205750505050506114fe565b6001600160a01b038116301461143a5750505050506114fe565b600082815260038901602052604090205460ff1661148657600082815260038901602090815260408220805460ff1916600190811790915560028b018054918201815583529120018290555b6001600160a01b0385166000908152600489016020908152604080832085905560058b01825280832086905584835260068b01909152812080548592906114ce908490611d3f565b90915550506000828152600889016020526040812080548592906114f3908490611d3f565b909155505050505050505b6001016113d2565b50505050565b60008181526001602052604081209080611524611915565b9150915060005b81518110156116285760008084838151811061154957611549611dae565b602002602001015184848151811061156357611563611dae565b60200260200101519150915060008061157b83610cc0565b600086815260038b016020526040902054919350915060ff166115a15750505050611620565b6001600160a01b03821630146115ba5750505050611620565b6001600160a01b03831660009081526007890160209081526040808320805460ff1916600117905560048b01825280832087905560058b01825280832084905586835260088b0190915281208054839290611616908490611d3f565b9091555050505050505b60010161152b565b5050505050565b60008181526001602052604081209080805b60028401548110156116b057600084600201828154811061166457611664611dae565b906000526020600020015490506116836a0422ca8b0a00a42500000090565b6000828152600687016020526040902054106116a757836116a381611ded565b9450505b50600101611641565b50600b830182905560005b60028401548110156117225760008460020182815481106116de576116de611dae565b9060005260206000200154905060006116f787836119ea565b6000838152600988016020526040902081905590506117168185611d3f565b935050506001016116bb565b50600a909201919091555050565b60008381526001602090815260408083206001600160a01b0385168452600781018352818420546005820190935290832054839260ff16906117728287611a83565b6001600160a01b038716600090815260058501602090815260408083208490558a83526008870190915290205490955085906117af908390611dc4565b6117b99190611d3f565b60008881526008850160205260409020558161182657600087815260068401602052604081205490866117ec8484611dc4565b6117f69190611d3f565b60008a8152600687016020526040902081905590506a0422ca8b0a00a42500000080831015908210151415955050505b505050935093915050565b6000828152600160205260408120906a0422ca8b0a00a4250000006000848152600684016020526040902054109050801561188657600182600b01600082825461187b9190611dc4565b909155506118a19050565b600182600b01600082825461189b9190611d3f565b90915550505b61150684611ab2565b60008281526001602090815260408083208484526009810190925282205490916118d485856119ea565b60008581526009850160205260409020819055600a84015490915081906118fc908490611dc4565b6119069190611d3f565b83600a01819055505050505050565b6060806000611922611b60565b90506001600160a01b03811661193757509091565b806001600160a01b03166390599c076040518163ffffffff1660e01b8152600401600060405180830381865afa158015611975573d6000803e3d6000fd5b505050506040513d6000823e601f3d908101601f1916820160405261199d9190810190612080565b805182519296509094501490506119e55760405162461bcd60e51b815260206004820152600c60248201526b496e76616c6964206461746160a01b6044820152606401610b11565b509091565b6000828152600160209081526040808320848452600681018352818420546008820190935290832054600b8201549192916a0422ca8b0a00a425000000831015611a3b5760009450505050506105a7565b600180821115611a5357611a50600183611dc4565b90505b6000611a6a6a0422ca8b0a00a4250000008561215d565b905081811115611a775750805b98975050505050505050565b60008215611a9d57611a9482610cc0565b91506105a79050565b611aa6826106eb565b50919695505050505050565b6000818152600160205260408120600a81015490915b6002830154811015611b56576000836002018281548110611aeb57611aeb611dae565b600091825260208083209091015480835260098701909152604082205490925090611b1687846119ea565b9050808214611b4b5760008381526009870160205260409020819055611b3c8286611dc4565b9450611b488186611d3f565b94505b505050600101611ac8565b50600a9091015550565b60405163e2693e3f60e01b815260206004820152600a602482015269434c526567697374727960b01b60448201526000906104019063e2693e3f9060640161136e565b60008060408385031215611bb657600080fd5b50508035926020909101359150565b6001600160a01b0381168114610cbd57600080fd5b60008060408385031215611bed57600080fd5b823591506020830135611bff81611bc5565b809150509250929050565b600060208284031215611c1c57600080fd5b5035919050565b60005b83811015611c3e578181015183820152602001611c26565b50506000910152565b6020815260008251806020840152611c66816040850160208701611c23565b601f01601f19169190910160400192915050565b600060208284031215611c8c57600080fd5b813561101b81611bc5565b60008151808452602080850194506020840160005b83811015611cc857815187529582019590820190600101611cac565b509495945050505050565b606081526000611ce66060830186611c97565b8281036020840152611cf88186611c97565b90508281036040840152611d0c8185611c97565b9695505050505050565b60208152600061101b6020830184611c97565b634e487b7160e01b600052601160045260246000fd5b808201808211156105a7576105a7611d29565b600060608201858352602085602085015260606040850152818554808452608086019150866000526020600020935060005b81811015611da057845483526001948501949284019201611d84565b509098975050505050505050565b634e487b7160e01b600052603260045260246000fd5b818103818111156105a7576105a7611d29565b634e487b7160e01b600052603160045260246000fd5b600060018201611dff57611dff611d29565b5060010190565b600060208284031215611e1857600080fd5b5051919050565b600060208284031215611e3157600080fd5b815161101b81611bc5565b634e487b7160e01b600052604160045260246000fd5b60008251611e64818460208701611c23565b9190910192915050565b604051601f8201601f1916810167ffffffffffffffff81118282101715611e9757611e97611e3c565b604052919050565b600060208284031215611eb157600080fd5b815167ffffffffffffffff80821115611ec957600080fd5b818401915084601f830112611edd57600080fd5b815181811115611eef57611eef611e3c565b611f02601f8201601f1916602001611e6e565b9150808252856020828501011115611f1957600080fd5b611f2a816020840160208601611c23565b50949350505050565b600067ffffffffffffffff821115611f4d57611f4d611e3c565b5060051b60200190565b600082601f830112611f6857600080fd5b81516020611f7d611f7883611f33565b611e6e565b8083825260208201915060208460051b870101935086841115611f9f57600080fd5b602086015b84811015611fc4578051611fb781611bc5565b8352918301918301611fa4565b509695505050505050565b600080600080600060a08688031215611fe757600080fd5b855167ffffffffffffffff80821115611fff57600080fd5b61200b89838a01611f57565b9650602088015191508082111561202157600080fd5b61202d89838a01611f57565b9550604088015191508082111561204357600080fd5b5061205088828901611f57565b935050606086015161206181611bc5565b608087015190925061207281611bc5565b809150509295509295909350565b60008060006060848603121561209557600080fd5b835167ffffffffffffffff808211156120ad57600080fd5b6120b987838801611f57565b94506020915081860151818111156120d057600080fd5b8601601f810188136120e157600080fd5b80516120ef611f7882611f33565b81815260059190911b8201840190848101908a83111561210e57600080fd5b928501925b8284101561212c57835182529285019290850190612113565b60408a015190975094505050508082111561214657600080fd5b5061215386828701611f57565b9150509250925092565b60008261217a57634e487b7160e01b600052601260045260246000fd5b50049056fea26469706673582212202116f67d955a792507b91b25967a0c953b77fd0f122ec15c9a0d3365d4d5437864736f6c63430008190033",
+  "devdoc": {
+    "errors": {
+      "OwnableInvalidOwner(address)": [
+        {
+          "details": "The owner is not a valid owner account. (eg. `address(0)`)"
+        }
+      ],
+      "OwnableUnauthorizedAccount(address)": [
+        {
+          "details": "The caller account is not authorized to perform an operation."
+        }
+      ]
+    },
+    "kind": "dev",
+    "methods": {
+      "VERSION()": {
+        "details": "It remains 1 for the compatibility with the previous version."
+      },
+      "createTracker(uint256,uint256)": {
+        "details": "Creates a new Tracker and populate initial values from AddressBook Only allowed to the contract owner."
+      },
+      "isCnStakingV2(address)": {
+        "details": "Test if the given contract is a CnStakingV2 instance Does not check if the contract is registered in AddressBook."
+      },
+      "owner()": {
+        "details": "Returns the address of the current owner."
+      },
+      "readCLPool(address)": {
+        "details": "Read balance from CLPool"
+      },
+      "readCnStaking(address)": {
+        "details": "Read various fields from a CnStaking contract"
+      },
+      "refreshStake(address)": {
+        "details": "Re-evaluate Tracker contents related to the staking contract Anyone can call this function, but `staking` must be a staking contract registered in tracker."
+      },
+      "refreshVoter(address)": {
+        "details": "Re-evaluate voter account mapping related to the staking contract Anyone can call this function, but `staking` must be a staking contract registered to the current AddressBook. Updates the voter account of the GC of the `staking` with respect to the current AddressBook. If the GC already had a voter account, the account will be unregistered. If the new voter account is already appointed for another GC, this function reverts."
+      },
+      "renounceOwnership()": {
+        "details": "Leaves the contract without owner. It will not be possible to call `onlyOwner` functions. Can only be called by the current owner. NOTE: Renouncing ownership will leave the contract without an owner, thereby disabling any functionality that is only available to the owner."
+      },
+      "transferOwnership(address)": {
+        "details": "Transfers ownership of the contract to a new account (`newOwner`). Can only be called by the current owner."
+      }
+    },
+    "version": 1
+  },
+  "userdoc": {
+    "kind": "user",
+    "methods": {},
+    "version": 1
+  },
+  "storageLayout": {
+    "storage": [
+      {
+        "astId": 3206,
+        "contract": "contracts/consensus/StakingTrackerV2/StakingTrackerV2.sol:StakingTrackerV2",
+        "label": "_owner",
+        "offset": 0,
+        "slot": "0",
+        "type": "t_address"
+      },
+      {
+        "astId": 1315,
+        "contract": "contracts/consensus/StakingTrackerV2/StakingTrackerV2.sol:StakingTrackerV2",
+        "label": "trackers",
+        "offset": 0,
+        "slot": "1",
+        "type": "t_mapping(t_uint256,t_struct(Tracker)1310_storage)"
+      },
+      {
+        "astId": 1318,
+        "contract": "contracts/consensus/StakingTrackerV2/StakingTrackerV2.sol:StakingTrackerV2",
+        "label": "allTrackerIds",
+        "offset": 0,
+        "slot": "2",
+        "type": "t_array(t_uint256)dyn_storage"
+      },
+      {
+        "astId": 1321,
+        "contract": "contracts/consensus/StakingTrackerV2/StakingTrackerV2.sol:StakingTrackerV2",
+        "label": "liveTrackerIds",
+        "offset": 0,
+        "slot": "3",
+        "type": "t_array(t_uint256)dyn_storage"
+      },
+      {
+        "astId": 1326,
+        "contract": "contracts/consensus/StakingTrackerV2/StakingTrackerV2.sol:StakingTrackerV2",
+        "label": "gcIdToVoter",
+        "offset": 0,
+        "slot": "4",
+        "type": "t_mapping(t_uint256,t_address)"
+      },
+      {
+        "astId": 1331,
+        "contract": "contracts/consensus/StakingTrackerV2/StakingTrackerV2.sol:StakingTrackerV2",
+        "label": "voterToGCId",
+        "offset": 0,
+        "slot": "5",
+        "type": "t_mapping(t_address,t_uint256)"
+      }
+    ],
+    "types": {
+      "t_address": {
+        "encoding": "inplace",
+        "label": "address",
+        "numberOfBytes": "20"
+      },
+      "t_array(t_uint256)dyn_storage": {
+        "base": "t_uint256",
+        "encoding": "dynamic_array",
+        "label": "uint256[]",
+        "numberOfBytes": "32"
+      },
+      "t_bool": {
+        "encoding": "inplace",
+        "label": "bool",
+        "numberOfBytes": "1"
+      },
+      "t_mapping(t_address,t_bool)": {
+        "encoding": "mapping",
+        "key": "t_address",
+        "label": "mapping(address => bool)",
+        "numberOfBytes": "32",
+        "value": "t_bool"
+      },
+      "t_mapping(t_address,t_uint256)": {
+        "encoding": "mapping",
+        "key": "t_address",
+        "label": "mapping(address => uint256)",
+        "numberOfBytes": "32",
+        "value": "t_uint256"
+      },
+      "t_mapping(t_uint256,t_address)": {
+        "encoding": "mapping",
+        "key": "t_uint256",
+        "label": "mapping(uint256 => address)",
+        "numberOfBytes": "32",
+        "value": "t_address"
+      },
+      "t_mapping(t_uint256,t_bool)": {
+        "encoding": "mapping",
+        "key": "t_uint256",
+        "label": "mapping(uint256 => bool)",
+        "numberOfBytes": "32",
+        "value": "t_bool"
+      },
+      "t_mapping(t_uint256,t_struct(Tracker)1310_storage)": {
+        "encoding": "mapping",
+        "key": "t_uint256",
+        "label": "mapping(uint256 => struct StakingTrackerV2.Tracker)",
+        "numberOfBytes": "32",
+        "value": "t_struct(Tracker)1310_storage"
+      },
+      "t_mapping(t_uint256,t_uint256)": {
+        "encoding": "mapping",
+        "key": "t_uint256",
+        "label": "mapping(uint256 => uint256)",
+        "numberOfBytes": "32",
+        "value": "t_uint256"
+      },
+      "t_struct(Tracker)1310_storage": {
+        "encoding": "inplace",
+        "label": "struct StakingTrackerV2.Tracker",
+        "members": [
+          {
+            "astId": 1272,
+            "contract": "contracts/consensus/StakingTrackerV2/StakingTrackerV2.sol:StakingTrackerV2",
+            "label": "trackStart",
+            "offset": 0,
+            "slot": "0",
+            "type": "t_uint256"
+          },
+          {
+            "astId": 1274,
+            "contract": "contracts/consensus/StakingTrackerV2/StakingTrackerV2.sol:StakingTrackerV2",
+            "label": "trackEnd",
+            "offset": 0,
+            "slot": "1",
+            "type": "t_uint256"
+          },
+          {
+            "astId": 1277,
+            "contract": "contracts/consensus/StakingTrackerV2/StakingTrackerV2.sol:StakingTrackerV2",
+            "label": "gcIds",
+            "offset": 0,
+            "slot": "2",
+            "type": "t_array(t_uint256)dyn_storage"
+          },
+          {
+            "astId": 1281,
+            "contract": "contracts/consensus/StakingTrackerV2/StakingTrackerV2.sol:StakingTrackerV2",
+            "label": "gcExists",
+            "offset": 0,
+            "slot": "3",
+            "type": "t_mapping(t_uint256,t_bool)"
+          },
+          {
+            "astId": 1285,
+            "contract": "contracts/consensus/StakingTrackerV2/StakingTrackerV2.sol:StakingTrackerV2",
+            "label": "stakingToGCId",
+            "offset": 0,
+            "slot": "4",
+            "type": "t_mapping(t_address,t_uint256)"
+          },
+          {
+            "astId": 1289,
+            "contract": "contracts/consensus/StakingTrackerV2/StakingTrackerV2.sol:StakingTrackerV2",
+            "label": "stakingBalances",
+            "offset": 0,
+            "slot": "5",
+            "type": "t_mapping(t_address,t_uint256)"
+          },
+          {
+            "astId": 1293,
+            "contract": "contracts/consensus/StakingTrackerV2/StakingTrackerV2.sol:StakingTrackerV2",
+            "label": "cnStakingBalances",
+            "offset": 0,
+            "slot": "6",
+            "type": "t_mapping(t_uint256,t_uint256)"
+          },
+          {
+            "astId": 1297,
+            "contract": "contracts/consensus/StakingTrackerV2/StakingTrackerV2.sol:StakingTrackerV2",
+            "label": "isCLPool",
+            "offset": 0,
+            "slot": "7",
+            "type": "t_mapping(t_address,t_bool)"
+          },
+          {
+            "astId": 1301,
+            "contract": "contracts/consensus/StakingTrackerV2/StakingTrackerV2.sol:StakingTrackerV2",
+            "label": "gcBalances",
+            "offset": 0,
+            "slot": "8",
+            "type": "t_mapping(t_uint256,t_uint256)"
+          },
+          {
+            "astId": 1305,
+            "contract": "contracts/consensus/StakingTrackerV2/StakingTrackerV2.sol:StakingTrackerV2",
+            "label": "gcVotes",
+            "offset": 0,
+            "slot": "9",
+            "type": "t_mapping(t_uint256,t_uint256)"
+          },
+          {
+            "astId": 1307,
+            "contract": "contracts/consensus/StakingTrackerV2/StakingTrackerV2.sol:StakingTrackerV2",
+            "label": "totalVotes",
+            "offset": 0,
+            "slot": "10",
+            "type": "t_uint256"
+          },
+          {
+            "astId": 1309,
+            "contract": "contracts/consensus/StakingTrackerV2/StakingTrackerV2.sol:StakingTrackerV2",
+            "label": "numEligible",
+            "offset": 0,
+            "slot": "11",
+            "type": "t_uint256"
+          }
+        ],
+        "numberOfBytes": "384"
+      },
+      "t_uint256": {
+        "encoding": "inplace",
+        "label": "uint256",
+        "numberOfBytes": "32"
+      }
+    }
+  }
+}

@@ -1,0 +1,45 @@
+# Development files
+test/
+deploy/
+deployments/
+helpers/
+scripts/
+cache/
+typechain-types/
+coverage/
+coverage.json
+
+# Config files
+hardhat.config.ts
+tsconfig.json
+.env
+.env.*
+.gitignore
+.prettierrc
+.eslintrc
+.solhint.json
+.solcover.js
+
+# Build artifacts to exclude
+artifacts/**/*.dbg.json
+artifacts/build-info/
+
+# Foundry (if applicable)
+out/
+lib/
+foundry.toml
+remappings.txt
+snapshots/
+
+# IDE
+.vscode/
+.idea/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Misc
+*.log
+*.txt
+!README.txt

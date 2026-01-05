@@ -1,0 +1,484 @@
+{
+  "address": "0xb90e8A1D5434a191c42bd2E12a51DA1d96Debe67",
+  "abi": [
+    {
+      "inputs": [],
+      "stateMutability": "nonpayable",
+      "type": "constructor"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "owner",
+          "type": "address"
+        }
+      ],
+      "name": "OwnableInvalidOwner",
+      "type": "error"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "account",
+          "type": "address"
+        }
+      ],
+      "name": "OwnableUnauthorizedAccount",
+      "type": "error"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "beneficiary",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "amount",
+          "type": "uint256"
+        }
+      ],
+      "name": "Claimed",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "previousOwner",
+          "type": "address"
+        },
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "newOwner",
+          "type": "address"
+        }
+      ],
+      "name": "OwnershipTransferred",
+      "type": "event"
+    },
+    {
+      "inputs": [],
+      "name": "KAIA_UNIT",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "TOTAL_AIRDROP_AMOUNT",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address[]",
+          "name": "beneficiaries",
+          "type": "address[]"
+        },
+        {
+          "internalType": "uint256[]",
+          "name": "amounts",
+          "type": "uint256[]"
+        }
+      ],
+      "name": "addBatchClaims",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "beneficiary",
+          "type": "address"
+        },
+        {
+          "internalType": "uint256",
+          "name": "amount",
+          "type": "uint256"
+        }
+      ],
+      "name": "addClaim",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "claim",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address[]",
+          "name": "beneficiary",
+          "type": "address[]"
+        }
+      ],
+      "name": "claimBatch",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "beneficiary",
+          "type": "address"
+        }
+      ],
+      "name": "claimFor",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "name": "claimed",
+      "outputs": [
+        {
+          "internalType": "bool",
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "name": "claims",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "start",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "end",
+          "type": "uint256"
+        }
+      ],
+      "name": "getBeneficiaries",
+      "outputs": [
+        {
+          "internalType": "address[]",
+          "name": "result",
+          "type": "address[]"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getBeneficiariesLength",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "index",
+          "type": "uint256"
+        }
+      ],
+      "name": "getBeneficiaryAt",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "owner",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "renounceOwnership",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "newOwner",
+          "type": "address"
+        }
+      ],
+      "name": "transferOwnership",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    }
+  ],
+  "transactionHash": "0x0ff127e79ff236d6f22d6cb0ce635590cedfa318f6ccbd34fb36dade9f9c5dda",
+  "receipt": {
+    "to": null,
+    "from": "0xe4460065c651692cC5f0Bb584d4b3A0050fE2301",
+    "contractAddress": "0xb90e8A1D5434a191c42bd2E12a51DA1d96Debe67",
+    "transactionIndex": 2,
+    "gasUsed": "926634",
+    "logsBloom": "0x00000000000000000000000000000000000000000000000000800000000000000000000000000000000000000000000400000000000000100000000000000000000000000000000000000000000000000001000000000000000000000000000000000000020000000000000000000800000000000000000000000000000000400000000000008000000000080000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000800000000000000000000000020000000000000000000000000000000000000000000000000000000000000001000",
+    "blockHash": "0xfd67173dc2a49ff8785a02a92463ada4a82e8cde402fb16a39def90e434cb489",
+    "transactionHash": "0x0ff127e79ff236d6f22d6cb0ce635590cedfa318f6ccbd34fb36dade9f9c5dda",
+    "logs": [
+      {
+        "transactionIndex": 2,
+        "blockNumber": 156147518,
+        "transactionHash": "0x0ff127e79ff236d6f22d6cb0ce635590cedfa318f6ccbd34fb36dade9f9c5dda",
+        "address": "0xb90e8A1D5434a191c42bd2E12a51DA1d96Debe67",
+        "topics": [
+          "0x8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e0",
+          "0x0000000000000000000000000000000000000000000000000000000000000000",
+          "0x000000000000000000000000e4460065c651692cc5f0bb584d4b3a0050fe2301"
+        ],
+        "data": "0x",
+        "logIndex": 6,
+        "blockHash": "0xfd67173dc2a49ff8785a02a92463ada4a82e8cde402fb16a39def90e434cb489"
+      }
+    ],
+    "blockNumber": 156147518,
+    "cumulativeGasUsed": "1307912",
+    "status": 1,
+    "byzantium": true
+  },
+  "args": [],
+  "numDeployments": 1,
+  "solcInputHash": "7666795c885cdce6907ebb382815d2c9",
+  "metadata": "{\"compiler\":{\"version\":\"0.8.25+commit.b61c2a91\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"inputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"constructor\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"owner\",\"type\":\"address\"}],\"name\":\"OwnableInvalidOwner\",\"type\":\"error\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"account\",\"type\":\"address\"}],\"name\":\"OwnableUnauthorizedAccount\",\"type\":\"error\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"beneficiary\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"}],\"name\":\"Claimed\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"previousOwner\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"newOwner\",\"type\":\"address\"}],\"name\":\"OwnershipTransferred\",\"type\":\"event\"},{\"inputs\":[],\"name\":\"KAIA_UNIT\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"TOTAL_AIRDROP_AMOUNT\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address[]\",\"name\":\"beneficiaries\",\"type\":\"address[]\"},{\"internalType\":\"uint256[]\",\"name\":\"amounts\",\"type\":\"uint256[]\"}],\"name\":\"addBatchClaims\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"beneficiary\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"}],\"name\":\"addClaim\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"claim\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address[]\",\"name\":\"beneficiary\",\"type\":\"address[]\"}],\"name\":\"claimBatch\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"beneficiary\",\"type\":\"address\"}],\"name\":\"claimFor\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"name\":\"claimed\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"name\":\"claims\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"start\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"end\",\"type\":\"uint256\"}],\"name\":\"getBeneficiaries\",\"outputs\":[{\"internalType\":\"address[]\",\"name\":\"result\",\"type\":\"address[]\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getBeneficiariesLength\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"index\",\"type\":\"uint256\"}],\"name\":\"getBeneficiaryAt\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"owner\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"renounceOwnership\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"newOwner\",\"type\":\"address\"}],\"name\":\"transferOwnership\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"}],\"devdoc\":{\"errors\":{\"OwnableInvalidOwner(address)\":[{\"details\":\"The owner is not a valid owner account. (eg. `address(0)`)\"}],\"OwnableUnauthorizedAccount(address)\":[{\"details\":\"The caller account is not authorized to perform an operation.\"}]},\"kind\":\"dev\",\"methods\":{\"owner()\":{\"details\":\"Returns the address of the current owner.\"},\"renounceOwnership()\":{\"details\":\"Leaves the contract without owner. It will not be possible to call `onlyOwner` functions. Can only be called by the current owner. NOTE: Renouncing ownership will leave the contract without an owner, thereby disabling any functionality that is only available to the owner.\"},\"transferOwnership(address)\":{\"details\":\"Transfers ownership of the contract to a new account (`newOwner`). Can only be called by the current owner.\"}},\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1}},\"settings\":{\"compilationTarget\":{\"contracts/allocation/Airdrop.sol\":\"Airdrop\"},\"evmVersion\":\"paris\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\",\"useLiteralContent\":true},\"optimizer\":{\"enabled\":true,\"runs\":200},\"remappings\":[]},\"sources\":{\"contracts/allocation/Airdrop.sol\":{\"content\":\"// Copyright 2024 The kaia Authors\\n// This file is part of the kaia library.\\n//\\n// The kaia library is free software: you can redistribute it and/or modify\\n// it under the terms of the GNU Lesser General Public License as published by\\n// the Free Software Foundation, either version 3 of the License, or\\n// (at your option) any later version.\\n//\\n// The kaia library is distributed in the hope that it will be useful,\\n// but WITHOUT ANY WARRANTY; without even the implied warranty of\\n// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the\\n// GNU Lesser General Public License for more details.\\n//\\n// You should have received a copy of the GNU Lesser General Public License\\n// along with the kaia library. If not, see <http://www.gnu.org/licenses/>.\\n\\n// SPDX-License-Identifier: LGPL-3.0-only\\npragma solidity 0.8.25;\\n\\nimport \\\"./IAirdrop.sol\\\";\\nimport \\\"openzeppelin-contracts-5.0/utils/structs/EnumerableSet.sol\\\";\\nimport \\\"openzeppelin-contracts-5.0/access/Ownable.sol\\\";\\n\\ncontract Airdrop is Ownable, IAirdrop {\\n    using EnumerableSet for EnumerableSet.AddressSet;\\n\\n    /* ========== CONSTANTS ========== */\\n\\n    uint256 public constant KAIA_UNIT = 1e18;\\n\\n    uint256 public constant TOTAL_AIRDROP_AMOUNT = 80_000_000 * KAIA_UNIT;\\n\\n    /* ========== STATE VARIABLES ========== */\\n\\n    EnumerableSet.AddressSet private _beneficiaries;\\n\\n    mapping(address => uint256) public claims;\\n\\n    mapping(address => bool) public claimed;\\n\\n    /* ========== CONSTRUCTOR ========== */\\n\\n    constructor() Ownable(msg.sender) {}\\n\\n    /* ========== OPERATOR FUNCTIONS ========== */\\n\\n    function addClaim(address beneficiary, uint256 amount) external override onlyOwner {\\n        _addClaim(beneficiary, amount);\\n    }\\n\\n    function addBatchClaims(address[] calldata beneficiaries, uint256[] calldata amounts) external override onlyOwner {\\n        require(beneficiaries.length == amounts.length, \\\"Airdrop: invalid input length\\\");\\n\\n        for (uint256 i = 0; i < beneficiaries.length; i++) {\\n            _addClaim(beneficiaries[i], amounts[i]);\\n        }\\n    }\\n\\n    /* ========== PUBLIC FUNCTIONS ========== */\\n\\n    function claim() external override {\\n        _claim(msg.sender);\\n    }\\n\\n    function claimFor(address beneficiary) public override {\\n        _claim(beneficiary);\\n    }\\n\\n    function claimBatch(address[] calldata beneficiary) external override {\\n        for (uint256 i = 0; i < beneficiary.length; i++) {\\n            _claim(beneficiary[i]);\\n        }\\n    }\\n\\n    /* ========== INTERNAL FUNCTIONS ========== */\\n\\n    function _addClaim(address beneficiary, uint256 amount) internal {\\n        require(_beneficiaries.add(beneficiary), \\\"Airdrop: beneficiary already exists\\\");\\n        claims[beneficiary] = amount;\\n    }\\n\\n    function _claim(address beneficiary) internal {\\n        require(!claimed[beneficiary], \\\"Airdrop: already claimed\\\");\\n\\n        uint256 _amount = claims[beneficiary];\\n        require(_amount > 0 && _amount <= address(this).balance, \\\"Airdrop: no claimable amount\\\");\\n\\n        claimed[beneficiary] = true;\\n\\n        (bool success, ) = beneficiary.call{value: _amount}(\\\"\\\");\\n        require(success, \\\"Transfer failed.\\\");\\n\\n        emit Claimed(beneficiary, _amount);\\n    }\\n\\n    /* ========== GETTERS ========== */\\n\\n    function getBeneficiaries(uint256 start, uint256 end) external view override returns (address[] memory result) {\\n        end = end > _beneficiaries.length() ? _beneficiaries.length() : end;\\n        if (start >= end) {\\n            return new address[](0);\\n        }\\n\\n        result = new address[](end - start);\\n        for (uint256 i = start; i < end; i++) {\\n            unchecked {\\n                result[i - start] = _beneficiaries.at(i);\\n            }\\n        }\\n    }\\n\\n    function getBeneficiaryAt(uint256 index) external view override returns (address) {\\n        return _beneficiaries.at(index);\\n    }\\n\\n    function getBeneficiariesLength() external view override returns (uint256) {\\n        return _beneficiaries.length();\\n    }\\n}\\n\",\"keccak256\":\"0x1297fc1a6be4bfd509ed48a0d30e6407497831854ed7e71eb66beda01c5b653f\",\"license\":\"LGPL-3.0-only\"},\"contracts/allocation/IAirdrop.sol\":{\"content\":\"// Copyright 2024 The kaia Authors\\n// This file is part of the kaia library.\\n//\\n// The kaia library is free software: you can redistribute it and/or modify\\n// it under the terms of the GNU Lesser General Public License as published by\\n// the Free Software Foundation, either version 3 of the License, or\\n// (at your option) any later version.\\n//\\n// The kaia library is distributed in the hope that it will be useful,\\n// but WITHOUT ANY WARRANTY; without even the implied warranty of\\n// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the\\n// GNU Lesser General Public License for more details.\\n//\\n// You should have received a copy of the GNU Lesser General Public License\\n// along with the kaia library. If not, see <http://www.gnu.org/licenses/>.\\n\\n// SPDX-License-Identifier: LGPL-3.0-only\\npragma solidity 0.8.25;\\n\\ninterface IAirdrop {\\n    /* ========== EVENT ========== */\\n\\n    event Claimed(address indexed beneficiary, uint256 amount);\\n\\n    /* ========== VIEWS ========== */\\n\\n    function KAIA_UNIT() external view returns (uint256);\\n\\n    function TOTAL_AIRDROP_AMOUNT() external view returns (uint256);\\n\\n    function claims(address) external view returns (uint256);\\n\\n    function claimed(address) external view returns (bool);\\n\\n    function getBeneficiaries(uint256 start, uint256 end) external view returns (address[] memory);\\n\\n    function getBeneficiaryAt(uint256 index) external view returns (address);\\n\\n    function getBeneficiariesLength() external view returns (uint256);\\n\\n    /* ========== MUTATIVE FUNCTIONS ========== */\\n\\n    function addClaim(address beneficiary, uint256 amount) external;\\n\\n    function addBatchClaims(address[] calldata beneficiaries, uint256[] calldata amounts) external;\\n\\n    function claim() external;\\n\\n    function claimFor(address beneficiary) external;\\n\\n    function claimBatch(address[] calldata beneficiaries) external;\\n}\\n\",\"keccak256\":\"0x18495eaef6bf3e40e736149c3360753d98b631f5e2d8088a8f24f30bd6384448\",\"license\":\"LGPL-3.0-only\"},\"openzeppelin-contracts-5.0/access/Ownable.sol\":{\"content\":\"// SPDX-License-Identifier: MIT\\n// OpenZeppelin Contracts (last updated v5.0.0) (access/Ownable.sol)\\n\\npragma solidity ^0.8.20;\\n\\nimport {Context} from \\\"../utils/Context.sol\\\";\\n\\n/**\\n * @dev Contract module which provides a basic access control mechanism, where\\n * there is an account (an owner) that can be granted exclusive access to\\n * specific functions.\\n *\\n * The initial owner is set to the address provided by the deployer. This can\\n * later be changed with {transferOwnership}.\\n *\\n * This module is used through inheritance. It will make available the modifier\\n * `onlyOwner`, which can be applied to your functions to restrict their use to\\n * the owner.\\n */\\nabstract contract Ownable is Context {\\n    address private _owner;\\n\\n    /**\\n     * @dev The caller account is not authorized to perform an operation.\\n     */\\n    error OwnableUnauthorizedAccount(address account);\\n\\n    /**\\n     * @dev The owner is not a valid owner account. (eg. `address(0)`)\\n     */\\n    error OwnableInvalidOwner(address owner);\\n\\n    event OwnershipTransferred(address indexed previousOwner, address indexed newOwner);\\n\\n    /**\\n     * @dev Initializes the contract setting the address provided by the deployer as the initial owner.\\n     */\\n    constructor(address initialOwner) {\\n        if (initialOwner == address(0)) {\\n            revert OwnableInvalidOwner(address(0));\\n        }\\n        _transferOwnership(initialOwner);\\n    }\\n\\n    /**\\n     * @dev Throws if called by any account other than the owner.\\n     */\\n    modifier onlyOwner() {\\n        _checkOwner();\\n        _;\\n    }\\n\\n    /**\\n     * @dev Returns the address of the current owner.\\n     */\\n    function owner() public view virtual returns (address) {\\n        return _owner;\\n    }\\n\\n    /**\\n     * @dev Throws if the sender is not the owner.\\n     */\\n    function _checkOwner() internal view virtual {\\n        if (owner() != _msgSender()) {\\n            revert OwnableUnauthorizedAccount(_msgSender());\\n        }\\n    }\\n\\n    /**\\n     * @dev Leaves the contract without owner. It will not be possible to call\\n     * `onlyOwner` functions. Can only be called by the current owner.\\n     *\\n     * NOTE: Renouncing ownership will leave the contract without an owner,\\n     * thereby disabling any functionality that is only available to the owner.\\n     */\\n    function renounceOwnership() public virtual onlyOwner {\\n        _transferOwnership(address(0));\\n    }\\n\\n    /**\\n     * @dev Transfers ownership of the contract to a new account (`newOwner`).\\n     * Can only be called by the current owner.\\n     */\\n    function transferOwnership(address newOwner) public virtual onlyOwner {\\n        if (newOwner == address(0)) {\\n            revert OwnableInvalidOwner(address(0));\\n        }\\n        _transferOwnership(newOwner);\\n    }\\n\\n    /**\\n     * @dev Transfers ownership of the contract to a new account (`newOwner`).\\n     * Internal function without access restriction.\\n     */\\n    function _transferOwnership(address newOwner) internal virtual {\\n        address oldOwner = _owner;\\n        _owner = newOwner;\\n        emit OwnershipTransferred(oldOwner, newOwner);\\n    }\\n}\\n\",\"keccak256\":\"0xff6d0bb2e285473e5311d9d3caacb525ae3538a80758c10649a4d61029b017bb\",\"license\":\"MIT\"},\"openzeppelin-contracts-5.0/utils/Context.sol\":{\"content\":\"// SPDX-License-Identifier: MIT\\n// OpenZeppelin Contracts (last updated v5.0.1) (utils/Context.sol)\\n\\npragma solidity ^0.8.20;\\n\\n/**\\n * @dev Provides information about the current execution context, including the\\n * sender of the transaction and its data. While these are generally available\\n * via msg.sender and msg.data, they should not be accessed in such a direct\\n * manner, since when dealing with meta-transactions the account sending and\\n * paying for execution may not be the actual sender (as far as an application\\n * is concerned).\\n *\\n * This contract is only required for intermediate, library-like contracts.\\n */\\nabstract contract Context {\\n    function _msgSender() internal view virtual returns (address) {\\n        return msg.sender;\\n    }\\n\\n    function _msgData() internal view virtual returns (bytes calldata) {\\n        return msg.data;\\n    }\\n\\n    function _contextSuffixLength() internal view virtual returns (uint256) {\\n        return 0;\\n    }\\n}\\n\",\"keccak256\":\"0x493033a8d1b176a037b2cc6a04dad01a5c157722049bbecf632ca876224dd4b2\",\"license\":\"MIT\"},\"openzeppelin-contracts-5.0/utils/structs/EnumerableSet.sol\":{\"content\":\"// SPDX-License-Identifier: MIT\\n// OpenZeppelin Contracts (last updated v5.0.0) (utils/structs/EnumerableSet.sol)\\n// This file was procedurally generated from scripts/generate/templates/EnumerableSet.js.\\n\\npragma solidity ^0.8.20;\\n\\n/**\\n * @dev Library for managing\\n * https://en.wikipedia.org/wiki/Set_(abstract_data_type)[sets] of primitive\\n * types.\\n *\\n * Sets have the following properties:\\n *\\n * - Elements are added, removed, and checked for existence in constant time\\n * (O(1)).\\n * - Elements are enumerated in O(n). No guarantees are made on the ordering.\\n *\\n * ```solidity\\n * contract Example {\\n *     // Add the library methods\\n *     using EnumerableSet for EnumerableSet.AddressSet;\\n *\\n *     // Declare a set state variable\\n *     EnumerableSet.AddressSet private mySet;\\n * }\\n * ```\\n *\\n * As of v3.3.0, sets of type `bytes32` (`Bytes32Set`), `address` (`AddressSet`)\\n * and `uint256` (`UintSet`) are supported.\\n *\\n * [WARNING]\\n * ====\\n * Trying to delete such a structure from storage will likely result in data corruption, rendering the structure\\n * unusable.\\n * See https://github.com/ethereum/solidity/pull/11843[ethereum/solidity#11843] for more info.\\n *\\n * In order to clean an EnumerableSet, you can either remove all elements one by one or create a fresh instance using an\\n * array of EnumerableSet.\\n * ====\\n */\\nlibrary EnumerableSet {\\n    // To implement this library for multiple types with as little code\\n    // repetition as possible, we write it in terms of a generic Set type with\\n    // bytes32 values.\\n    // The Set implementation uses private functions, and user-facing\\n    // implementations (such as AddressSet) are just wrappers around the\\n    // underlying Set.\\n    // This means that we can only create new EnumerableSets for types that fit\\n    // in bytes32.\\n\\n    struct Set {\\n        // Storage of set values\\n        bytes32[] _values;\\n        // Position is the index of the value in the `values` array plus 1.\\n        // Position 0 is used to mean a value is not in the set.\\n        mapping(bytes32 value => uint256) _positions;\\n    }\\n\\n    /**\\n     * @dev Add a value to a set. O(1).\\n     *\\n     * Returns true if the value was added to the set, that is if it was not\\n     * already present.\\n     */\\n    function _add(Set storage set, bytes32 value) private returns (bool) {\\n        if (!_contains(set, value)) {\\n            set._values.push(value);\\n            // The value is stored at length-1, but we add 1 to all indexes\\n            // and use 0 as a sentinel value\\n            set._positions[value] = set._values.length;\\n            return true;\\n        } else {\\n            return false;\\n        }\\n    }\\n\\n    /**\\n     * @dev Removes a value from a set. O(1).\\n     *\\n     * Returns true if the value was removed from the set, that is if it was\\n     * present.\\n     */\\n    function _remove(Set storage set, bytes32 value) private returns (bool) {\\n        // We cache the value's position to prevent multiple reads from the same storage slot\\n        uint256 position = set._positions[value];\\n\\n        if (position != 0) {\\n            // Equivalent to contains(set, value)\\n            // To delete an element from the _values array in O(1), we swap the element to delete with the last one in\\n            // the array, and then remove the last element (sometimes called as 'swap and pop').\\n            // This modifies the order of the array, as noted in {at}.\\n\\n            uint256 valueIndex = position - 1;\\n            uint256 lastIndex = set._values.length - 1;\\n\\n            if (valueIndex != lastIndex) {\\n                bytes32 lastValue = set._values[lastIndex];\\n\\n                // Move the lastValue to the index where the value to delete is\\n                set._values[valueIndex] = lastValue;\\n                // Update the tracked position of the lastValue (that was just moved)\\n                set._positions[lastValue] = position;\\n            }\\n\\n            // Delete the slot where the moved value was stored\\n            set._values.pop();\\n\\n            // Delete the tracked position for the deleted slot\\n            delete set._positions[value];\\n\\n            return true;\\n        } else {\\n            return false;\\n        }\\n    }\\n\\n    /**\\n     * @dev Returns true if the value is in the set. O(1).\\n     */\\n    function _contains(Set storage set, bytes32 value) private view returns (bool) {\\n        return set._positions[value] != 0;\\n    }\\n\\n    /**\\n     * @dev Returns the number of values on the set. O(1).\\n     */\\n    function _length(Set storage set) private view returns (uint256) {\\n        return set._values.length;\\n    }\\n\\n    /**\\n     * @dev Returns the value stored at position `index` in the set. O(1).\\n     *\\n     * Note that there are no guarantees on the ordering of values inside the\\n     * array, and it may change when more values are added or removed.\\n     *\\n     * Requirements:\\n     *\\n     * - `index` must be strictly less than {length}.\\n     */\\n    function _at(Set storage set, uint256 index) private view returns (bytes32) {\\n        return set._values[index];\\n    }\\n\\n    /**\\n     * @dev Return the entire set in an array\\n     *\\n     * WARNING: This operation will copy the entire storage to memory, which can be quite expensive. This is designed\\n     * to mostly be used by view accessors that are queried without any gas fees. Developers should keep in mind that\\n     * this function has an unbounded cost, and using it as part of a state-changing function may render the function\\n     * uncallable if the set grows to a point where copying to memory consumes too much gas to fit in a block.\\n     */\\n    function _values(Set storage set) private view returns (bytes32[] memory) {\\n        return set._values;\\n    }\\n\\n    // Bytes32Set\\n\\n    struct Bytes32Set {\\n        Set _inner;\\n    }\\n\\n    /**\\n     * @dev Add a value to a set. O(1).\\n     *\\n     * Returns true if the value was added to the set, that is if it was not\\n     * already present.\\n     */\\n    function add(Bytes32Set storage set, bytes32 value) internal returns (bool) {\\n        return _add(set._inner, value);\\n    }\\n\\n    /**\\n     * @dev Removes a value from a set. O(1).\\n     *\\n     * Returns true if the value was removed from the set, that is if it was\\n     * present.\\n     */\\n    function remove(Bytes32Set storage set, bytes32 value) internal returns (bool) {\\n        return _remove(set._inner, value);\\n    }\\n\\n    /**\\n     * @dev Returns true if the value is in the set. O(1).\\n     */\\n    function contains(Bytes32Set storage set, bytes32 value) internal view returns (bool) {\\n        return _contains(set._inner, value);\\n    }\\n\\n    /**\\n     * @dev Returns the number of values in the set. O(1).\\n     */\\n    function length(Bytes32Set storage set) internal view returns (uint256) {\\n        return _length(set._inner);\\n    }\\n\\n    /**\\n     * @dev Returns the value stored at position `index` in the set. O(1).\\n     *\\n     * Note that there are no guarantees on the ordering of values inside the\\n     * array, and it may change when more values are added or removed.\\n     *\\n     * Requirements:\\n     *\\n     * - `index` must be strictly less than {length}.\\n     */\\n    function at(Bytes32Set storage set, uint256 index) internal view returns (bytes32) {\\n        return _at(set._inner, index);\\n    }\\n\\n    /**\\n     * @dev Return the entire set in an array\\n     *\\n     * WARNING: This operation will copy the entire storage to memory, which can be quite expensive. This is designed\\n     * to mostly be used by view accessors that are queried without any gas fees. Developers should keep in mind that\\n     * this function has an unbounded cost, and using it as part of a state-changing function may render the function\\n     * uncallable if the set grows to a point where copying to memory consumes too much gas to fit in a block.\\n     */\\n    function values(Bytes32Set storage set) internal view returns (bytes32[] memory) {\\n        bytes32[] memory store = _values(set._inner);\\n        bytes32[] memory result;\\n\\n        /// @solidity memory-safe-assembly\\n        assembly {\\n            result := store\\n        }\\n\\n        return result;\\n    }\\n\\n    // AddressSet\\n\\n    struct AddressSet {\\n        Set _inner;\\n    }\\n\\n    /**\\n     * @dev Add a value to a set. O(1).\\n     *\\n     * Returns true if the value was added to the set, that is if it was not\\n     * already present.\\n     */\\n    function add(AddressSet storage set, address value) internal returns (bool) {\\n        return _add(set._inner, bytes32(uint256(uint160(value))));\\n    }\\n\\n    /**\\n     * @dev Removes a value from a set. O(1).\\n     *\\n     * Returns true if the value was removed from the set, that is if it was\\n     * present.\\n     */\\n    function remove(AddressSet storage set, address value) internal returns (bool) {\\n        return _remove(set._inner, bytes32(uint256(uint160(value))));\\n    }\\n\\n    /**\\n     * @dev Returns true if the value is in the set. O(1).\\n     */\\n    function contains(AddressSet storage set, address value) internal view returns (bool) {\\n        return _contains(set._inner, bytes32(uint256(uint160(value))));\\n    }\\n\\n    /**\\n     * @dev Returns the number of values in the set. O(1).\\n     */\\n    function length(AddressSet storage set) internal view returns (uint256) {\\n        return _length(set._inner);\\n    }\\n\\n    /**\\n     * @dev Returns the value stored at position `index` in the set. O(1).\\n     *\\n     * Note that there are no guarantees on the ordering of values inside the\\n     * array, and it may change when more values are added or removed.\\n     *\\n     * Requirements:\\n     *\\n     * - `index` must be strictly less than {length}.\\n     */\\n    function at(AddressSet storage set, uint256 index) internal view returns (address) {\\n        return address(uint160(uint256(_at(set._inner, index))));\\n    }\\n\\n    /**\\n     * @dev Return the entire set in an array\\n     *\\n     * WARNING: This operation will copy the entire storage to memory, which can be quite expensive. This is designed\\n     * to mostly be used by view accessors that are queried without any gas fees. Developers should keep in mind that\\n     * this function has an unbounded cost, and using it as part of a state-changing function may render the function\\n     * uncallable if the set grows to a point where copying to memory consumes too much gas to fit in a block.\\n     */\\n    function values(AddressSet storage set) internal view returns (address[] memory) {\\n        bytes32[] memory store = _values(set._inner);\\n        address[] memory result;\\n\\n        /// @solidity memory-safe-assembly\\n        assembly {\\n            result := store\\n        }\\n\\n        return result;\\n    }\\n\\n    // UintSet\\n\\n    struct UintSet {\\n        Set _inner;\\n    }\\n\\n    /**\\n     * @dev Add a value to a set. O(1).\\n     *\\n     * Returns true if the value was added to the set, that is if it was not\\n     * already present.\\n     */\\n    function add(UintSet storage set, uint256 value) internal returns (bool) {\\n        return _add(set._inner, bytes32(value));\\n    }\\n\\n    /**\\n     * @dev Removes a value from a set. O(1).\\n     *\\n     * Returns true if the value was removed from the set, that is if it was\\n     * present.\\n     */\\n    function remove(UintSet storage set, uint256 value) internal returns (bool) {\\n        return _remove(set._inner, bytes32(value));\\n    }\\n\\n    /**\\n     * @dev Returns true if the value is in the set. O(1).\\n     */\\n    function contains(UintSet storage set, uint256 value) internal view returns (bool) {\\n        return _contains(set._inner, bytes32(value));\\n    }\\n\\n    /**\\n     * @dev Returns the number of values in the set. O(1).\\n     */\\n    function length(UintSet storage set) internal view returns (uint256) {\\n        return _length(set._inner);\\n    }\\n\\n    /**\\n     * @dev Returns the value stored at position `index` in the set. O(1).\\n     *\\n     * Note that there are no guarantees on the ordering of values inside the\\n     * array, and it may change when more values are added or removed.\\n     *\\n     * Requirements:\\n     *\\n     * - `index` must be strictly less than {length}.\\n     */\\n    function at(UintSet storage set, uint256 index) internal view returns (uint256) {\\n        return uint256(_at(set._inner, index));\\n    }\\n\\n    /**\\n     * @dev Return the entire set in an array\\n     *\\n     * WARNING: This operation will copy the entire storage to memory, which can be quite expensive. This is designed\\n     * to mostly be used by view accessors that are queried without any gas fees. Developers should keep in mind that\\n     * this function has an unbounded cost, and using it as part of a state-changing function may render the function\\n     * uncallable if the set grows to a point where copying to memory consumes too much gas to fit in a block.\\n     */\\n    function values(UintSet storage set) internal view returns (uint256[] memory) {\\n        bytes32[] memory store = _values(set._inner);\\n        uint256[] memory result;\\n\\n        /// @solidity memory-safe-assembly\\n        assembly {\\n            result := store\\n        }\\n\\n        return result;\\n    }\\n}\\n\",\"keccak256\":\"0x86c1470cbfd878491e5de030072b647352d36bd27122cffb928970b1945282aa\",\"license\":\"MIT\"}},\"version\":1}",
+  "bytecode": "0x6080604052348015600f57600080fd5b503380603557604051631e4fbdf760e01b81526000600482015260240160405180910390fd5b603c816041565b506091565b600080546001600160a01b038381166001600160a01b0319831681178455604051919092169283917f8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e09190a35050565b610ad9806100a06000396000f3fe608060405234801561001057600080fd5b50600436106100f55760003560e01c8063b6e8d2e211610097578063d4abe71711610066578063d4abe717146101fc578063ddeae0331461020f578063f2fde38b14610222578063f8fcabe31461023557600080fd5b8063b6e8d2e21461018e578063bb7ca3f8146101a1578063c6788bdd146101a9578063c884ef83146101c957600080fd5b80634e71d92d116100d35780634e71d92d146101515780635e26184a14610159578063715018a6146101615780638da5cb5b1461016957600080fd5b80630b6b5bfa146100fa57806335d6e1d41461011c57806341c8149a14610131575b600080fd5b610109670de0b6b3a764000081565b6040519081526020015b60405180910390f35b61012f61012a3660046108a0565b610248565b005b61014461013f36600461090c565b610306565b604051610113919061092e565b61012f6103e5565b6101096103f0565b61012f610401565b6000546001600160a01b03165b6040516001600160a01b039091168152602001610113565b61017661019c36600461097b565b610413565b610109610420565b6101096101b73660046109b0565b60036020526000908152604090205481565b6101ec6101d73660046109b0565b60046020526000908152604090205460ff1681565b6040519015158152602001610113565b61012f61020a3660046109cb565b610439565b61012f61021d3660046109b0565b610480565b61012f6102303660046109b0565b61048c565b61012f610243366004610a0d565b6104c7565b6102506104dd565b8281146102a45760405162461bcd60e51b815260206004820152601d60248201527f41697264726f703a20696e76616c696420696e707574206c656e67746800000060448201526064015b60405180910390fd5b60005b838110156102ff576102f78585838181106102c4576102c4610a37565b90506020020160208101906102d991906109b0565b8484848181106102eb576102eb610a37565b9050602002013561050a565b6001016102a7565b5050505050565b60606103126001610589565b821161031e5781610328565b6103286001610589565b915081831061034657506040805160008152602081019091526103df565b6103508383610a79565b67ffffffffffffffff81111561036857610368610a4d565b604051908082528060200260200182016040528015610391578160200160208202803683370190505b509050825b828110156103dd576103a9600182610593565b82858303815181106103bd576103bd610a37565b6001600160a01b0390921660209283029190910190910152600101610396565b505b92915050565b6103ee336105a6565b565b60006103fc6001610589565b905090565b6104096104dd565b6103ee6000610776565b60006103df600183610593565b610436670de0b6b3a76400006304c4b400610a8c565b81565b60005b8181101561047b5761047383838381811061045957610459610a37565b905060200201602081019061046e91906109b0565b6105a6565b60010161043c565b505050565b610489816105a6565b50565b6104946104dd565b6001600160a01b0381166104be57604051631e4fbdf760e01b81526000600482015260240161029b565b61048981610776565b6104cf6104dd565b6104d9828261050a565b5050565b6000546001600160a01b031633146103ee5760405163118cdaa760e01b815233600482015260240161029b565b6105156001836107c6565b61056d5760405162461bcd60e51b815260206004820152602360248201527f41697264726f703a2062656e656669636961727920616c72656164792065786960448201526273747360e81b606482015260840161029b565b6001600160a01b03909116600090815260036020526040902055565b60006103df825490565b600061059f83836107db565b9392505050565b6001600160a01b03811660009081526004602052604090205460ff161561060f5760405162461bcd60e51b815260206004820152601860248201527f41697264726f703a20616c726561647920636c61696d65640000000000000000604482015260640161029b565b6001600160a01b03811660009081526003602052604090205480158015906106375750478111155b6106835760405162461bcd60e51b815260206004820152601c60248201527f41697264726f703a206e6f20636c61696d61626c6520616d6f756e7400000000604482015260640161029b565b6001600160a01b038216600081815260046020526040808220805460ff191660011790555190919083908381818185875af1925050503d80600081146106e5576040519150601f19603f3d011682016040523d82523d6000602084013e6106ea565b606091505b505090508061072e5760405162461bcd60e51b815260206004820152601060248201526f2a3930b739b332b9103330b4b632b21760811b604482015260640161029b565b826001600160a01b03167fd8138f8a3f377c5259ca548e70e4c2de94f129f5a11036a15b69513cba2b426a8360405161076991815260200190565b60405180910390a2505050565b600080546001600160a01b038381166001600160a01b0319831681178455604051919092169283917f8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e09190a35050565b600061059f836001600160a01b038416610805565b60008260000182815481106107f2576107f2610a37565b9060005260206000200154905092915050565b600081815260018301602052604081205461084c575081546001818101845560008481526020808220909301849055845484825282860190935260409020919091556103df565b5060006103df565b60008083601f84011261086657600080fd5b50813567ffffffffffffffff81111561087e57600080fd5b6020830191508360208260051b850101111561089957600080fd5b9250929050565b600080600080604085870312156108b657600080fd5b843567ffffffffffffffff808211156108ce57600080fd5b6108da88838901610854565b909650945060208701359150808211156108f357600080fd5b5061090087828801610854565b95989497509550505050565b6000806040838503121561091f57600080fd5b50508035926020909101359150565b6020808252825182820181905260009190848201906040850190845b8181101561096f5783516001600160a01b03168352928401929184019160010161094a565b50909695505050505050565b60006020828403121561098d57600080fd5b5035919050565b80356001600160a01b03811681146109ab57600080fd5b919050565b6000602082840312156109c257600080fd5b61059f82610994565b600080602083850312156109de57600080fd5b823567ffffffffffffffff8111156109f557600080fd5b610a0185828601610854565b90969095509350505050565b60008060408385031215610a2057600080fd5b610a2983610994565b946020939093013593505050565b634e487b7160e01b600052603260045260246000fd5b634e487b7160e01b600052604160045260246000fd5b634e487b7160e01b600052601160045260246000fd5b818103818111156103df576103df610a63565b80820281158282048414176103df576103df610a6356fea26469706673582212209b6f1cd4016e26f59187688d4245acf111c9484ac5c1e46c9c5984ee0217822264736f6c63430008190033",
+  "deployedBytecode": "0x608060405234801561001057600080fd5b50600436106100f55760003560e01c8063b6e8d2e211610097578063d4abe71711610066578063d4abe717146101fc578063ddeae0331461020f578063f2fde38b14610222578063f8fcabe31461023557600080fd5b8063b6e8d2e21461018e578063bb7ca3f8146101a1578063c6788bdd146101a9578063c884ef83146101c957600080fd5b80634e71d92d116100d35780634e71d92d146101515780635e26184a14610159578063715018a6146101615780638da5cb5b1461016957600080fd5b80630b6b5bfa146100fa57806335d6e1d41461011c57806341c8149a14610131575b600080fd5b610109670de0b6b3a764000081565b6040519081526020015b60405180910390f35b61012f61012a3660046108a0565b610248565b005b61014461013f36600461090c565b610306565b604051610113919061092e565b61012f6103e5565b6101096103f0565b61012f610401565b6000546001600160a01b03165b6040516001600160a01b039091168152602001610113565b61017661019c36600461097b565b610413565b610109610420565b6101096101b73660046109b0565b60036020526000908152604090205481565b6101ec6101d73660046109b0565b60046020526000908152604090205460ff1681565b6040519015158152602001610113565b61012f61020a3660046109cb565b610439565b61012f61021d3660046109b0565b610480565b61012f6102303660046109b0565b61048c565b61012f610243366004610a0d565b6104c7565b6102506104dd565b8281146102a45760405162461bcd60e51b815260206004820152601d60248201527f41697264726f703a20696e76616c696420696e707574206c656e67746800000060448201526064015b60405180910390fd5b60005b838110156102ff576102f78585838181106102c4576102c4610a37565b90506020020160208101906102d991906109b0565b8484848181106102eb576102eb610a37565b9050602002013561050a565b6001016102a7565b5050505050565b60606103126001610589565b821161031e5781610328565b6103286001610589565b915081831061034657506040805160008152602081019091526103df565b6103508383610a79565b67ffffffffffffffff81111561036857610368610a4d565b604051908082528060200260200182016040528015610391578160200160208202803683370190505b509050825b828110156103dd576103a9600182610593565b82858303815181106103bd576103bd610a37565b6001600160a01b0390921660209283029190910190910152600101610396565b505b92915050565b6103ee336105a6565b565b60006103fc6001610589565b905090565b6104096104dd565b6103ee6000610776565b60006103df600183610593565b610436670de0b6b3a76400006304c4b400610a8c565b81565b60005b8181101561047b5761047383838381811061045957610459610a37565b905060200201602081019061046e91906109b0565b6105a6565b60010161043c565b505050565b610489816105a6565b50565b6104946104dd565b6001600160a01b0381166104be57604051631e4fbdf760e01b81526000600482015260240161029b565b61048981610776565b6104cf6104dd565b6104d9828261050a565b5050565b6000546001600160a01b031633146103ee5760405163118cdaa760e01b815233600482015260240161029b565b6105156001836107c6565b61056d5760405162461bcd60e51b815260206004820152602360248201527f41697264726f703a2062656e656669636961727920616c72656164792065786960448201526273747360e81b606482015260840161029b565b6001600160a01b03909116600090815260036020526040902055565b60006103df825490565b600061059f83836107db565b9392505050565b6001600160a01b03811660009081526004602052604090205460ff161561060f5760405162461bcd60e51b815260206004820152601860248201527f41697264726f703a20616c726561647920636c61696d65640000000000000000604482015260640161029b565b6001600160a01b03811660009081526003602052604090205480158015906106375750478111155b6106835760405162461bcd60e51b815260206004820152601c60248201527f41697264726f703a206e6f20636c61696d61626c6520616d6f756e7400000000604482015260640161029b565b6001600160a01b038216600081815260046020526040808220805460ff191660011790555190919083908381818185875af1925050503d80600081146106e5576040519150601f19603f3d011682016040523d82523d6000602084013e6106ea565b606091505b505090508061072e5760405162461bcd60e51b815260206004820152601060248201526f2a3930b739b332b9103330b4b632b21760811b604482015260640161029b565b826001600160a01b03167fd8138f8a3f377c5259ca548e70e4c2de94f129f5a11036a15b69513cba2b426a8360405161076991815260200190565b60405180910390a2505050565b600080546001600160a01b038381166001600160a01b0319831681178455604051919092169283917f8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e09190a35050565b600061059f836001600160a01b038416610805565b60008260000182815481106107f2576107f2610a37565b9060005260206000200154905092915050565b600081815260018301602052604081205461084c575081546001818101845560008481526020808220909301849055845484825282860190935260409020919091556103df565b5060006103df565b60008083601f84011261086657600080fd5b50813567ffffffffffffffff81111561087e57600080fd5b6020830191508360208260051b850101111561089957600080fd5b9250929050565b600080600080604085870312156108b657600080fd5b843567ffffffffffffffff808211156108ce57600080fd5b6108da88838901610854565b909650945060208701359150808211156108f357600080fd5b5061090087828801610854565b95989497509550505050565b6000806040838503121561091f57600080fd5b50508035926020909101359150565b6020808252825182820181905260009190848201906040850190845b8181101561096f5783516001600160a01b03168352928401929184019160010161094a565b50909695505050505050565b60006020828403121561098d57600080fd5b5035919050565b80356001600160a01b03811681146109ab57600080fd5b919050565b6000602082840312156109c257600080fd5b61059f82610994565b600080602083850312156109de57600080fd5b823567ffffffffffffffff8111156109f557600080fd5b610a0185828601610854565b90969095509350505050565b60008060408385031215610a2057600080fd5b610a2983610994565b946020939093013593505050565b634e487b7160e01b600052603260045260246000fd5b634e487b7160e01b600052604160045260246000fd5b634e487b7160e01b600052601160045260246000fd5b818103818111156103df576103df610a63565b80820281158282048414176103df576103df610a6356fea26469706673582212209b6f1cd4016e26f59187688d4245acf111c9484ac5c1e46c9c5984ee0217822264736f6c63430008190033",
+  "devdoc": {
+    "errors": {
+      "OwnableInvalidOwner(address)": [
+        {
+          "details": "The owner is not a valid owner account. (eg. `address(0)`)"
+        }
+      ],
+      "OwnableUnauthorizedAccount(address)": [
+        {
+          "details": "The caller account is not authorized to perform an operation."
+        }
+      ]
+    },
+    "kind": "dev",
+    "methods": {
+      "owner()": {
+        "details": "Returns the address of the current owner."
+      },
+      "renounceOwnership()": {
+        "details": "Leaves the contract without owner. It will not be possible to call `onlyOwner` functions. Can only be called by the current owner. NOTE: Renouncing ownership will leave the contract without an owner, thereby disabling any functionality that is only available to the owner."
+      },
+      "transferOwnership(address)": {
+        "details": "Transfers ownership of the contract to a new account (`newOwner`). Can only be called by the current owner."
+      }
+    },
+    "version": 1
+  },
+  "userdoc": {
+    "kind": "user",
+    "methods": {},
+    "version": 1
+  },
+  "storageLayout": {
+    "storage": [
+      {
+        "astId": 419,
+        "contract": "contracts/allocation/Airdrop.sol:Airdrop",
+        "label": "_owner",
+        "offset": 0,
+        "slot": "0",
+        "type": "t_address"
+      },
+      {
+        "astId": 23,
+        "contract": "contracts/allocation/Airdrop.sol:Airdrop",
+        "label": "_beneficiaries",
+        "offset": 0,
+        "slot": "1",
+        "type": "t_struct(AddressSet)914_storage"
+      },
+      {
+        "astId": 27,
+        "contract": "contracts/allocation/Airdrop.sol:Airdrop",
+        "label": "claims",
+        "offset": 0,
+        "slot": "3",
+        "type": "t_mapping(t_address,t_uint256)"
+      },
+      {
+        "astId": 31,
+        "contract": "contracts/allocation/Airdrop.sol:Airdrop",
+        "label": "claimed",
+        "offset": 0,
+        "slot": "4",
+        "type": "t_mapping(t_address,t_bool)"
+      }
+    ],
+    "types": {
+      "t_address": {
+        "encoding": "inplace",
+        "label": "address",
+        "numberOfBytes": "20"
+      },
+      "t_array(t_bytes32)dyn_storage": {
+        "base": "t_bytes32",
+        "encoding": "dynamic_array",
+        "label": "bytes32[]",
+        "numberOfBytes": "32"
+      },
+      "t_bool": {
+        "encoding": "inplace",
+        "label": "bool",
+        "numberOfBytes": "1"
+      },
+      "t_bytes32": {
+        "encoding": "inplace",
+        "label": "bytes32",
+        "numberOfBytes": "32"
+      },
+      "t_mapping(t_address,t_bool)": {
+        "encoding": "mapping",
+        "key": "t_address",
+        "label": "mapping(address => bool)",
+        "numberOfBytes": "32",
+        "value": "t_bool"
+      },
+      "t_mapping(t_address,t_uint256)": {
+        "encoding": "mapping",
+        "key": "t_address",
+        "label": "mapping(address => uint256)",
+        "numberOfBytes": "32",
+        "value": "t_uint256"
+      },
+      "t_mapping(t_bytes32,t_uint256)": {
+        "encoding": "mapping",
+        "key": "t_bytes32",
+        "label": "mapping(bytes32 => uint256)",
+        "numberOfBytes": "32",
+        "value": "t_uint256"
+      },
+      "t_struct(AddressSet)914_storage": {
+        "encoding": "inplace",
+        "label": "struct EnumerableSet.AddressSet",
+        "members": [
+          {
+            "astId": 913,
+            "contract": "contracts/allocation/Airdrop.sol:Airdrop",
+            "label": "_inner",
+            "offset": 0,
+            "slot": "0",
+            "type": "t_struct(Set)599_storage"
+          }
+        ],
+        "numberOfBytes": "64"
+      },
+      "t_struct(Set)599_storage": {
+        "encoding": "inplace",
+        "label": "struct EnumerableSet.Set",
+        "members": [
+          {
+            "astId": 594,
+            "contract": "contracts/allocation/Airdrop.sol:Airdrop",
+            "label": "_values",
+            "offset": 0,
+            "slot": "0",
+            "type": "t_array(t_bytes32)dyn_storage"
+          },
+          {
+            "astId": 598,
+            "contract": "contracts/allocation/Airdrop.sol:Airdrop",
+            "label": "_positions",
+            "offset": 0,
+            "slot": "1",
+            "type": "t_mapping(t_bytes32,t_uint256)"
+          }
+        ],
+        "numberOfBytes": "64"
+      },
+      "t_uint256": {
+        "encoding": "inplace",
+        "label": "uint256",
+        "numberOfBytes": "32"
+      }
+    }
+  }
+}

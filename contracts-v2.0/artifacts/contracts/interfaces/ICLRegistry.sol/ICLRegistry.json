@@ -1,0 +1,182 @@
+{
+  "_format": "hh-sol-artifact-1",
+  "contractName": "ICLRegistry",
+  "sourceName": "contracts/interfaces/ICLRegistry.sol",
+  "abi": [
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "internalType": "address",
+          "name": "nodeId",
+          "type": "address"
+        },
+        {
+          "indexed": true,
+          "internalType": "uint256",
+          "name": "gcId",
+          "type": "uint256"
+        },
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "clPool",
+          "type": "address"
+        }
+      ],
+      "name": "RegisterPair",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "internalType": "address",
+          "name": "nodeId",
+          "type": "address"
+        },
+        {
+          "indexed": true,
+          "internalType": "uint256",
+          "name": "gcId",
+          "type": "uint256"
+        },
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "clPool",
+          "type": "address"
+        }
+      ],
+      "name": "RetirePair",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "internalType": "address",
+          "name": "nodeId",
+          "type": "address"
+        },
+        {
+          "indexed": true,
+          "internalType": "uint256",
+          "name": "gcId",
+          "type": "uint256"
+        },
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "clPool",
+          "type": "address"
+        }
+      ],
+      "name": "UpdatePair",
+      "type": "event"
+    },
+    {
+      "inputs": [
+        {
+          "components": [
+            {
+              "internalType": "address",
+              "name": "nodeId",
+              "type": "address"
+            },
+            {
+              "internalType": "uint256",
+              "name": "gcId",
+              "type": "uint256"
+            },
+            {
+              "internalType": "address",
+              "name": "clPool",
+              "type": "address"
+            }
+          ],
+          "internalType": "struct ICLRegistry.CLInfo[]",
+          "name": "list",
+          "type": "tuple[]"
+        }
+      ],
+      "name": "addCLPair",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getAllCLs",
+      "outputs": [
+        {
+          "internalType": "address[]",
+          "name": "",
+          "type": "address[]"
+        },
+        {
+          "internalType": "uint256[]",
+          "name": "",
+          "type": "uint256[]"
+        },
+        {
+          "internalType": "address[]",
+          "name": "",
+          "type": "address[]"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "gcId",
+          "type": "uint256"
+        }
+      ],
+      "name": "removeCLPair",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "components": [
+            {
+              "internalType": "address",
+              "name": "nodeId",
+              "type": "address"
+            },
+            {
+              "internalType": "uint256",
+              "name": "gcId",
+              "type": "uint256"
+            },
+            {
+              "internalType": "address",
+              "name": "clPool",
+              "type": "address"
+            }
+          ],
+          "internalType": "struct ICLRegistry.CLInfo[]",
+          "name": "list",
+          "type": "tuple[]"
+        }
+      ],
+      "name": "updateCLPair",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    }
+  ],
+  "bytecode": "0x",
+  "deployedBytecode": "0x",
+  "linkReferences": {},
+  "deployedLinkReferences": {}
+}

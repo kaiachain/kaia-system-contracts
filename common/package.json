@@ -1,0 +1,45 @@
+{
+  "name": "@kaiachain/system-contracts-common",
+  "version": "0.0.1",
+  "private": true,
+  "description": "Common utilities for Kaia System Contracts",
+  "author": "Kaia Team",
+  "license": "LGPL-3.0",
+  "homepage": "https://github.com/kaiachain/system-contracts#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kaiachain/system-contracts.git",
+    "directory": "common"
+  },
+  "bugs": {
+    "url": "https://github.com/kaiachain/system-contracts/issues"
+  },
+  "keywords": [
+    "kaia",
+    "smart-contracts",
+    "solidity",
+    "ethereum",
+    "blockchain",
+    "testing",
+    "utilities"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "watch": "tsc -w",
+    "test": "echo 'No tests for common utilities'"
+  },
+  "devDependencies": {
+    "@nomicfoundation/hardhat-network-helpers": "^1.0.0",
+    "@nomicfoundation/hardhat-toolbox": "^5.0.0",
+    "@types/chai": "^4.3.0",
+    "@types/lodash": "^4.14.195",
+    "chai": "^4.3.0",
+    "ethers": "^6.16.0",
+    "hardhat": "^2.23.0",
+    "ts-node": "^10.9.1",
+    "typescript": "^5.0.4"
+  },
+  "dependencies": {
+    "lodash": "^4.17.21"
+  }
+}

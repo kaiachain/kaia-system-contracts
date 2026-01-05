@@ -1,0 +1,8 @@
+@openzeppelin/=node_modules/@openzeppelin/
+@kaiachain/=../node_modules/@kaiachain/
+erc4626-tests/=lib/openzeppelin-contracts-upgradeable/lib/erc4626-tests/
+forge-std/=lib/forge-std/src/
+halmos-cheatcodes/=lib/openzeppelin-contracts-upgradeable/lib/halmos-cheatcodes/src/
+openzeppelin-contracts-4.0/=../node_modules/openzeppelin-contracts-4.0/
+openzeppelin-contracts-5.0/=../node_modules/openzeppelin-contracts-5.0/
+openzeppelin-contracts-upgradeable-4.0/=../node_modules/openzeppelin-contracts-upgradeable-4.0/

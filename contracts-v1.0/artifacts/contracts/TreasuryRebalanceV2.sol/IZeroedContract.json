@@ -1,0 +1,29 @@
+{
+  "_format": "hh-sol-artifact-1",
+  "contractName": "IZeroedContract",
+  "sourceName": "contracts/TreasuryRebalanceV2.sol",
+  "abi": [
+    {
+      "inputs": [],
+      "name": "getState",
+      "outputs": [
+        {
+          "internalType": "address[]",
+          "name": "adminList",
+          "type": "address[]"
+        },
+        {
+          "internalType": "uint256",
+          "name": "quorom",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    }
+  ],
+  "bytecode": "0x",
+  "deployedBytecode": "0x",
+  "linkReferences": {},
+  "deployedLinkReferences": {}
+}

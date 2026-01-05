@@ -1,0 +1,243 @@
+{
+  "address": "0xAfF533BA8C31B014374d1847b4c1E421Fa4934ae",
+  "abi": [
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "_chunkOne",
+          "type": "address"
+        },
+        {
+          "internalType": "address",
+          "name": "_chunkTwo",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "nonpayable",
+      "type": "constructor"
+    },
+    {
+      "inputs": [],
+      "name": "DeploymentFailed",
+      "type": "error"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "deployer",
+          "type": "address"
+        },
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "cnStakingV3MultiSig",
+          "type": "address"
+        }
+      ],
+      "name": "CnStakingV3MultiSigDeployed",
+      "type": "event"
+    },
+    {
+      "inputs": [],
+      "name": "CNSTAKINGV3_MULTISIG_BYTECODE_HASH",
+      "outputs": [
+        {
+          "internalType": "bytes32",
+          "name": "",
+          "type": "bytes32"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "chunkOne",
+      "outputs": [
+        {
+          "internalType": "contract ICnStakingV3MultiSigChunk",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "chunkTwo",
+      "outputs": [
+        {
+          "internalType": "contract ICnStakingV3MultiSigChunk",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "_contractValidator",
+          "type": "address"
+        },
+        {
+          "internalType": "address",
+          "name": "_nodeId",
+          "type": "address"
+        },
+        {
+          "internalType": "address",
+          "name": "_rewardAddress",
+          "type": "address"
+        },
+        {
+          "internalType": "address[]",
+          "name": "_cnAdminlist",
+          "type": "address[]"
+        },
+        {
+          "internalType": "uint256",
+          "name": "_requirement",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256[]",
+          "name": "_unlockTime",
+          "type": "uint256[]"
+        },
+        {
+          "internalType": "uint256[]",
+          "name": "_unlockAmount",
+          "type": "uint256[]"
+        }
+      ],
+      "name": "deployCnStakingV3MultiSig",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "cnStakingV3MultiSig",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "_deployer",
+          "type": "address"
+        }
+      ],
+      "name": "getDeployedCnStakingV3MultiSigList",
+      "outputs": [
+        {
+          "internalType": "address[]",
+          "name": "",
+          "type": "address[]"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "_deployer",
+          "type": "address"
+        },
+        {
+          "internalType": "address",
+          "name": "_cnStakingV3MultiSig",
+          "type": "address"
+        }
+      ],
+      "name": "isDeployedBy",
+      "outputs": [
+        {
+          "internalType": "bool",
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    }
+  ],
+  "transactionHash": "0xe7053ac301489cdb5fe28c11b6343b77e523e17548a108c2536199a2b8606571",
+  "receipt": {
+    "to": null,
+    "from": "0xe4460065c651692cC5f0Bb584d4b3A0050fE2301",
+    "contractAddress": "0xAfF533BA8C31B014374d1847b4c1E421Fa4934ae",
+    "transactionIndex": 0,
+    "gasUsed": "824856",
+    "logsBloom": "0x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+    "blockHash": "0xb95c41aed839f1eeab1c8d5d3e68e66ece745b0dd276371f427dc2d43249487e",
+    "transactionHash": "0xe7053ac301489cdb5fe28c11b6343b77e523e17548a108c2536199a2b8606571",
+    "logs": [],
+    "blockNumber": 211994908,
+    "cumulativeGasUsed": "824856",
+    "status": 1,
+    "byzantium": true
+  },
+  "args": [
+    "0x4Ce9f8bb54928a20293Ab06b085DC72483372CEC",
+    "0xf8107262026f9CF220b9c39eCDcDE495a3816785"
+  ],
+  "numDeployments": 1,
+  "solcInputHash": "356e819d8aa8d971d5182f485dc7ee25",
+  "metadata": "{\"compiler\":{\"version\":\"0.8.25+commit.b61c2a91\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"inputs\":[{\"internalType\":\"address\",\"name\":\"_chunkOne\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"_chunkTwo\",\"type\":\"address\"}],\"stateMutability\":\"nonpayable\",\"type\":\"constructor\"},{\"inputs\":[],\"name\":\"DeploymentFailed\",\"type\":\"error\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"deployer\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"cnStakingV3MultiSig\",\"type\":\"address\"}],\"name\":\"CnStakingV3MultiSigDeployed\",\"type\":\"event\"},{\"inputs\":[],\"name\":\"CNSTAKINGV3_MULTISIG_BYTECODE_HASH\",\"outputs\":[{\"internalType\":\"bytes32\",\"name\":\"\",\"type\":\"bytes32\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"chunkOne\",\"outputs\":[{\"internalType\":\"contract ICnStakingV3MultiSigChunk\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"chunkTwo\",\"outputs\":[{\"internalType\":\"contract ICnStakingV3MultiSigChunk\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"_contractValidator\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"_nodeId\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"_rewardAddress\",\"type\":\"address\"},{\"internalType\":\"address[]\",\"name\":\"_cnAdminlist\",\"type\":\"address[]\"},{\"internalType\":\"uint256\",\"name\":\"_requirement\",\"type\":\"uint256\"},{\"internalType\":\"uint256[]\",\"name\":\"_unlockTime\",\"type\":\"uint256[]\"},{\"internalType\":\"uint256[]\",\"name\":\"_unlockAmount\",\"type\":\"uint256[]\"}],\"name\":\"deployCnStakingV3MultiSig\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"cnStakingV3MultiSig\",\"type\":\"address\"}],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"_deployer\",\"type\":\"address\"}],\"name\":\"getDeployedCnStakingV3MultiSigList\",\"outputs\":[{\"internalType\":\"address[]\",\"name\":\"\",\"type\":\"address[]\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"_deployer\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"_cnStakingV3MultiSig\",\"type\":\"address\"}],\"name\":\"isDeployedBy\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"}],\"devdoc\":{\"kind\":\"dev\",\"methods\":{},\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1}},\"settings\":{\"compilationTarget\":{\"contracts/consensus/CnStakingV3MultiSigFactory/CnStakingV3MultiSigFactory.sol\":\"CnStakingV3MultiSigFactory\"},\"evmVersion\":\"paris\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\",\"useLiteralContent\":true},\"optimizer\":{\"enabled\":true,\"runs\":200},\"remappings\":[]},\"sources\":{\"contracts/consensus/CnStakingV3MultiSigFactory/CnStakingV3MultiSigFactory.sol\":{\"content\":\"// Copyright 2025 The kaia Authors\\n// This file is part of the kaia library.\\n//\\n// The kaia library is free software: you can redistribute it and/or modify\\n// it under the terms of the GNU Lesser General Public License as published by\\n// the Free Software Foundation, either version 3 of the License, or\\n// (at your option) any later version.\\n//\\n// The kaia library is distributed in the hope that it will be useful,\\n// but WITHOUT ANY WARRANTY; without even the implied warranty of\\n// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the\\n// GNU Lesser General Public License for more details.\\n//\\n// You should have received a copy of the GNU Lesser General Public License\\n// along with the kaia library. If not, see <http://www.gnu.org/licenses/>.\\n\\n// SPDX-License-Identifier: LGPL-3.0-only\\npragma solidity 0.8.25;\\n\\nimport {ICnStakingV3MultiSigChunk} from \\\"./ICnStakingV3MultiSigChunk.sol\\\";\\nimport {ICnStakingV3MultiSigFactory} from \\\"./ICnStakingV3MultiSigFactory.sol\\\";\\n\\ncontract CnStakingV3MultiSigFactory is ICnStakingV3MultiSigFactory {\\n    bytes32 public constant CNSTAKINGV3_MULTISIG_BYTECODE_HASH =\\n        0x2f15da75ebe93ab05e8a43462d97f4e7d2f5df0c61063df35c04efd4a58eb005;\\n\\n    ICnStakingV3MultiSigChunk public immutable chunkOne;\\n    ICnStakingV3MultiSigChunk public immutable chunkTwo;\\n\\n    mapping(address => address[]) private _deployedCnStakingV3MultiSigList;\\n\\n    constructor(address _chunkOne, address _chunkTwo) {\\n        chunkOne = ICnStakingV3MultiSigChunk(_chunkOne);\\n        chunkTwo = ICnStakingV3MultiSigChunk(_chunkTwo);\\n\\n        require(chunkOne.CHUNK_ID() == 1 && chunkTwo.CHUNK_ID() == 2, \\\"Invalid chunk ordering\\\");\\n        require(\\n            keccak256(_assembleBytecode()) == CNSTAKINGV3_MULTISIG_BYTECODE_HASH,\\n            \\\"Invalid CnStakingV3MultiSig bytecode hash\\\"\\n        );\\n    }\\n\\n    function deployCnStakingV3MultiSig(\\n        address _contractValidator,\\n        address _nodeId,\\n        address _rewardAddress,\\n        address[] memory _cnAdminlist,\\n        uint256 _requirement,\\n        uint256[] memory _unlockTime,\\n        uint256[] memory _unlockAmount\\n    ) public returns (address cnStakingV3MultiSig) {\\n        bytes memory constructorArgs = abi.encode(\\n            _contractValidator,\\n            _nodeId,\\n            _rewardAddress,\\n            _cnAdminlist,\\n            _requirement,\\n            _unlockTime,\\n            _unlockAmount\\n        );\\n        bytes memory initCode = abi.encodePacked(_assembleBytecode(), constructorArgs);\\n        bytes32 salt = keccak256(abi.encode(msg.sender, constructorArgs));\\n\\n        assembly {\\n            cnStakingV3MultiSig := create2(0, add(initCode, 0x20), mload(initCode), salt)\\n        }\\n        if (cnStakingV3MultiSig == address(0)) revert DeploymentFailed();\\n        _deployedCnStakingV3MultiSigList[msg.sender].push(cnStakingV3MultiSig);\\n\\n        emit CnStakingV3MultiSigDeployed(msg.sender, cnStakingV3MultiSig);\\n\\n        return cnStakingV3MultiSig;\\n    }\\n\\n    function _assembleBytecode() private view returns (bytes memory) {\\n        return abi.encodePacked(chunkOne.CHUNK_BYTECODE(), chunkTwo.CHUNK_BYTECODE());\\n    }\\n\\n    function getDeployedCnStakingV3MultiSigList(address _deployer) public view returns (address[] memory) {\\n        return _deployedCnStakingV3MultiSigList[_deployer];\\n    }\\n\\n    function isDeployedBy(address _deployer, address _cnStakingV3MultiSig) public view returns (bool) {\\n        for (uint256 i = 0; i < _deployedCnStakingV3MultiSigList[_deployer].length; i++) {\\n            if (_deployedCnStakingV3MultiSigList[_deployer][i] == _cnStakingV3MultiSig) {\\n                return true;\\n            }\\n        }\\n        return false;\\n    }\\n}\\n\",\"keccak256\":\"0x11c5efad327f3df2669de8fb0d7c5cdb38cc38149d241c3bb041e7af35387efb\",\"license\":\"LGPL-3.0-only\"},\"contracts/consensus/CnStakingV3MultiSigFactory/ICnStakingV3MultiSigChunk.sol\":{\"content\":\"// Copyright 2025 The kaia Authors\\n// This file is part of the kaia library.\\n//\\n// The kaia library is free software: you can redistribute it and/or modify\\n// it under the terms of the GNU Lesser General Public License as published by\\n// the Free Software Foundation, either version 3 of the License, or\\n// (at your option) any later version.\\n//\\n// The kaia library is distributed in the hope that it will be useful,\\n// but WITHOUT ANY WARRANTY; without even the implied warranty of\\n// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the\\n// GNU Lesser General Public License for more details.\\n//\\n// You should have received a copy of the GNU Lesser General Public License\\n// along with the kaia library. If not, see <http://www.gnu.org/licenses/>.\\n\\n// SPDX-License-Identifier: LGPL-3.0-only\\npragma solidity 0.8.25;\\n\\ninterface ICnStakingV3MultiSigChunk {\\n    function CHUNK_ID() external view returns (uint256);\\n\\n    function CHUNK_BYTECODE() external view returns (bytes memory);\\n}\\n\",\"keccak256\":\"0x2fc11ac68d27336c0770bb8495b5d510cbfa73f9f89891361b38568546c61a61\",\"license\":\"LGPL-3.0-only\"},\"contracts/consensus/CnStakingV3MultiSigFactory/ICnStakingV3MultiSigFactory.sol\":{\"content\":\"// Copyright 2025 The kaia Authors\\n// This file is part of the kaia library.\\n//\\n// The kaia library is free software: you can redistribute it and/or modify\\n// it under the terms of the GNU Lesser General Public License as published by\\n// the Free Software Foundation, either version 3 of the License, or\\n// (at your option) any later version.\\n//\\n// The kaia library is distributed in the hope that it will be useful,\\n// but WITHOUT ANY WARRANTY; without even the implied warranty of\\n// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the\\n// GNU Lesser General Public License for more details.\\n//\\n// You should have received a copy of the GNU Lesser General Public License\\n// along with the kaia library. If not, see <http://www.gnu.org/licenses/>.\\n\\n// SPDX-License-Identifier: LGPL-3.0-only\\npragma solidity 0.8.25;\\n\\ninterface ICnStakingV3MultiSigFactory {\\n    event CnStakingV3MultiSigDeployed(address indexed deployer, address indexed cnStakingV3MultiSig);\\n\\n    error DeploymentFailed();\\n\\n    function deployCnStakingV3MultiSig(\\n        address _contractValidator,\\n        address _nodeId,\\n        address _rewardAddress,\\n        address[] memory _cnAdminlist,\\n        uint256 _requirement,\\n        uint256[] memory _unlockTime,\\n        uint256[] memory _unlockAmount\\n    ) external returns (address cnStakingV3MultiSig);\\n\\n    function getDeployedCnStakingV3MultiSigList(address _deployer) external view returns (address[] memory);\\n\\n    function isDeployedBy(address _deployer, address _cnStakingV3MultiSig) external view returns (bool);\\n}\\n\",\"keccak256\":\"0xa274a7a3e115db2374612ee8356f78e218ae08d1a6ee9c75e076e52c49906465\",\"license\":\"LGPL-3.0-only\"}},\"version\":1}",
+  "bytecode": "0x60c060405234801561001057600080fd5b50604051610e40380380610e4083398101604081905261002f91610310565b6001600160a01b03808316608081905290821660a05260408051635731438d60e01b81529051635731438d916004808201926020929091908290030181865afa158015610080573d6000803e3d6000fd5b505050506040513d601f19601f820116820180604052508101906100a49190610343565b6001148015610116575060a0516001600160a01b0316635731438d6040518163ffffffff1660e01b8152600401602060405180830381865afa1580156100ee573d6000803e3d6000fd5b505050506040513d601f19601f820116820180604052508101906101129190610343565b6002145b6101675760405162461bcd60e51b815260206004820152601660248201527f496e76616c6964206368756e6b206f72646572696e670000000000000000000060448201526064015b60405180910390fd5b7f2f15da75ebe93ab05e8a43462d97f4e7d2f5df0c61063df35c04efd4a58eb0056101906101fd565b80519060200120146101f65760405162461bcd60e51b815260206004820152602960248201527f496e76616c696420436e5374616b696e6756334d756c746953696720627974656044820152680c6dec8ca40d0c2e6d60bb1b606482015260840161015e565b5050610471565b60606080516001600160a01b031663f771ba3c6040518163ffffffff1660e01b8152600401600060405180830381865afa15801561023f573d6000803e3d6000fd5b505050506040513d6000823e601f3d908101601f191682016040526102679190810190610396565b60a0516001600160a01b031663f771ba3c6040518163ffffffff1660e01b8152600401600060405180830381865afa1580156102a7573d6000803e3d6000fd5b505050506040513d6000823e601f3d908101601f191682016040526102cf9190810190610396565b6040516020016102e0929190610442565b604051602081830303815290604052905090565b80516001600160a01b038116811461030b57600080fd5b919050565b6000806040838503121561032357600080fd5b61032c836102f4565b915061033a602084016102f4565b90509250929050565b60006020828403121561035557600080fd5b5051919050565b634e487b7160e01b600052604160045260246000fd5b60005b8381101561038d578181015183820152602001610375565b50506000910152565b6000602082840312156103a857600080fd5b81516001600160401b03808211156103bf57600080fd5b818401915084601f8301126103d357600080fd5b8151818111156103e5576103e561035c565b604051601f8201601f19908116603f0116810190838211818310171561040d5761040d61035c565b8160405282815287602084870101111561042657600080fd5b610437836020830160208801610372565b979650505050505050565b60008351610454818460208801610372565b835190830190610468818360208801610372565b01949350505050565b60805160a05161099d6104a36000396000818161011c015261041b01526000818160c00152610395015261099d6000f3fe608060405234801561001057600080fd5b50600436106100625760003560e01c806307c7ee7f146100675780635e4d10cb14610090578063c7289000146100bb578063d748dcc9146100e2578063d87fa35814610117578063e5bba11b1461013e575b600080fd5b61007a6100753660046104e0565b610161565b6040516100879190610547565b60405180910390f35b6100a361009e366004610634565b6101d5565b6040516001600160a01b039091168152602001610087565b6100a37f000000000000000000000000000000000000000000000000000000000000000081565b6101097f2f15da75ebe93ab05e8a43462d97f4e7d2f5df0c61063df35c04efd4a58eb00581565b604051908152602001610087565b6100a37f000000000000000000000000000000000000000000000000000000000000000081565b61015161014c366004610756565b610306565b6040519015158152602001610087565b6001600160a01b038116600090815260208181526040918290208054835181840281018401909452808452606093928301828280156101c957602002820191906000526020600020905b81546001600160a01b031681526001909101906020018083116101ab575b50505050509050919050565b600080888888888888886040516020016101f597969594939291906107ba565b60405160208183030381529060405290506000610210610391565b8260405160200161022292919061084c565b60405160208183030381529060405290506000338360405160200161024892919061087b565b604051602081830303815290604052805190602001209050808251602084016000f593506001600160a01b03841661029357604051633011642560e01b815260040160405180910390fd5b33600081815260208181526040808320805460018101825590845291832090910180546001600160a01b0319166001600160a01b03891690811790915590519092917f4e2552aae907f1313e38fa19f25eaca80f481af4f84842eb9827685db3dfd63c91a3505050979650505050505050565b6000805b6001600160a01b038416600090815260208190526040902054811015610385576001600160a01b03848116600090815260208190526040902080549185169183908110610359576103596108bd565b6000918252602090912001546001600160a01b03160361037d57600191505061038b565b60010161030a565b50600090505b92915050565b60607f00000000000000000000000000000000000000000000000000000000000000006001600160a01b031663f771ba3c6040518163ffffffff1660e01b8152600401600060405180830381865afa1580156103f1573d6000803e3d6000fd5b505050506040513d6000823e601f3d908101601f1916820160405261041991908101906108d3565b7f00000000000000000000000000000000000000000000000000000000000000006001600160a01b031663f771ba3c6040518163ffffffff1660e01b8152600401600060405180830381865afa158015610477573d6000803e3d6000fd5b505050506040513d6000823e601f3d908101601f1916820160405261049f91908101906108d3565b6040516020016104b092919061084c565b604051602081830303815290604052905090565b80356001600160a01b03811681146104db57600080fd5b919050565b6000602082840312156104f257600080fd5b6104fb826104c4565b9392505050565b60008151808452602080850194506020840160005b8381101561053c5781516001600160a01b031687529582019590820190600101610517565b509495945050505050565b6020815260006104fb6020830184610502565b634e487b7160e01b600052604160045260246000fd5b604051601f8201601f1916810167ffffffffffffffff811182821017156105995761059961055a565b604052919050565b600067ffffffffffffffff8211156105bb576105bb61055a565b5060051b60200190565b600082601f8301126105d657600080fd5b813560206105eb6105e6836105a1565b610570565b8083825260208201915060208460051b87010193508684111561060d57600080fd5b602086015b848110156106295780358352918301918301610612565b509695505050505050565b600080600080600080600060e0888a03121561064f57600080fd5b610658886104c4565b96506020610667818a016104c4565b965061067560408a016104c4565b9550606089013567ffffffffffffffff8082111561069257600080fd5b818b0191508b601f8301126106a657600080fd5b81356106b46105e6826105a1565b81815260059190911b8301840190848101908e8311156106d357600080fd5b938501935b828510156106f8576106e9856104c4565b825293850193908501906106d8565b9850505060808b0135955060a08b013592508083111561071757600080fd5b6107238c848d016105c5565b945060c08b013592508083111561073957600080fd5b50506107478a828b016105c5565b91505092959891949750929550565b6000806040838503121561076957600080fd5b610772836104c4565b9150610780602084016104c4565b90509250929050565b60008151808452602080850194506020840160005b8381101561053c5781518752958201959082019060010161079e565b6001600160a01b03888116825287811660208301528616604082015260e0606082018190526000906107ee90830187610502565b85608084015282810360a08401526108068186610789565b905082810360c084015261081a8185610789565b9a9950505050505050505050565b60005b8381101561084357818101518382015260200161082b565b50506000910152565b6000835161085e818460208801610828565b835190830190610872818360208801610828565b01949350505050565b60018060a01b038316815260406020820152600082518060408401526108a8816060850160208701610828565b601f01601f1916919091016060019392505050565b634e487b7160e01b600052603260045260246000fd5b6000602082840312156108e557600080fd5b815167ffffffffffffffff808211156108fd57600080fd5b818401915084601f83011261091157600080fd5b8151818111156109235761092361055a565b610936601f8201601f1916602001610570565b915080825285602082850101111561094d57600080fd5b61095e816020840160208601610828565b5094935050505056fea26469706673582212207c65bd6ff209425a7c60c227d38977cfb9c629ff8252a2a1fecce6b38f0e370364736f6c63430008190033",
+  "deployedBytecode": "0x608060405234801561001057600080fd5b50600436106100625760003560e01c806307c7ee7f146100675780635e4d10cb14610090578063c7289000146100bb578063d748dcc9146100e2578063d87fa35814610117578063e5bba11b1461013e575b600080fd5b61007a6100753660046104e0565b610161565b6040516100879190610547565b60405180910390f35b6100a361009e366004610634565b6101d5565b6040516001600160a01b039091168152602001610087565b6100a37f000000000000000000000000000000000000000000000000000000000000000081565b6101097f2f15da75ebe93ab05e8a43462d97f4e7d2f5df0c61063df35c04efd4a58eb00581565b604051908152602001610087565b6100a37f000000000000000000000000000000000000000000000000000000000000000081565b61015161014c366004610756565b610306565b6040519015158152602001610087565b6001600160a01b038116600090815260208181526040918290208054835181840281018401909452808452606093928301828280156101c957602002820191906000526020600020905b81546001600160a01b031681526001909101906020018083116101ab575b50505050509050919050565b600080888888888888886040516020016101f597969594939291906107ba565b60405160208183030381529060405290506000610210610391565b8260405160200161022292919061084c565b60405160208183030381529060405290506000338360405160200161024892919061087b565b604051602081830303815290604052805190602001209050808251602084016000f593506001600160a01b03841661029357604051633011642560e01b815260040160405180910390fd5b33600081815260208181526040808320805460018101825590845291832090910180546001600160a01b0319166001600160a01b03891690811790915590519092917f4e2552aae907f1313e38fa19f25eaca80f481af4f84842eb9827685db3dfd63c91a3505050979650505050505050565b6000805b6001600160a01b038416600090815260208190526040902054811015610385576001600160a01b03848116600090815260208190526040902080549185169183908110610359576103596108bd565b6000918252602090912001546001600160a01b03160361037d57600191505061038b565b60010161030a565b50600090505b92915050565b60607f00000000000000000000000000000000000000000000000000000000000000006001600160a01b031663f771ba3c6040518163ffffffff1660e01b8152600401600060405180830381865afa1580156103f1573d6000803e3d6000fd5b505050506040513d6000823e601f3d908101601f1916820160405261041991908101906108d3565b7f00000000000000000000000000000000000000000000000000000000000000006001600160a01b031663f771ba3c6040518163ffffffff1660e01b8152600401600060405180830381865afa158015610477573d6000803e3d6000fd5b505050506040513d6000823e601f3d908101601f1916820160405261049f91908101906108d3565b6040516020016104b092919061084c565b604051602081830303815290604052905090565b80356001600160a01b03811681146104db57600080fd5b919050565b6000602082840312156104f257600080fd5b6104fb826104c4565b9392505050565b60008151808452602080850194506020840160005b8381101561053c5781516001600160a01b031687529582019590820190600101610517565b509495945050505050565b6020815260006104fb6020830184610502565b634e487b7160e01b600052604160045260246000fd5b604051601f8201601f1916810167ffffffffffffffff811182821017156105995761059961055a565b604052919050565b600067ffffffffffffffff8211156105bb576105bb61055a565b5060051b60200190565b600082601f8301126105d657600080fd5b813560206105eb6105e6836105a1565b610570565b8083825260208201915060208460051b87010193508684111561060d57600080fd5b602086015b848110156106295780358352918301918301610612565b509695505050505050565b600080600080600080600060e0888a03121561064f57600080fd5b610658886104c4565b96506020610667818a016104c4565b965061067560408a016104c4565b9550606089013567ffffffffffffffff8082111561069257600080fd5b818b0191508b601f8301126106a657600080fd5b81356106b46105e6826105a1565b81815260059190911b8301840190848101908e8311156106d357600080fd5b938501935b828510156106f8576106e9856104c4565b825293850193908501906106d8565b9850505060808b0135955060a08b013592508083111561071757600080fd5b6107238c848d016105c5565b945060c08b013592508083111561073957600080fd5b50506107478a828b016105c5565b91505092959891949750929550565b6000806040838503121561076957600080fd5b610772836104c4565b9150610780602084016104c4565b90509250929050565b60008151808452602080850194506020840160005b8381101561053c5781518752958201959082019060010161079e565b6001600160a01b03888116825287811660208301528616604082015260e0606082018190526000906107ee90830187610502565b85608084015282810360a08401526108068186610789565b905082810360c084015261081a8185610789565b9a9950505050505050505050565b60005b8381101561084357818101518382015260200161082b565b50506000910152565b6000835161085e818460208801610828565b835190830190610872818360208801610828565b01949350505050565b60018060a01b038316815260406020820152600082518060408401526108a8816060850160208701610828565b601f01601f1916919091016060019392505050565b634e487b7160e01b600052603260045260246000fd5b6000602082840312156108e557600080fd5b815167ffffffffffffffff808211156108fd57600080fd5b818401915084601f83011261091157600080fd5b8151818111156109235761092361055a565b610936601f8201601f1916602001610570565b915080825285602082850101111561094d57600080fd5b61095e816020840160208601610828565b5094935050505056fea26469706673582212207c65bd6ff209425a7c60c227d38977cfb9c629ff8252a2a1fecce6b38f0e370364736f6c63430008190033",
+  "devdoc": {
+    "kind": "dev",
+    "methods": {},
+    "version": 1
+  },
+  "userdoc": {
+    "kind": "user",
+    "methods": {},
+    "version": 1
+  },
+  "storageLayout": {
+    "storage": [
+      {
+        "astId": 8525,
+        "contract": "contracts/consensus/CnStakingV3MultiSigFactory/CnStakingV3MultiSigFactory.sol:CnStakingV3MultiSigFactory",
+        "label": "_deployedCnStakingV3MultiSigList",
+        "offset": 0,
+        "slot": "0",
+        "type": "t_mapping(t_address,t_array(t_address)dyn_storage)"
+      }
+    ],
+    "types": {
+      "t_address": {
+        "encoding": "inplace",
+        "label": "address",
+        "numberOfBytes": "20"
+      },
+      "t_array(t_address)dyn_storage": {
+        "base": "t_address",
+        "encoding": "dynamic_array",
+        "label": "address[]",
+        "numberOfBytes": "32"
+      },
+      "t_mapping(t_address,t_array(t_address)dyn_storage)": {
+        "encoding": "mapping",
+        "key": "t_address",
+        "label": "mapping(address => address[])",
+        "numberOfBytes": "32",
+        "value": "t_array(t_address)dyn_storage"
+      }
+    }
+  }
+}

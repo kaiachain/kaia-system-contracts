@@ -1,0 +1,78 @@
+{
+  "_format": "hh-sol-artifact-1",
+  "contractName": "IPublicDelegationFactory",
+  "sourceName": "contracts/PublicDelegation/interfaces/IPublicDelegationFactory.sol",
+  "abi": [
+    {
+      "inputs": [],
+      "name": "CONTRACT_TYPE",
+      "outputs": [
+        {
+          "internalType": "string",
+          "name": "",
+          "type": "string"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "VERSION",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "components": [
+            {
+              "internalType": "address",
+              "name": "owner",
+              "type": "address"
+            },
+            {
+              "internalType": "address",
+              "name": "commissionTo",
+              "type": "address"
+            },
+            {
+              "internalType": "uint256",
+              "name": "commissionRate",
+              "type": "uint256"
+            },
+            {
+              "internalType": "string",
+              "name": "gcName",
+              "type": "string"
+            }
+          ],
+          "internalType": "struct IPublicDelegation.PDConstructorArgs",
+          "name": "_pdArgs",
+          "type": "tuple"
+        }
+      ],
+      "name": "deployPublicDelegation",
+      "outputs": [
+        {
+          "internalType": "contract IPublicDelegation",
+          "name": "publicDelegation",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    }
+  ],
+  "bytecode": "0x",
+  "deployedBytecode": "0x",
+  "linkReferences": {},
+  "deployedLinkReferences": {}
+}

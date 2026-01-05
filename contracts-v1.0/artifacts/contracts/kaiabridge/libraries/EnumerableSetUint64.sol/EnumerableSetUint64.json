@@ -1,0 +1,10 @@
+{
+  "_format": "hh-sol-artifact-1",
+  "contractName": "EnumerableSetUint64",
+  "sourceName": "contracts/kaiabridge/libraries/EnumerableSetUint64.sol",
+  "abi": [],
+  "bytecode": "0x60808060405234601757603a9081601d823930815050f35b600080fdfe600080fdfea264697066735822122057d5fa34e76f4a2eaff456742e0b86a6fd57f9e9e2207daca411d9d207288c6564736f6c63430008180033",
+  "deployedBytecode": "0x600080fdfea264697066735822122057d5fa34e76f4a2eaff456742e0b86a6fd57f9e9e2207daca411d9d207288c6564736f6c63430008180033",
+  "linkReferences": {},
+  "deployedLinkReferences": {}
+}

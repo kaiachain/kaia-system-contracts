@@ -1,0 +1,41 @@
+{
+  "_format": "hh-sol-artifact-1",
+  "contractName": "IKIP113",
+  "sourceName": "contracts/interfaces/IKIP113.sol",
+  "abi": [
+    {
+      "inputs": [],
+      "name": "getAllBlsInfo",
+      "outputs": [
+        {
+          "internalType": "address[]",
+          "name": "nodeIdList",
+          "type": "address[]"
+        },
+        {
+          "components": [
+            {
+              "internalType": "bytes",
+              "name": "publicKey",
+              "type": "bytes"
+            },
+            {
+              "internalType": "bytes",
+              "name": "pop",
+              "type": "bytes"
+            }
+          ],
+          "internalType": "struct IKIP113.BlsPublicKeyInfo[]",
+          "name": "pubkeyList",
+          "type": "tuple[]"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    }
+  ],
+  "bytecode": "0x",
+  "deployedBytecode": "0x",
+  "linkReferences": {},
+  "deployedLinkReferences": {}
+}

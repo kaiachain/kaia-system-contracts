@@ -1,0 +1,126 @@
+{
+  "_format": "hh-sol-artifact-1",
+  "contractName": "IPublicDelegationFactoryV2",
+  "sourceName": "contracts/interfaces/IPublicDelegationFactoryV2.sol",
+  "abi": [
+    {
+      "inputs": [],
+      "name": "DeploymentFailed",
+      "type": "error"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "_deployer",
+          "type": "address"
+        },
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "_publicDelegation",
+          "type": "address"
+        }
+      ],
+      "name": "PublicDelegationDeployed",
+      "type": "event"
+    },
+    {
+      "inputs": [],
+      "name": "CONTRACT_TYPE",
+      "outputs": [
+        {
+          "internalType": "string",
+          "name": "",
+          "type": "string"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "VERSION",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "components": [
+            {
+              "internalType": "address",
+              "name": "owner",
+              "type": "address"
+            },
+            {
+              "internalType": "address",
+              "name": "commissionTo",
+              "type": "address"
+            },
+            {
+              "internalType": "uint256",
+              "name": "commissionRate",
+              "type": "uint256"
+            },
+            {
+              "internalType": "string",
+              "name": "gcName",
+              "type": "string"
+            }
+          ],
+          "internalType": "struct IPublicDelegation.PDConstructorArgs",
+          "name": "_pdArgs",
+          "type": "tuple"
+        }
+      ],
+      "name": "deployPublicDelegation",
+      "outputs": [
+        {
+          "internalType": "contract IPublicDelegation",
+          "name": "publicDelegation",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "_cnStakingV3MultiSig",
+          "type": "address"
+        },
+        {
+          "internalType": "address",
+          "name": "_publicDelegation",
+          "type": "address"
+        }
+      ],
+      "name": "isDeployedBy",
+      "outputs": [
+        {
+          "internalType": "bool",
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    }
+  ],
+  "bytecode": "0x",
+  "deployedBytecode": "0x",
+  "linkReferences": {},
+  "deployedLinkReferences": {}
+}

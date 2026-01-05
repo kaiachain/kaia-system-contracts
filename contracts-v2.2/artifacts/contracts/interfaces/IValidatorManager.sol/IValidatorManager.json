@@ -1,0 +1,739 @@
+{
+  "_format": "hh-sol-artifact-1",
+  "contractName": "IValidatorManager",
+  "sourceName": "contracts/interfaces/IValidatorManager.sol",
+  "abi": [
+    {
+      "inputs": [],
+      "name": "ABookNotExecutable",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "BLSKeyAlreadyExists",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "BelowMinNodeIdBalance",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "CnStakingV3MultiSigFactoryNotFound",
+      "type": "error"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "errorCode",
+          "type": "uint256"
+        }
+      ],
+      "name": "IncompatibleNewStakingContract",
+      "type": "error"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "errorCode",
+          "type": "uint256"
+        }
+      ],
+      "name": "InvalidBLSKeyInfo",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "InvalidBatchRequestLength",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "InvalidNewManager",
+      "type": "error"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "errorCode",
+          "type": "uint256"
+        }
+      ],
+      "name": "InvalidNodeInfo",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "InvalidNodeManager",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "InvalidRequestType",
+      "type": "error"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "errorCode",
+          "type": "uint256"
+        }
+      ],
+      "name": "InvalidStakingContract",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "InvalidTargetNodeId",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "NodeAlreadyExists",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "NodeNotFound",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "PublicDelegationFactoryNotFound",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "RequestExists",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "RequestNotExists",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "RequestNotOwned",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "SimpleBlsRegistryNotExecutable",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "SimpleBlsRegistryNotFound",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "UnmatchedConsensusNodeId",
+      "type": "error"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "consensusNodeId",
+          "type": "address"
+        }
+      ],
+      "name": "NodeInfoAdded",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "consensusNodeId",
+          "type": "address"
+        }
+      ],
+      "name": "NodeInfoRemoved",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "consensusNodeId",
+          "type": "address"
+        },
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "oldNodeManager",
+          "type": "address"
+        },
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "newNodeManager",
+          "type": "address"
+        }
+      ],
+      "name": "NodeManagerTransferred",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "consensusNodeId",
+          "type": "address"
+        },
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "manager",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "requestIndex",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "internalType": "enum IValidatorManager.RequestType",
+          "name": "requestType",
+          "type": "uint8"
+        },
+        {
+          "indexed": false,
+          "internalType": "bytes",
+          "name": "requestData",
+          "type": "bytes"
+        }
+      ],
+      "name": "RequestApproved",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "consensusNodeId",
+          "type": "address"
+        },
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "manager",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "requestIndex",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "internalType": "enum IValidatorManager.RequestType",
+          "name": "requestType",
+          "type": "uint8"
+        },
+        {
+          "indexed": false,
+          "internalType": "bytes",
+          "name": "requestData",
+          "type": "bytes"
+        }
+      ],
+      "name": "RequestCancelled",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "consensusNodeId",
+          "type": "address"
+        },
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "manager",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "requestIndex",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "internalType": "enum IValidatorManager.RequestType",
+          "name": "requestType",
+          "type": "uint8"
+        },
+        {
+          "indexed": false,
+          "internalType": "bytes",
+          "name": "requestData",
+          "type": "bytes"
+        }
+      ],
+      "name": "RequestRejected",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "consensusNodeId",
+          "type": "address"
+        },
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "manager",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "requestIndex",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "internalType": "enum IValidatorManager.RequestType",
+          "name": "requestType",
+          "type": "uint8"
+        },
+        {
+          "indexed": false,
+          "internalType": "bytes",
+          "name": "requestData",
+          "type": "bytes"
+        }
+      ],
+      "name": "RequestSubmitted",
+      "type": "event"
+    },
+    {
+      "inputs": [
+        {
+          "components": [
+            {
+              "internalType": "address",
+              "name": "manager",
+              "type": "address"
+            },
+            {
+              "internalType": "address",
+              "name": "consensusNodeId",
+              "type": "address"
+            },
+            {
+              "internalType": "address[]",
+              "name": "nodeIds",
+              "type": "address[]"
+            }
+          ],
+          "internalType": "struct IValidatorManager.NodeInfo",
+          "name": "nodeInfo",
+          "type": "tuple"
+        }
+      ],
+      "name": "addNodeInfo",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address[]",
+          "name": "consensusNodeIds",
+          "type": "address[]"
+        },
+        {
+          "internalType": "uint256[]",
+          "name": "requestIndices",
+          "type": "uint256[]"
+        }
+      ],
+      "name": "approveBatchRequest",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "consensusNodeId",
+          "type": "address"
+        },
+        {
+          "internalType": "uint256",
+          "name": "requestIndex",
+          "type": "uint256"
+        }
+      ],
+      "name": "approveRequest",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "consensusNodeId",
+          "type": "address"
+        }
+      ],
+      "name": "cancelRequest",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "consensusNodeId",
+          "type": "address"
+        },
+        {
+          "internalType": "enum IValidatorManager.RequestType",
+          "name": "requestType",
+          "type": "uint8"
+        },
+        {
+          "internalType": "bytes",
+          "name": "requestData",
+          "type": "bytes"
+        }
+      ],
+      "name": "checkRequest",
+      "outputs": [],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getAllNodeInfos",
+      "outputs": [
+        {
+          "components": [
+            {
+              "internalType": "address",
+              "name": "manager",
+              "type": "address"
+            },
+            {
+              "internalType": "address",
+              "name": "consensusNodeId",
+              "type": "address"
+            },
+            {
+              "internalType": "address[]",
+              "name": "nodeIds",
+              "type": "address[]"
+            }
+          ],
+          "internalType": "struct IValidatorManager.NodeInfo[]",
+          "name": "nodeInfos",
+          "type": "tuple[]"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getConsensusNodeIds",
+      "outputs": [
+        {
+          "internalType": "address[]",
+          "name": "",
+          "type": "address[]"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "nodeId",
+          "type": "address"
+        }
+      ],
+      "name": "getDuplicatedNode",
+      "outputs": [
+        {
+          "internalType": "address[]",
+          "name": "consensusNodeIds",
+          "type": "address[]"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "consensusNodeId",
+          "type": "address"
+        }
+      ],
+      "name": "getNodeInfo",
+      "outputs": [
+        {
+          "components": [
+            {
+              "internalType": "address",
+              "name": "manager",
+              "type": "address"
+            },
+            {
+              "internalType": "address",
+              "name": "consensusNodeId",
+              "type": "address"
+            },
+            {
+              "internalType": "address[]",
+              "name": "nodeIds",
+              "type": "address[]"
+            }
+          ],
+          "internalType": "struct IValidatorManager.NodeInfo",
+          "name": "",
+          "type": "tuple"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getPendingRequests",
+      "outputs": [
+        {
+          "internalType": "address[]",
+          "name": "consensusNodeIds",
+          "type": "address[]"
+        },
+        {
+          "components": [
+            {
+              "internalType": "address",
+              "name": "manager",
+              "type": "address"
+            },
+            {
+              "internalType": "uint256",
+              "name": "requestIndex",
+              "type": "uint256"
+            },
+            {
+              "internalType": "enum IValidatorManager.RequestType",
+              "name": "requestType",
+              "type": "uint8"
+            },
+            {
+              "internalType": "bytes",
+              "name": "requestData",
+              "type": "bytes"
+            }
+          ],
+          "internalType": "struct IValidatorManager.Request[]",
+          "name": "requests",
+          "type": "tuple[]"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "consensusNodeId",
+          "type": "address"
+        }
+      ],
+      "name": "getRequest",
+      "outputs": [
+        {
+          "components": [
+            {
+              "internalType": "address",
+              "name": "manager",
+              "type": "address"
+            },
+            {
+              "internalType": "uint256",
+              "name": "requestIndex",
+              "type": "uint256"
+            },
+            {
+              "internalType": "enum IValidatorManager.RequestType",
+              "name": "requestType",
+              "type": "uint8"
+            },
+            {
+              "internalType": "bytes",
+              "name": "requestData",
+              "type": "bytes"
+            }
+          ],
+          "internalType": "struct IValidatorManager.Request",
+          "name": "",
+          "type": "tuple"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "target",
+          "type": "address"
+        },
+        {
+          "internalType": "bytes",
+          "name": "data",
+          "type": "bytes"
+        }
+      ],
+      "name": "manage",
+      "outputs": [
+        {
+          "internalType": "bytes",
+          "name": "result",
+          "type": "bytes"
+        }
+      ],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address[]",
+          "name": "consensusNodeIds",
+          "type": "address[]"
+        },
+        {
+          "internalType": "uint256[]",
+          "name": "requestIndices",
+          "type": "uint256[]"
+        }
+      ],
+      "name": "rejectBatchRequest",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "consensusNodeId",
+          "type": "address"
+        },
+        {
+          "internalType": "uint256",
+          "name": "requestIndex",
+          "type": "uint256"
+        }
+      ],
+      "name": "rejectRequest",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "consensusNodeId",
+          "type": "address"
+        }
+      ],
+      "name": "removeNodeInfo",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "consensusNodeId",
+          "type": "address"
+        },
+        {
+          "internalType": "enum IValidatorManager.RequestType",
+          "name": "requestType",
+          "type": "uint8"
+        },
+        {
+          "internalType": "bytes",
+          "name": "requestData",
+          "type": "bytes"
+        }
+      ],
+      "name": "request",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "consensusNodeId",
+          "type": "address"
+        },
+        {
+          "internalType": "address",
+          "name": "newManager",
+          "type": "address"
+        }
+      ],
+      "name": "transferManager",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    }
+  ],
+  "bytecode": "0x",
+  "deployedBytecode": "0x",
+  "linkReferences": {},
+  "deployedLinkReferences": {}
+}

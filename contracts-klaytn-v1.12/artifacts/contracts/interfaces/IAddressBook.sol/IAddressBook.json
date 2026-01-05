@@ -1,0 +1,482 @@
+{
+  "_format": "hh-sol-artifact-1",
+  "contractName": "IAddressBook",
+  "sourceName": "contracts/interfaces/IAddressBook.sol",
+  "abi": [
+    {
+      "inputs": [
+        {
+          "internalType": "address[]",
+          "name": "_adminList",
+          "type": "address[]"
+        },
+        {
+          "internalType": "uint256",
+          "name": "_requirement",
+          "type": "uint256"
+        }
+      ],
+      "name": "constructContract",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getAllAddress",
+      "outputs": [
+        {
+          "internalType": "uint8[]",
+          "name": "typeList",
+          "type": "uint8[]"
+        },
+        {
+          "internalType": "address[]",
+          "name": "addressList",
+          "type": "address[]"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getAllAddressInfo",
+      "outputs": [
+        {
+          "internalType": "address[]",
+          "name": "cnNodeIdList",
+          "type": "address[]"
+        },
+        {
+          "internalType": "address[]",
+          "name": "cnStakingContractList",
+          "type": "address[]"
+        },
+        {
+          "internalType": "address[]",
+          "name": "cnRewardAddressList",
+          "type": "address[]"
+        },
+        {
+          "internalType": "address",
+          "name": "pocContractAddress",
+          "type": "address"
+        },
+        {
+          "internalType": "address",
+          "name": "kirContractAddress",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "_cnNodeId",
+          "type": "address"
+        }
+      ],
+      "name": "getCnInfo",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "cnNodeId",
+          "type": "address"
+        },
+        {
+          "internalType": "address",
+          "name": "cnStakingcontract",
+          "type": "address"
+        },
+        {
+          "internalType": "address",
+          "name": "cnRewardAddress",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getPendingRequestList",
+      "outputs": [
+        {
+          "internalType": "bytes32[]",
+          "name": "pendingRequestList",
+          "type": "bytes32[]"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "bytes32",
+          "name": "_id",
+          "type": "bytes32"
+        }
+      ],
+      "name": "getRequestInfo",
+      "outputs": [
+        {
+          "internalType": "enum IAddressBook.Functions",
+          "name": "functionId",
+          "type": "uint8"
+        },
+        {
+          "internalType": "bytes32",
+          "name": "firstArg",
+          "type": "bytes32"
+        },
+        {
+          "internalType": "bytes32",
+          "name": "secondArg",
+          "type": "bytes32"
+        },
+        {
+          "internalType": "bytes32",
+          "name": "thirdArg",
+          "type": "bytes32"
+        },
+        {
+          "internalType": "address[]",
+          "name": "confirmers",
+          "type": "address[]"
+        },
+        {
+          "internalType": "uint256",
+          "name": "initialProposedTime",
+          "type": "uint256"
+        },
+        {
+          "internalType": "enum IAddressBook.RequestState",
+          "name": "state",
+          "type": "uint8"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "enum IAddressBook.Functions",
+          "name": "_functionId",
+          "type": "uint8"
+        },
+        {
+          "internalType": "bytes32",
+          "name": "_firstArg",
+          "type": "bytes32"
+        },
+        {
+          "internalType": "bytes32",
+          "name": "_secondArg",
+          "type": "bytes32"
+        },
+        {
+          "internalType": "bytes32",
+          "name": "_thirdArg",
+          "type": "bytes32"
+        }
+      ],
+      "name": "getRequestInfoByArgs",
+      "outputs": [
+        {
+          "internalType": "bytes32",
+          "name": "id",
+          "type": "bytes32"
+        },
+        {
+          "internalType": "address[]",
+          "name": "confirmers",
+          "type": "address[]"
+        },
+        {
+          "internalType": "uint256",
+          "name": "initialProposedTime",
+          "type": "uint256"
+        },
+        {
+          "internalType": "enum IAddressBook.RequestState",
+          "name": "state",
+          "type": "uint8"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getState",
+      "outputs": [
+        {
+          "internalType": "address[]",
+          "name": "adminList",
+          "type": "address[]"
+        },
+        {
+          "internalType": "uint256",
+          "name": "requirement",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "isActivated",
+      "outputs": [
+        {
+          "internalType": "bool",
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "isConstructed",
+      "outputs": [
+        {
+          "internalType": "bool",
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "kirContractAddress",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "pocContractAddress",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "_rewardAddress",
+          "type": "address"
+        }
+      ],
+      "name": "reviseRewardAddress",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "enum IAddressBook.Functions",
+          "name": "_functionId",
+          "type": "uint8"
+        },
+        {
+          "internalType": "bytes32",
+          "name": "_firstArg",
+          "type": "bytes32"
+        },
+        {
+          "internalType": "bytes32",
+          "name": "_secondArg",
+          "type": "bytes32"
+        },
+        {
+          "internalType": "bytes32",
+          "name": "_thirdArg",
+          "type": "bytes32"
+        }
+      ],
+      "name": "revokeRequest",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "spareContractAddress",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "submitActivateAddressBook",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "_admin",
+          "type": "address"
+        }
+      ],
+      "name": "submitAddAdmin",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "submitClearRequest",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "_admin",
+          "type": "address"
+        }
+      ],
+      "name": "submitDeleteAdmin",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "_cnNodeId",
+          "type": "address"
+        },
+        {
+          "internalType": "address",
+          "name": "_cnStakingContractAddress",
+          "type": "address"
+        },
+        {
+          "internalType": "address",
+          "name": "_cnRewardAddress",
+          "type": "address"
+        }
+      ],
+      "name": "submitRegisterCnStakingContract",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "_cnNodeId",
+          "type": "address"
+        }
+      ],
+      "name": "submitUnregisterCnStakingContract",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "_kirContractAddress",
+          "type": "address"
+        },
+        {
+          "internalType": "uint256",
+          "name": "_version",
+          "type": "uint256"
+        }
+      ],
+      "name": "submitUpdateKirContract",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "_pocContractAddress",
+          "type": "address"
+        },
+        {
+          "internalType": "uint256",
+          "name": "_version",
+          "type": "uint256"
+        }
+      ],
+      "name": "submitUpdatePocContract",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "_requirement",
+          "type": "uint256"
+        }
+      ],
+      "name": "submitUpdateRequirement",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "_spareContractAddress",
+          "type": "address"
+        }
+      ],
+      "name": "submitUpdateSpareContract",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    }
+  ],
+  "bytecode": "0x",
+  "deployedBytecode": "0x",
+  "linkReferences": {},
+  "deployedLinkReferences": {}
+}
