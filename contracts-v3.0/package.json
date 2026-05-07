@@ -1,0 +1,40 @@
+{
+  "name": "@kaiachain/system-contracts-v3.0",
+  "version": "0.0.1",
+  "description": "Kaia System Contracts v3.0",
+  "author": "Kaia Team",
+  "license": "LGPL-3.0",
+  "homepage": "https://github.com/kaiachain/system-contracts#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kaiachain/system-contracts.git",
+    "directory": "contracts-v3.0"
+  },
+  "bugs": {
+    "url": "https://github.com/kaiachain/system-contracts/issues"
+  },
+  "keywords": [
+    "kaia",
+    "smart-contracts",
+    "solidity",
+    "ethereum",
+    "blockchain"
+  ],
+  "files": [
+    "src/**/*.sol",
+    "out/**/*.json",
+    "!out/**/*.dbg.json",
+    "LICENSE",
+    "README.md"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "clean": "rm -rf out cache",
+    "compile": "forge build",
+    "test": "forge test",
+    "lint": "forge fmt --check",
+    "lint:fix": "forge fmt"
+  }
+}

@@ -1,0 +1,441 @@
+// SPDX-License-Identifier: LGPL-3.0-only
+pragma solidity ^0.8.0;
+
+import {State, BlsPublicKeyInfo, NodeInfo, Profile, GovernanceInfo} from "../../types/Node.sol";
+
+// UintConfigUpdated(configId, ...) IDs
+uint8 constant UINT_CFG_PAUSE_TIMEOUT = 0;
+uint8 constant UINT_CFG_IDLE_TIMEOUT = 1;
+uint8 constant UINT_CFG_PFS_THRESHOLD = 2;
+uint8 constant UINT_CFG_CFS_THRESHOLD = 3;
+uint8 constant UINT_CFG_MAX_NODE_COUNT = 4;
+uint8 constant UINT_CFG_MAX_VAL_ACTIVE_PAUSED = 5;
+uint8 constant UINT_CFG_MAX_CAND_READY = 6;
+
+// AddressConfigUpdated(configId, ...) IDs
+uint8 constant ADDR_CFG_KEF = 0;
+uint8 constant ADDR_CFG_KIF = 1;
+uint8 constant ADDR_CFG_KPF = 2;
+uint8 constant ADDR_CFG_SUSPENDER = 3;
+uint8 constant ADDR_CFG_CONFIGURATOR = 4;
+
+/// @title IAddressBookV2
+/// @notice Unified interface for AddressBookV2 — the sole entry point for all node operations at 0x400.
+interface IAddressBookV2 {
+    /* ========== ERRORS ========== */
+
+    error NotInitializable();
+
+    /// @notice Thrown when caller is not the node's registered manager
+    error OnlyManager();
+
+    /// @notice Thrown when caller is not the node ID itself
+    error OnlyNodeId();
+
+    /// @notice Thrown when caller is not the suspender
+    error OnlySuspender();
+
+    /// @notice Thrown when caller is not the configurator
+    error OnlyConfigurator();
+
+    /// @notice Thrown when a node is not in a valid state for the requested operation
+    error InvalidState();
+
+    /// @notice Thrown when a slot limit (candidate ready, pause, exit) would be exceeded
+    error SlotsFull();
+
+    /// @notice Thrown when an input parameter is invalid (zero address, mismatched array lengths, etc.)
+    error InvalidInput();
+
+    /// @notice Thrown when a node's staking contract balance is below MIN_STAKE
+    error StakingTooLow();
+
+    /// @notice Thrown when attempting to create a node that already exists
+    error NodeAlreadyExists();
+
+    /// @notice Thrown when operating on a node that does not exist (state == Unknown)
+    error NodeNotFound();
+
+    /// @notice Thrown when a user action is attempted after the node's timeout has expired
+    error TimeoutExpired();
+
+    /// @notice Thrown when attempting to suspend a validator that is already suspended
+    error AlreadySuspended();
+
+    /// @notice Thrown when attempting to unsuspend a validator that is not suspended
+    error NotSuspended();
+
+    /// @notice Thrown when attempting to update the reward address while public delegation is enabled
+    error PDEnabled();
+
+    /// @notice Thrown when the nodeId address balance is below MIN_NODE_BALANCE
+    error InsufficientNodeBalance();
+
+    /// @notice Thrown when attempting to assign a gcId to a node that already has one
+    error GcIdAlreadyAssigned();
+
+    /// @notice Thrown when attempting to revoke a gcId from a node that has none
+    error GcIdNotAssigned();
+
+    /* ========== EVENTS ========== */
+
+    /// @notice Emitted when a node's state changes
+    /// @param nodeId The address of the node
+    /// @param fromState The previous state
+    /// @param toState The new state
+    event StateChanged(address indexed nodeId, State indexed fromState, State indexed toState);
+
+    /// @notice Emitted when a new node is created
+    /// @param nodeId The address of the newly created node
+    event NodeCreated(address indexed nodeId);
+
+    /// @notice Emitted when a gcId is assigned to a node by the configurator
+    /// @param nodeId The address of the node
+    /// @param gcId The assigned governance council ID
+    event GcIdAssigned(address indexed nodeId, uint256 gcId);
+
+    /// @notice Emitted when a node is deleted
+    /// @param nodeId The address of the deleted node
+    event NodeDeleted(address indexed nodeId);
+
+    /// @notice Emitted when a validator is suspended by the owner
+    /// @param nodeId The address of the suspended node
+    event ValidatorSuspended(address indexed nodeId);
+
+    /// @notice Emitted when a validator is unsuspended by the owner
+    /// @param nodeId The address of the unsuspended node
+    event ValidatorUnsuspended(address indexed nodeId);
+
+    /// @notice Emitted when a node's manager is updated
+    /// @param nodeId The address of the node
+    /// @param oldManager The old manager address
+    /// @param newManager The new manager address
+    event ManagerUpdated(address indexed nodeId, address indexed oldManager, address indexed newManager);
+
+    /// @notice Emitted when a node's reward address is updated
+    /// @param nodeId The address of the node
+    /// @param oldRewardAddress The old reward address
+    /// @param newRewardAddress The new reward address
+    event RewardAddressUpdated(
+        address indexed nodeId, address indexed oldRewardAddress, address indexed newRewardAddress
+    );
+
+    /// @notice Emitted when a node's voter address is updated
+    /// @param nodeId The address of the node
+    /// @param oldVoterAddress The old voter address
+    /// @param newVoterAddress The new voter address
+    event VoterAddressUpdated(address indexed nodeId, address indexed oldVoterAddress, address indexed newVoterAddress);
+
+    /// @notice Emitted when a node's metadata is updated
+    /// @param nodeId The address of the node
+    /// @param newMetadata The new metadata string
+    event MetadataUpdated(address indexed nodeId, string newMetadata);
+
+    /// @notice Emitted when a candidate transitions from Registered to CandReady
+    /// @param nodeId The address of the readied candidate
+    event CandidateReadied(address indexed nodeId);
+
+    /// @notice Emitted when a candidate transitions from CandReady to Registered
+    /// @param nodeId The address of the unreadied candidate
+    event CandidateUnreadied(address indexed nodeId);
+
+    /// @notice Emitted when genesis validators are initialized
+    /// @param nodeIds The addresses of the initialized validators
+    event ValidatorsInitialized(address[] nodeIds);
+
+    /// @notice Emitted when system transitions are processed
+    /// @param nodeIds The addresses of the transitioned nodes
+    /// @param newStates The new states for each node
+    event SystemTransitionProcessed(address[] nodeIds, State[] newStates);
+
+    /// @notice Emitted when the epoch transition is processed
+    /// @param epochVACount VA count after epoch transition
+    event EpochTransitionProcessed(uint256 epochVACount);
+
+    /// @notice Emitted when a uint256 config parameter is updated
+    /// @dev configId: 0=PauseTimeout, 1=IdleTimeout, 2=PfsThreshold, 3=CfsThreshold,
+    ///      4=MaxNodeCount, 5=MaxValActivePausedCount, 6=MaxCandReadyCount
+    event UintConfigUpdated(uint8 indexed configId, uint256 oldValue, uint256 newValue);
+
+    /// @notice Emitted when an address config parameter is updated
+    /// @dev configId: 0=KefAddress, 1=KifAddress, 2=KpfAddress, 3=Suspender, 4=Configurator
+    event AddressConfigUpdated(uint8 indexed configId, address oldValue, address newValue);
+
+    /* ========== USER FUNCTIONS ========== */
+
+    /// @notice Registers a new node in the Registered state
+    /// @param nodeId The address of the node to register
+    /// @param stakingContract The staking contract address
+    /// @param rewardAddress The reward address
+    /// @param voterAddress The voter address for on-chain governance (optional)
+    /// @param blsInfo The BLS public key and proof-of-possession
+    /// @param name The human-readable name of the node (must be non-empty)
+    /// @param metadata The node metadata in JSON format
+    function createNode(
+        address nodeId,
+        address stakingContract,
+        address rewardAddress,
+        address voterAddress,
+        BlsPublicKeyInfo memory blsInfo,
+        string memory name,
+        string memory metadata
+    ) external;
+
+    /// @notice Removes a Registered entry entirely
+    /// @param nodeId The address of the node to delete
+    function deleteNode(address nodeId) external;
+
+    /// @notice Updates the manager of a node
+    /// @param nodeId The address of the node
+    /// @param newManager The new manager address
+    function updateManager(address nodeId, address newManager) external;
+
+    /// @notice Updates the reward address of a node (only when public delegation is disabled)
+    /// @param nodeId The address of the node
+    /// @param newRewardAddress The new reward address
+    function updateRewardAddress(address nodeId, address newRewardAddress) external;
+
+    /// @notice Updates the voter address of a node
+    /// @param nodeId The address of the node
+    /// @param newVoterAddress The new voter address
+    function updateVoterAddress(address nodeId, address newVoterAddress) external;
+
+    /// @notice Updates the metadata of a node
+    /// @param nodeId The address of the node
+    /// @param newMetadata The new metadata string
+    function updateMetadata(address nodeId, string calldata newMetadata) external;
+
+    /// @notice Readies a candidate: Registered → CandReady
+    /// @param nodeId The address of the candidate to ready
+    function readyCandidate(address nodeId) external;
+
+    /// @notice Unreadies a candidate: CandReady → Registered
+    /// @param nodeId The address of the candidate to unready
+    function unreadyCandidate(address nodeId) external;
+
+    /// @notice Readies a validator: ValInactive → ValReady
+    /// @param nodeId The address of the validator
+    function readyValidator(address nodeId) external;
+
+    /// @notice Unreadies a validator: ValReady → ValInactive
+    /// @param nodeId The address of the validator
+    function unreadyValidator(address nodeId) external;
+
+    /// @notice Pauses a validator: ValActive → ValPaused
+    /// @param nodeId The address of the validator to pause
+    function pause(address nodeId) external;
+
+    /// @notice Resumes a paused validator: ValPaused → ValActive
+    /// @param nodeId The address of the validator to resume
+    function resume(address nodeId) external;
+
+    /// @notice Exits a validator: ValActive/ValPaused → ValExiting
+    /// @param nodeId The address of the validator to exit
+    function exit(address nodeId) external;
+
+    /// @notice Offboards a validator: ValInactive → Registered
+    /// @param nodeId The address of the validator to offboard
+    function offboard(address nodeId) external;
+
+    /* ========== SYSTEM FUNCTIONS ========== */
+
+    /// @notice Processes system-triggered state transitions for nodes.
+    /// @dev Core client computes all timeout/violation/epoch logic; AddressBookV2 unconditionally records results.
+    ///      Updates epochVACount only at epoch boundaries (block.number % epochBlockInterval == 0).
+    /// @param nodeIds Array of node addresses to transition
+    /// @param newStates Array of target states for each node
+    /// @param timeoutAts Array of timeout timestamps for each node (0 = no timeout)
+    /// @param epochVACount VA count after epoch transition (before violation); 0 for non-epoch blocks
+    function processSystemTransition(
+        address[] calldata nodeIds,
+        State[] calldata newStates,
+        uint256[] calldata timeoutAts,
+        uint256 epochVACount
+    ) external;
+
+    /* ========== ADMIN FUNCTIONS ========== */
+
+    /// @notice Suspends a validator (suspender emergency action)
+    /// @param nodeId The address of the validator to suspend
+    function suspendValidator(address nodeId) external;
+
+    /// @notice Unsuspends a validator (suspender action)
+    /// @param nodeId The address of the validator to unsuspend
+    function unsuspendValidator(address nodeId) external;
+
+    /// @notice Updates the suspender address (owner only)
+    /// @param newSuspender The new suspender address
+    function updateSuspender(address newSuspender) external;
+
+    /// @notice Updates the configurator address (owner only)
+    /// @param newConfigurator The new configurator address
+    function updateConfigurator(address newConfigurator) external;
+
+    /// @notice Assigns the next auto-incremented gcId to a node (configurator only)
+    /// @dev Node must exist and must not already have a gcId assigned
+    /// @param nodeId The address of the node
+    function assignGcId(address nodeId) external;
+
+    /// @notice Revokes the gcId from a node (configurator only)
+    /// @dev Node must exist and must have a gcId assigned
+    /// @param nodeId The address of the node
+    function revokeGcId(address nodeId) external;
+
+    /// @notice Updates the pause timeout duration
+    /// @param newPauseTimeout The new timeout in seconds
+    function updatePauseTimeout(uint256 newPauseTimeout) external;
+
+    /// @notice Updates the idle timeout duration
+    /// @param newIdleTimeout The new timeout in seconds
+    function updateIdleTimeout(uint256 newIdleTimeout) external;
+
+    /// @notice Updates the maximum node count
+    /// @param newMaxNodeCount The new maximum
+    function updateMaxNodeCount(uint256 newMaxNodeCount) external;
+
+    /// @notice Updates the max ValActive+ValPaused count for epoch slot competition
+    /// @param newMaxValActivePausedCount The new count
+    function updateMaxValActivePausedCount(uint256 newMaxValActivePausedCount) external;
+
+    /// @notice Updates the maximum ready candidate count
+    /// @param newMaxCandReadyCount The new maximum
+    function updateMaxCandReadyCount(uint256 newMaxCandReadyCount) external;
+
+    /// @notice Updates the PFS threshold for validator exit
+    /// @param newPfsThreshold The new threshold
+    function updatePfsThreshold(uint256 newPfsThreshold) external;
+
+    /// @notice Updates the CFS threshold
+    /// @param newCfsThreshold The new CFS threshold
+    function updateCfsThreshold(uint256 newCfsThreshold) external;
+
+    /// @notice Updates the KEF address
+    /// @param newKefAddress The new KEF address
+    function updateKefAddress(address newKefAddress) external;
+
+    /// @notice Updates the KIF address
+    /// @param newKifAddress The new KIF address
+    function updateKifAddress(address newKifAddress) external;
+
+    /// @notice Updates the KPF address
+    /// @param newKpfAddress The new KPF address
+    function updateKpfAddress(address newKpfAddress) external;
+
+    /* ========== GETTERS (node management) ========== */
+
+    /// @notice Returns the suspender address
+    /// @return The suspender address
+    function getSuspender() external view returns (address);
+
+    /// @notice Returns the configurator address
+    /// @return The configurator address
+    function getConfigurator() external view returns (address);
+
+    /// @notice Checks if an address is in use (nodeId, stakingContract, or rewardAddress)
+    /// @param addr The address to check
+    /// @return True if the address is in use
+    function isUsedAddress(address addr) external view returns (bool);
+
+    /// @notice Returns the pause and idle timeout durations
+    /// @return pauseTimeout The pause timeout in seconds
+    /// @return idleTimeout The idle timeout in seconds
+    function getTimeouts() external view returns (uint256 pauseTimeout, uint256 idleTimeout);
+
+    /// @notice Returns the maximum node and candidate-ready counts
+    /// @return maxNodeCount The maximum node count
+    /// @return maxCandReadyCount The maximum candidate-ready count
+    function getMaxCounts() external view returns (uint256 maxNodeCount, uint256 maxCandReadyCount);
+
+    /// @notice Returns the PFS threshold for validator exit
+    /// @return The PFS threshold
+    function getPfsThreshold() external view returns (uint256);
+
+    /// @notice Returns the CFS threshold
+    /// @return The CFS threshold
+    function getCfsThreshold() external view returns (uint256);
+
+    /// @notice Returns the max ValActive+ValPaused count for epoch slot competition
+    /// @return The max ValActive+ValPaused count
+    function getMaxValActivePausedCount() external view returns (uint256);
+
+    /// @notice Returns the slot limits for violation transitions based on epochVACount
+    /// @return maxSlotAvailable Maximum number of ValPaused or ValExiting each
+    /// @return minActiveCount Minimum number of ValActive validators required
+    function getSlotLimits() external view returns (uint256 maxSlotAvailable, uint256 minActiveCount);
+
+    /// @notice Computes slot limits for a given epochVACount
+    /// @param n The epochVACount to compute limits for
+    /// @return maxSlotAvailable Maximum number of ValPaused or ValExiting each
+    /// @return minActiveCount Minimum number of ValActive validators required
+    function getSlotLimitsFor(uint256 n) external pure returns (uint256 maxSlotAvailable, uint256 minActiveCount);
+
+    /// @notice Returns the fund addresses (KEF, KIF, KPF)
+    /// @return kefAddress The Kaia Ecosystem Fund address
+    /// @return kifAddress The Kaia Infrastructure Fund address
+    /// @return kpfAddress The Kaia Protocol Fund address
+    function getFundAddresses() external view returns (address kefAddress, address kifAddress, address kpfAddress);
+
+    /// @notice Returns the current epoch number
+    /// @return The current epoch
+    function currentEpoch() external view returns (uint256);
+
+    /// @notice Returns the epoch validator count snapshot (ValActive + ValPaused at last epoch)
+    /// @return The epoch validator count used for mid-epoch slot math
+    function getEpochVACount() external view returns (uint256);
+
+    /// @notice Returns the number of blocks per epoch (set at deployment, immutable)
+    /// @return The epoch block interval
+    function epochBlockInterval() external view returns (uint256);
+
+    /* ========== GETTERS (node info) ========== */
+
+    /// @notice Returns the full NodeInfo for a specific node
+    /// @dev Reverts NodeNotFound if the node's state is Unknown.
+    /// @param nodeId The address of the node
+    /// @return The NodeInfo struct
+    function getNodeInfo(address nodeId) external view returns (NodeInfo memory);
+
+    /// @notice Returns NodeInfo structs for multiple nodes
+    /// @param nodeIds Array of node addresses to fetch
+    /// @return Array of NodeInfo structs in the same order as nodeIds
+    function getNodeInfos(address[] calldata nodeIds) external view returns (NodeInfo[] memory);
+
+    /// @notice Returns lightweight profiles for all nodes (including suspended validators)
+    /// @dev Iterates allNodes. Cross-reference getSuspendedValidators() to identify suspended nodes.
+    /// @return Array of Profile structs
+    function getAllProfiles() external view returns (Profile[] memory);
+
+    /// @notice Returns BLS public key info for all nodes
+    /// @dev Iterates allNodes. Matches SimpleBlsRegistry interface.
+    /// @return nodeIdList Array of node addresses
+    /// @return pubkeyList Array of BlsPublicKeyInfo structs in the same order
+    function getAllBlsInfo() external view returns (address[] memory nodeIdList, BlsPublicKeyInfo[] memory pubkeyList);
+
+    /// @notice Returns the current state of a node
+    /// @param nodeId The address of the node
+    /// @return The node's current State
+    function getNodeState(address nodeId) external view returns (State);
+
+    /// @notice Returns all currently suspended validators
+    /// @return Array of suspended node addresses
+    function getSuspendedValidators() external view returns (address[] memory);
+
+    /// @notice Returns all nodes in the Registered state
+    /// @return Array of registered node addresses
+    function getRegisteredNodes() external view returns (address[] memory);
+
+    /// @notice Returns governance-relevant info for all nodes (includes suspended, no filtering)
+    /// @dev Iterates allNodes (CandReady+ states). STv3 filters gcId != 0.
+    /// @return Array of GovernanceInfo structs
+    function getAllGovernanceInfo() external view returns (GovernanceInfo[] memory);
+
+    /// @notice Returns the number of nodes (all states except Registered)
+    /// @return The total node count
+    function getAllNodesLength() external view returns (uint256);
+
+    /// @notice Returns the number of nodes in a given state
+    /// @dev Atomically maintained inside _transition(), _createNode(), _deleteNode().
+    /// @param state The State to query
+    /// @return The count of nodes in that state
+    function getStateCount(State state) external view returns (uint256);
+}

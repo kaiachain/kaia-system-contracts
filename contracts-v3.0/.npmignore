@@ -1,0 +1,33 @@
+# Development files
+test/
+script/
+cache/
+docs/
+
+# Config files
+foundry.toml
+remappings.txt
+.gitmodules
+.env
+.env.*
+.gitignore
+
+# Build artifacts to exclude
+out/**/*.dbg.json
+out/build-info/
+
+# Dependencies
+lib/
+
+# IDE
+.vscode/
+.idea/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Misc
+*.log
+CLAUDE.md
+foundry.lock
