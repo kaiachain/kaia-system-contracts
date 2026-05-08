@@ -139,6 +139,9 @@ const config: HardhatUserConfig = {
   paths: {
     deployments: "deployments",
   },
+  typechain: {
+    dontOverrideCompile: true,
+  },
 };
 
 export default config;
