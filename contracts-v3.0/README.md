@@ -31,6 +31,15 @@ Kaia v3.0 system contracts.
 | ERC1967Proxy | ERC-1967 transparent proxy |
 | UpgradeableBeacon | Beacon for beacon proxy pattern |
 
+### Auction
+
+| Contract | Description |
+| --- | --- |
+| AuctionEntryPoint | PBS-style bid entry; enforces `tx.gasprice == auctionTx.gasPrice` (v3.0 change). |
+| AuctionFeeVault | Holds and distributes bid fees; `registerRewardAddress` is gated by AddressBookV2 node manager (v3.0 change). |
+
+See [`src/Auction/README.md`](./src/Auction/README.md) for the diff vs. v2.1, audit scope, and deployment steps. `AuctionDepositVault` is not redeployed in v3.0 — v3.0 contracts integrate with the existing v2.1 deployment via the unchanged `IAuctionDepositVault` ABI.
+
 ### Libraries
 
 | Contract | Description |
