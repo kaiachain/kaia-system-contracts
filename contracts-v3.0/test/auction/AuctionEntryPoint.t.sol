@@ -9,8 +9,8 @@ import {AuctionError} from "../../src/Auction/AuctionError.sol";
 import {MockAuctionDepositVault} from "./mocks/MockAuctionDepositVault.sol";
 
 /// @title AuctionEntryPoint diff tests
-/// @notice Targets ONLY the v3.0 change: tx.gasprice == auctionTx.gasPrice exact-match in
-///         _verifyInputIntegrity. The rest of the bid flow (signature, nonce, takeBid/takeGas)
+/// @notice Targets ONLY the v3.0 change: tx.gasprice <= auctionTx.maxGasPrice upper-bound check
+///         in _verifyInputIntegrity. The rest of the bid flow (signature, nonce, takeBid/takeGas)
 ///         is exercised once on the happy path to confirm wiring; deeper coverage lives in
 ///         contracts-v2.1's auctionEntryPoint.test.ts and is not duplicated here.
 contract AuctionEntryPointTest is Test {
@@ -25,7 +25,7 @@ contract AuctionEntryPointTest is Test {
 
     bytes32 internal constant _AUCTIONTX_TYPEHASH =
         keccak256(
-            "AuctionTx(bytes32 targetTxHash,uint256 blockNumber,address sender,address to,uint256 nonce,uint256 bid,uint256 gasPrice,uint256 callGasLimit,bytes data)"
+            "AuctionTx(bytes32 targetTxHash,uint256 blockNumber,address sender,address to,uint256 nonce,uint256 bid,uint256 maxGasPrice,uint256 callGasLimit,bytes data)"
         );
     bytes32 internal constant _EIP712_DOMAIN_TYPEHASH =
         keccak256("EIP712Domain(string name,string version,uint256 chainId,address verifyingContract)");
@@ -70,7 +70,7 @@ contract AuctionEntryPointTest is Test {
                     a.to,
                     a.nonce,
                     a.bid,
-                    a.gasPrice,
+                    a.maxGasPrice,
                     a.callGasLimit,
                     keccak256(a.data)
                 )
@@ -78,8 +78,8 @@ contract AuctionEntryPointTest is Test {
     }
 
     /// @dev Builds and signs an AuctionTx that passes every check when submitted with
-    ///      tx.gasprice == gasPrice. Caller may then mutate one field to test a specific path.
-    function _buildSignedTx(uint256 gasPrice) internal view returns (IAuctionEntryPoint.AuctionTx memory a) {
+    ///      tx.gasprice <= maxGasPrice. Caller may then mutate one field to test a specific path.
+    function _buildSignedTx(uint256 maxGasPrice) internal view returns (IAuctionEntryPoint.AuctionTx memory a) {
         a = IAuctionEntryPoint.AuctionTx({
             targetTxHash: bytes32(uint256(0x1234)),
             blockNumber: block.number,
@@ -87,7 +87,7 @@ contract AuctionEntryPointTest is Test {
             to: target,
             nonce: entryPoint.nonces(searcher.addr),
             bid: 1 ether,
-            gasPrice: gasPrice,
+            maxGasPrice: maxGasPrice,
             callGasLimit: 100_000,
             data: hex"",
             searcherSig: bytes(""),
@@ -103,9 +103,9 @@ contract AuctionEntryPointTest is Test {
         a.auctioneerSig = abi.encodePacked(rA, sA, vA);
     }
 
-    /* ========== TESTS: gasprice exact-match (the diff) ========== */
+    /* ========== TESTS: gasprice upper-bound check (the diff) ========== */
 
-    function test_gasprice_exact_match_succeeds() public {
+    function test_gasprice_equal_to_ceiling_succeeds() public {
         uint256 g = 25 gwei;
         IAuctionEntryPoint.AuctionTx memory a = _buildSignedTx(g);
 
@@ -120,11 +120,11 @@ contract AuctionEntryPointTest is Test {
         assertEq(vault.lastTakeBidAmount(), a.bid, "wrong bid amount taken");
     }
 
-    function test_gasprice_higher_than_signed_reverts() public {
-        uint256 signedG = 25 gwei;
-        IAuctionEntryPoint.AuctionTx memory a = _buildSignedTx(signedG);
+    function test_gasprice_above_ceiling_reverts() public {
+        uint256 ceiling = 25 gwei;
+        IAuctionEntryPoint.AuctionTx memory a = _buildSignedTx(ceiling);
 
-        vm.txGasPrice(signedG + 1);
+        vm.txGasPrice(ceiling + 1);
         vm.prank(proposer);
         vm.expectRevert();
         entryPoint.call(a);
@@ -133,21 +133,23 @@ contract AuctionEntryPointTest is Test {
         assertEq(vault.takeBidCallCount(), 0, "takeBid must not be invoked on reject");
     }
 
-    function test_gasprice_lower_than_signed_reverts() public {
-        uint256 signedG = 25 gwei;
-        IAuctionEntryPoint.AuctionTx memory a = _buildSignedTx(signedG);
+    /// @dev With ceiling semantics, a lower-than-signed effective gas price is harmless to the
+    ///      searcher (they get charged less for gas), so the bundle MUST land successfully.
+    function test_gasprice_below_ceiling_succeeds() public {
+        uint256 ceiling = 25 gwei;
+        IAuctionEntryPoint.AuctionTx memory a = _buildSignedTx(ceiling);
 
-        vm.txGasPrice(signedG - 1);
+        vm.txGasPrice(ceiling - 1);
         vm.prank(proposer);
-        vm.expectRevert();
         entryPoint.call(a);
 
-        assertEq(entryPoint.nonces(searcher.addr), 0);
-        assertEq(vault.takeBidCallCount(), 0);
+        assertEq(entryPoint.nonces(searcher.addr), 1, "nonce not consumed");
+        assertEq(vault.takeBidCallCount(), 1, "takeBid not invoked");
+        assertEq(vault.takeGasCallCount(), 1, "takeGas not invoked");
     }
 
-    function test_gasprice_zero_signed_requires_zero_tx() public {
-        // Edge: searcher signs gasPrice=0. Only landable when tx.gasprice==0 too.
+    function test_gasprice_zero_ceiling_rejects_any_positive_tx_gasprice() public {
+        // Edge: searcher signs maxGasPrice=0. Any positive tx.gasprice exceeds the ceiling.
         IAuctionEntryPoint.AuctionTx memory a = _buildSignedTx(0);
 
         vm.txGasPrice(1);
@@ -155,25 +157,25 @@ contract AuctionEntryPointTest is Test {
         vm.expectRevert();
         entryPoint.call(a);
 
-        // Re-attempt with matching zero gasprice should succeed.
+        // Re-attempt with zero tx.gasprice should pass the ceiling check (0 <= 0).
         vm.txGasPrice(0);
         vm.prank(proposer);
         entryPoint.call(a);
         assertEq(entryPoint.nonces(searcher.addr), 1);
     }
 
-    /// @dev Sanity: the signed `gasPrice` is part of the EIP-712 payload, so tampering with it
-    ///      after signing must invalidate the searcher signature (covers both the gasprice
-    ///      check AND the signature recovery — defense in depth).
+    /// @dev Sanity: the signed `maxGasPrice` is part of the EIP-712 payload, so tampering with it
+    ///      after signing must invalidate the searcher signature (defense in depth — the ceiling
+    ///      check alone would let an attacker raise the field, but signature recovery catches it).
     function test_gasprice_tampered_after_signing_fails_signature_check() public {
-        uint256 signedG = 25 gwei;
-        IAuctionEntryPoint.AuctionTx memory a = _buildSignedTx(signedG);
+        uint256 signedCeiling = 25 gwei;
+        IAuctionEntryPoint.AuctionTx memory a = _buildSignedTx(signedCeiling);
 
-        // Tamper: change the gasPrice field but keep the signature. Submit with tx.gasprice
-        // matching the tampered field so the new exact-match check passes — the failure must
+        // Tamper: raise the maxGasPrice field but keep the signature. Submit with tx.gasprice
+        // equal to the tampered ceiling so the upper-bound check passes — the failure must
         // come from the searcher-signature recovery instead.
-        a.gasPrice = signedG + 1;
-        vm.txGasPrice(signedG + 1);
+        a.maxGasPrice = signedCeiling + 1;
+        vm.txGasPrice(signedCeiling + 1);
 
         vm.prank(proposer);
         vm.expectRevert();

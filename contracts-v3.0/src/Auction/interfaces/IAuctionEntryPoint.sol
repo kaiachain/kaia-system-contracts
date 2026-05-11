@@ -24,9 +24,7 @@ interface IAuctionEntryPoint {
     /* ========== STRUCT ========== */
 
     /// @notice The auction transaction signed by the searcher and countersigned by the auctioneer.
-    /// @dev v3.0 change: `gasPrice` is now part of the EIP-712 payload. The proposer must submit the
-    ///      bundle at exactly `gasPrice` (enforced as `tx.gasprice == gasPrice` on-chain); this
-    ///      prevents an auctioneer from replaying a signed bid at a different effective gas price.
+    /// @dev v3.0 change: `maxGasPrice` is now part of the EIP-712 payload.
     struct AuctionTx {
         bytes32 targetTxHash;
         uint256 blockNumber;
@@ -34,7 +32,7 @@ interface IAuctionEntryPoint {
         address to;
         uint256 nonce;
         uint256 bid;
-        uint256 gasPrice;
+        uint256 maxGasPrice;
         uint256 callGasLimit;
         bytes data;
         bytes searcherSig; // digest = hashTypedData(AuctionTx)

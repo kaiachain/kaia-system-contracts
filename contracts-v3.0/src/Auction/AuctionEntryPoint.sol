@@ -32,13 +32,10 @@ contract AuctionEntryPoint is IAuctionEntryPoint, AuctionError, Nonces, EIP712, 
 
     /* ========== CONSTANTS ========== */
 
-    /// @dev v3.0 change: `gasPrice` is part of the signed payload. AUCTION_VERSION is kept
-    ///      at "0.0.1"; cross-version replay is already structurally prevented because the
-    ///      v3.0 EntryPoint is a new deployment (different `verifyingContract` in the EIP-712
-    ///      domain separator).
+    /// @dev v3.0 change: `maxGasPrice` is part of the signed payload.
     bytes32 private constant _AUCTIONTX_TYPEHASH =
         keccak256(
-            "AuctionTx(bytes32 targetTxHash,uint256 blockNumber,address sender,address to,uint256 nonce,uint256 bid,uint256 gasPrice,uint256 callGasLimit,bytes data)"
+            "AuctionTx(bytes32 targetTxHash,uint256 blockNumber,address sender,address to,uint256 nonce,uint256 bid,uint256 maxGasPrice,uint256 callGasLimit,bytes data)"
         );
 
     string public constant AUCTION_NAME = "KAIA_AUCTION";
@@ -197,10 +194,10 @@ contract AuctionEntryPoint is IAuctionEntryPoint, AuctionError, Nonces, EIP712, 
             return false;
         }
 
-        /// 4. v3.0 change: enforce exact-match between submitted tx gas price and signed gas price.
-        ///    Rejects the bundle if the proposer (or any relay) tries to land a signed bid
-        ///    at a different effective gas price than the searcher committed to.
-        if (tx.gasprice != auctionTx.gasPrice) {
+        /// 4. v3.0 change: enforce upper bound on the effective tx gas price. The searcher
+        ///    signs a ceiling (`maxGasPrice`); the bundle is rejected if the proposer (or any
+        ///    relay) tries to land it above that ceiling.
+        if (tx.gasprice > auctionTx.maxGasPrice) {
             return false;
         }
 
@@ -237,7 +234,7 @@ contract AuctionEntryPoint is IAuctionEntryPoint, AuctionError, Nonces, EIP712, 
                 auctionTx.to,
                 auctionTx.nonce,
                 auctionTx.bid,
-                auctionTx.gasPrice,
+                auctionTx.maxGasPrice,
                 auctionTx.callGasLimit,
                 keccak256(auctionTx.data)
             )
