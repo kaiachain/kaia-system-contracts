@@ -6,7 +6,7 @@ import {AuctionEntryPoint} from "../src/Auction/AuctionEntryPoint.sol";
 import {AuctionFeeVault} from "../src/Auction/AuctionFeeVault.sol";
 import {IAuctionDepositVault} from "../src/Auction/interfaces/IAuctionDepositVault.sol";
 
-/// @title DeployAuction
+/// @title DeployAuctionEntryPointAndFeeVault
 /// @notice Deploys the v3.0 auction stack: AuctionFeeVault + AuctionEntryPoint.
 ///         AuctionDepositVault is NOT redeployed — the v2.1 deployment is reused. v3.0
 ///         contracts integrate with it through the verbatim IAuctionDepositVault ABI.
@@ -24,12 +24,12 @@ import {IAuctionDepositVault} from "../src/Auction/interfaces/IAuctionDepositVau
 ///   # Dry-run
 ///   DEPLOYER_PRIVATE_KEY=0x... AUCTION_OWNER=0x... AUCTION_DEPOSIT_VAULT=0x... \
 ///   AUCTIONEER=0x... SEARCHER_PAYBACK_RATE=2000 VALIDATOR_PAYBACK_RATE=5000 \
-///     forge script script/DeployAuction.s.sol -v
+///     forge script script/DeployAuctionEntryPointAndFeeVault.s.sol -v
 ///
 ///   # Broadcast
 ///   DEPLOYER_PRIVATE_KEY=0x... AUCTION_OWNER=0x... AUCTION_DEPOSIT_VAULT=0x... \
 ///   AUCTIONEER=0x... SEARCHER_PAYBACK_RATE=2000 VALIDATOR_PAYBACK_RATE=5000 \
-///     forge script script/DeployAuction.s.sol --rpc-url $RPC_URL --broadcast --verify
+///     forge script script/DeployAuctionEntryPointAndFeeVault.s.sol --rpc-url $RPC_URL --broadcast --verify
 ///
 /// POST-DEPLOY GOVERNANCE ACTIONS (printed at end of run; not executed by this script):
 ///   1. Registry (0x...0401): set getActiveAddr("AuctionEntryPoint") to the new EntryPoint.
@@ -37,7 +37,7 @@ import {IAuctionDepositVault} from "../src/Auction/interfaces/IAuctionDepositVau
 ///      EntryPoint with OnlyEntryPoint.
 ///   2. Existing DepositVault owner calls changeAuctionFeeVault(newFeeVault) so bids flow
 ///      to the v3.0 FeeVault. Until this lands, bids still route to the v2.1 FeeVault.
-contract DeployAuction is Script {
+contract DeployAuctionEntryPointAndFeeVault is Script {
     uint256 internal constant MAX_PAYBACK_RATE = 10000;
 
     function run() external {
@@ -59,7 +59,7 @@ contract DeployAuction is Script {
         // does not point at a contract that implements depositBalances(address).
         IAuctionDepositVault(depositVault).depositBalances(address(0));
 
-        console.log("=== DeployAuction ===");
+        console.log("=== DeployAuctionEntryPointAndFeeVault ===");
         console.log("Deployer            :", vm.addr(deployerKey));
         console.log("Owner               :", owner);
         console.log("DepositVault (v2.1) :", depositVault);

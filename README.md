@@ -13,7 +13,7 @@ This monorepo contains the official system contracts for the Kaia blockchain.
 | [@kaiachain/system-contracts-v2.0](./contracts-v2.0) | Kaia v2.0 contracts (CLRegistry, StakingTrackerV2, GaslessSwapRouter) |
 | [@kaiachain/system-contracts-v2.1](./contracts-v2.1) | Kaia v2.1 contracts (Auction) |
 | [@kaiachain/system-contracts-v2.2](./contracts-v2.2) | Kaia v2.2 contracts (ValidatorManager, CnStakingV3MultiSigFactory, MultiCallContract(Flexible reward)) |
-| [@kaiachain/system-contracts-v3.0](./contracts-v3.0) | Kaia v3.0 contracts (AddressBookV2, CnStakingV4, PublicDelegation, StakingTrackerV3, MultiCallContract) |
+| [@kaiachain/system-contracts-v3.0](./contracts-v3.0) | Kaia v3.0 contracts (AddressBookV2, CnStakingV4, PublicDelegation, StakingTrackerV3, MultiCallContract, AuctionEntryPoint, AuctionFeeVault) |
 
 ## Installation
 
