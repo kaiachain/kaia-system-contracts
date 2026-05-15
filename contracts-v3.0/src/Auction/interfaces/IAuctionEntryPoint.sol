@@ -75,6 +75,8 @@ interface IAuctionEntryPoint {
 
     function call(AuctionTx calldata auctionTx) external;
 
+    function AUCTION_VERSION() external view returns (string memory);
+
     function auctioneer() external view returns (address);
 
     function gasPerByteIntrinsic() external view returns (uint256);
