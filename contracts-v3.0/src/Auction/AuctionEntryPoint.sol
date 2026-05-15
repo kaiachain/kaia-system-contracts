@@ -39,7 +39,7 @@ contract AuctionEntryPoint is IAuctionEntryPoint, AuctionError, Nonces, EIP712, 
         );
 
     string public constant AUCTION_NAME = "KAIA_AUCTION";
-    string public constant AUCTION_VERSION = "0.0.1";
+    string public constant AUCTION_VERSION = "0.0.2";
 
     uint256 public constant MAX_DATA_SIZE = 64 * 1024; // 64KB
 

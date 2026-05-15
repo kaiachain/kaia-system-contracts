@@ -12,6 +12,7 @@ cache/
 !/out/MultiCallContract.sol/
 /out/MultiCallContract.sol/I*.json
 !/out/IAuctionEntryPoint.sol/
+!/out/AuctionEntryPoint.sol/
 
 # Ignores development broadcast logs
 !/broadcast

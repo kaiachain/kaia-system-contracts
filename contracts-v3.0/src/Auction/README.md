@@ -37,7 +37,7 @@ if (tx.gasprice > auctionTx.maxGasPrice) {
 Consequences:
 
 - **EIP-712 typehash changed.** Off-chain signers must update their EIP-712 type definition to include `uint256 maxGasPrice` (immediately after `bid`).
-- `AUCTION_VERSION` is kept at `"0.0.1"`. Cross-version signature replay is already structurally prevented because the v3.0 EntryPoint is a fresh deployment, so `verifyingContract` in the EIP-712 domain separator differs from v2.1's.
+- `AUCTION_VERSION` is bumped to `"0.0.2"`. Off-chain components (auctioneer, searcher SDK, kaia core) query this view to discriminate between the v2.1 and v3.0 typehash/ABI paths, removing the need to thread a hardfork-block check through every component.
 - The proposer (block.coinbase) cannot land a signed bundle at a higher effective gas price than the searcher authorized. The threat is one-directional — over-charging harms the searcher; under-charging does not — so an upper bound is sufficient and lets searchers sign a ceiling without predicting EIP-1559 `baseFee` at the target block. The naming aligns with EIP-1559's `maxFeePerGas`.
 
 ### AuctionFeeVault — manager auth on `registerRewardAddress`
