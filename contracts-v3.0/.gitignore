@@ -11,6 +11,7 @@ cache/
 !/out/PublicDelegation.sol/
 !/out/MultiCallContract.sol/
 /out/MultiCallContract.sol/I*.json
+!/out/IAuctionEntryPoint.sol/
 
 # Ignores development broadcast logs
 !/broadcast
