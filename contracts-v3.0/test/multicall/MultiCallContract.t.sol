@@ -17,8 +17,6 @@ struct MultiCallNodeStatesResult {
     uint256 pfsThreshold;
     uint256 cfsThreshold;
     uint256 epochVACount;
-    uint256 maxSlotAvailable;
-    uint256 minActiveCount;
     uint256 maxValActivePausedCount;
     address[] suspendedValidators;
 }
@@ -125,8 +123,5 @@ contract MultiCallContractTest is Base {
 
         // epochVACount = 10 (10 active validators)
         assertEq(result.epochVACount, 10);
-        // maxSlotAvailable(10) = (10/3+1)/2 = 2, minActiveCount(10) = (20+2)/3 = 7
-        assertEq(result.maxSlotAvailable, 2);
-        assertEq(result.minActiveCount, 7);
     }
 }

@@ -148,8 +148,6 @@ contract MultiCallContract {
         uint256 pfsThreshold;
         uint256 cfsThreshold;
         uint256 epochVACount;
-        uint256 maxSlotAvailable;
-        uint256 minActiveCount;
         uint256 maxValActivePausedCount;
         address[] suspendedValidators;
     }
@@ -167,7 +165,6 @@ contract MultiCallContract {
         result.epochVACount = abv2.getEpochVACount();
         result.maxValActivePausedCount = abv2.getMaxValActivePausedCount();
         result.suspendedValidators = abv2.getSuspendedValidators();
-        (result.maxSlotAvailable, result.minActiveCount) = abv2.getSlotLimits();
     }
 
     function _getProfilesAndStaking() private view returns (Profile[] memory profiles, uint256[] memory stakingAmounts) {
