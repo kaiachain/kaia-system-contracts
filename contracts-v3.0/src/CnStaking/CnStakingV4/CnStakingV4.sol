@@ -73,6 +73,34 @@ contract CnStakingV4 is ICnStaking, Initializable, OwnableUpgradeable, Reentranc
         }
     }
 
+    /// @custom:storage-location erc7201:cnstakingv4.storage.LegacyAbv1
+    /// @dev Holds the values required by AddressBookV1.register validation.
+    ///      This namespace exists only for the V3 → V4 migration window. After the permissionless
+    ///      hard fork it is dead storage; the beacon implementation may be upgraded to remove the
+    ///      associated functions entirely while leaving the (now-orphaned) slots untouched.
+    struct LegacyAbv1Storage {
+        /// @notice nodeId returned by the legacy `nodeId()` getter. Doubles as the "already set"
+        ///         guard — setLegacyAbv1Info reverts while this is non-zero.
+        address nodeId;
+        /// @notice rewardAddress returned by the legacy `rewardAddress()` getter.
+        address rewardAddress;
+        /// @notice Reflected by the legacy `isInitialized()` getter. Cleared by clearLegacyAbv1Info.
+        bool initialized;
+        /// @notice Monotonic flag — set to true on clearLegacyAbv1Info and never reset. Once true,
+        ///         the legacy getters revert and setLegacyAbv1Info is blocked.
+        bool cleared;
+    }
+
+    // keccak256(abi.encode(uint256(keccak256("cnstakingv4.storage.LegacyAbv1")) - 1)) & ~bytes32(uint256(0xff))
+    bytes32 private constant LEGACY_ABV1_STORAGE_LOCATION =
+        0x0d65c2d8693d3384f0fe15edc2d4c883f037216cb0f7456fa12fbb21dfbae900;
+
+    function _getLegacyAbv1Storage() private pure returns (LegacyAbv1Storage storage $) {
+        assembly {
+            $.slot := LEGACY_ABV1_STORAGE_LOCATION
+        }
+    }
+
     /* ========== MODIFIERS ========== */
 
     /// @dev Staking access: PD-only when PD is set, anyone otherwise.
@@ -399,5 +427,58 @@ contract CnStakingV4 is ICnStaking, Initializable, OwnableUpgradeable, Reentranc
     {
         WithdrawalRequest storage request = _getStakingStorage().withdrawalRequestMap[_index];
         return (request.to, request.value, request.withdrawableFrom, request.state);
+    }
+
+    /* ========== ABv1 LEGACY COMPATIBILITY ========== */
+
+    /// @inheritdoc ICnStaking
+    /// @dev Reverts if already set (nodeId != 0) or if previously cleared. If the wrong value
+    ///      was supplied before AddressBookV1 register, redeploy the contract rather than
+    ///      attempting to reuse this one.
+    function setLegacyAbv1Info(
+        address _nodeId,
+        address _rewardAddress
+    ) external override onlyOwner notNull(_nodeId) notNull(_rewardAddress) {
+        LegacyAbv1Storage storage $ = _getLegacyAbv1Storage();
+        if ($.cleared) revert LegacyCleared();
+        if ($.nodeId != address(0)) revert LegacyAlreadySet();
+        $.initialized = true;
+        $.nodeId = _nodeId;
+        $.rewardAddress = _rewardAddress;
+        emit LegacyAbv1InfoSet(_nodeId, _rewardAddress);
+    }
+
+    /// @inheritdoc ICnStaking
+    /// @dev Permanently disables the legacy interface — getters revert and setLegacyAbv1Info is
+    ///      blocked thereafter. Intended for post-HF cleanup.
+    function clearLegacyAbv1Info() external override onlyOwner {
+        LegacyAbv1Storage storage $ = _getLegacyAbv1Storage();
+        if ($.cleared) revert LegacyCleared();
+        $.nodeId = address(0);
+        $.rewardAddress = address(0);
+        $.initialized = false;
+        $.cleared = true;
+        emit LegacyAbv1InfoCleared();
+    }
+
+    /// @inheritdoc ICnStaking
+    function nodeId() external view override returns (address) {
+        LegacyAbv1Storage storage $ = _getLegacyAbv1Storage();
+        if ($.cleared) revert LegacyCleared();
+        return $.nodeId;
+    }
+
+    /// @inheritdoc ICnStaking
+    function rewardAddress() external view override returns (address) {
+        LegacyAbv1Storage storage $ = _getLegacyAbv1Storage();
+        if ($.cleared) revert LegacyCleared();
+        return $.rewardAddress;
+    }
+
+    /// @inheritdoc ICnStaking
+    function isInitialized() external view override returns (bool) {
+        LegacyAbv1Storage storage $ = _getLegacyAbv1Storage();
+        if ($.cleared) revert LegacyCleared();
+        return $.initialized;
     }
 }
