@@ -46,7 +46,7 @@ contract Abv1PdOnSwapFork is Abv1SwapForkBase {
     constructor() Abv1SwapForkBase(TARGET_NODE_ID_, TARGET_V3_) {}
 
     function _logInitialState() internal view override {
-        IV3 v3 = IV3(TARGET_V3);
+        IV3 v3 = IV3(TARGET_OLD_CN);
         console.log("=== Initial mainnet state ===");
         console.log("V3 effective (KAIA):", (v3.staking() - v3.unstaking()) / 1e18);
         console.log("V3 PD:", TARGET_V3_PD);
@@ -93,7 +93,7 @@ contract Abv1PdOnSwapFork is Abv1SwapForkBase {
     ///      KAIA lands in gcEoa.
     function _extractFromV3() internal override returns (address recipient, uint256 amount) {
         recipient = makeAddr("gcEoa");
-        IV3 v3 = IV3(TARGET_V3);
+        IV3 v3 = IV3(TARGET_OLD_CN);
         IV3PDV1 v3pd = IV3PDV1(TARGET_V3_PD);
 
         vm.deal(recipient, GC_SELF_SHARE);
@@ -131,6 +131,6 @@ contract Abv1PdOnSwapFork is Abv1SwapForkBase {
 
     /// @dev V3 still holds other holders' funds after the swap — sanity log, no assertion.
     function _verifyScenario() internal view override {
-        console.log("V3 leftover balance (KAIA):", TARGET_V3.balance / 1e18);
+        console.log("V3 leftover balance (KAIA):", TARGET_OLD_CN.balance / 1e18);
     }
 }

@@ -31,13 +31,15 @@ abstract contract Abv1SwapForkBase is Script {
     uint256 internal constant MIN_STAKE = 5_000_000 ether;
 
     address internal immutable TARGET_NODE_ID;
-    address internal immutable TARGET_V3;
+    /// @dev The legacy cnStaking address registered in ABv1 (V2 or V3) that gets unregistered
+    ///      during the swap. Kept generic so the same base supports both V2 and V3 scenarios.
+    address internal immutable TARGET_OLD_CN;
 
     IAddressBookV1 internal abv1 = IAddressBookV1(ADDRESS_BOOK);
 
-    constructor(address _nodeId, address _v3) {
+    constructor(address _nodeId, address _oldCn) {
         TARGET_NODE_ID = _nodeId;
-        TARGET_V3 = _v3;
+        TARGET_OLD_CN = _oldCn;
     }
 
     /* ========== TEMPLATE ========== */
@@ -119,7 +121,7 @@ abstract contract Abv1SwapForkBase is Script {
         bool v3Found;
         bool v4Found;
         for (uint256 i = 0; i < list.length; ++i) {
-            if (list[i] == TARGET_V3) v3Found = true;
+            if (list[i] == TARGET_OLD_CN) v3Found = true;
             if (list[i] == v4) v4Found = true;
         }
         require(!v3Found, "V3 still in list");

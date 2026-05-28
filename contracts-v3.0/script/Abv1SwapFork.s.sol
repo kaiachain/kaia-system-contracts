@@ -44,10 +44,10 @@ contract Abv1SwapFork is Abv1SwapForkBase {
     constructor() Abv1SwapForkBase(TARGET_NODE_ID_, TARGET_V3_) {}
 
     function _logInitialState() internal view override {
-        IMainnetV3 v3 = IMainnetV3(TARGET_V3);
+        IMainnetV3 v3 = IMainnetV3(TARGET_OLD_CN);
         console.log("=== Initial mainnet state ===");
         console.log("V3 staking (KAIA):", v3.staking() / 1e18);
-        console.log("V3 balance (KAIA):", TARGET_V3.balance / 1e18);
+        console.log("V3 balance (KAIA):", TARGET_OLD_CN.balance / 1e18);
     }
 
     /// @dev PD-off V4 deploy. Reward stays the legacy ABv1 reward EOA.
@@ -71,7 +71,7 @@ contract Abv1SwapFork is Abv1SwapForkBase {
     ///   3) Warp past 7-day STAKE_LOCKUP (claim window [+7d, +14d]).
     ///   4) Any single admin claims — UNSTAKING_CLAIMER_ROLE is per-admin in PD-off.
     function _extractFromV3() internal override returns (address recipient, uint256 amount) {
-        IMainnetV3 v3 = IMainnetV3(TARGET_V3);
+        IMainnetV3 v3 = IMainnetV3(TARGET_OLD_CN);
         (address[] memory admins, uint256 quorum) = _fetchV3Admins(v3);
 
         // Max value V3 accepts = staking - unstaking (V3.approveStakingWithdrawal precond).
@@ -101,7 +101,7 @@ contract Abv1SwapFork is Abv1SwapForkBase {
         v3.withdrawApprovedStaking(withdrawalId);
 
         console.log("Recipient balance after withdraw (KAIA):", recipient.balance / 1e18);
-        console.log("V3 balance after withdraw (KAIA):", TARGET_V3.balance / 1e18);
+        console.log("V3 balance after withdraw (KAIA):", TARGET_OLD_CN.balance / 1e18);
     }
 
     /// @dev PD-off V4's `receive()` is open (CnStakingV4.sol:84-89 `_onlyStaker` returns
@@ -116,7 +116,7 @@ contract Abv1SwapFork is Abv1SwapForkBase {
     /// @dev V3 must be left holding only the untouched initial-lockup pool
     ///      (~1 KAIA on this target — bounded loosely at 10).
     function _verifyScenario() internal view override {
-        require(TARGET_V3.balance <= 10 ether, "V3 leftover too large");
+        require(TARGET_OLD_CN.balance <= 10 ether, "V3 leftover too large");
     }
 
     function _fetchV3Admins(IMainnetV3 v3) internal view returns (address[] memory admins, uint256 quorum) {
