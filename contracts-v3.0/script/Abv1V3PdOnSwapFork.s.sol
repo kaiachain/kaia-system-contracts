@@ -20,12 +20,12 @@ interface IV3 {
     function unstaking() external view returns (uint256);
 }
 
-/// @title Abv1PdOnSwapFork
+/// @title Abv1V3PdOnSwapFork
 /// @notice PD-on "yes" scenario: a GC that already holds >=5M share in V3 PD redeems
 ///         those shares, re-stakes into a freshly deployed V4 + PD V2, then performs
 ///         the ABv1 swap. Patched V4's legacy ABv1 getters bridge the call from ABv1.
 ///
-/// Differences vs PD-off (Abv1SwapFork):
+/// Differences vs PD-off (Abv1V3SwapFork):
 ///   - V4 deployed via deployCnStakingWithPD (atomic V4 + PD V2)
 ///   - V3 funds freed via V3 PD.redeem (single tx, no multisig — PD already holds the role)
 ///   - Only the GC's own share (5M) leaves V3 PD; other holders' shares stay in V3 PD,
@@ -33,9 +33,9 @@ interface IV3 {
 ///   - V4 funds injected via V4 PD.stake (PD-on V4's `receive` is gated to PD only)
 ///
 /// Usage:
-///   forge script script/Abv1PdOnSwapFork.s.sol \
+///   forge script script/Abv1V3PdOnSwapFork.s.sol \
 ///     --fork-url https://public-en.node.kaia.io -vv
-contract Abv1PdOnSwapFork is Abv1SwapForkBase {
+contract Abv1V3PdOnSwapFork is Abv1SwapForkBase {
     // PD-on target (effective 29.8M, picked from AuditPdOwnerStake output)
     address internal constant TARGET_NODE_ID_ = 0x7AA64D5f97402c1b84A5027A254151BC6129CC4e;
     address internal constant TARGET_V3_      = 0xEA217C25FB244FAf32F9B274517dB735CeCb989C;

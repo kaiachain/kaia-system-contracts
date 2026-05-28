@@ -23,15 +23,15 @@ interface IMainnetV3 {
     function withdrawApprovedStaking(uint256 id) external;
 }
 
-/// @title Abv1SwapFork
+/// @title Abv1V3SwapFork
 /// @notice PD-off scenario: V3 admin multisig unstakes the entire balance, transfers it
 ///         to a freshly deployed PD-off V4, then performs the ABv1 swap. Same-capital
 ///         migration with no dual staking.
 ///
 /// Usage:
-///   forge script script/Abv1SwapFork.s.sol \
+///   forge script script/Abv1V3SwapFork.s.sol \
 ///     --fork-url https://public-en.node.kaia.io -vv
-contract Abv1SwapFork is Abv1SwapForkBase {
+contract Abv1V3SwapFork is Abv1SwapForkBase {
     // GC #5 in cnNodeIdList — V3 PD off, ~14.7M staking, multisig requirement = 3
     address internal constant TARGET_NODE_ID_ = 0x6Cd6261c8bE831ee79dA184BeAac962F6c8ee634;
     address internal constant TARGET_V3_      = 0x7dc397C45Ea4468c180fC010E69091B6D38846dF;

@@ -37,7 +37,7 @@ interface IMainnetV2 {
 /// @title Abv1V2SwapFork
 /// @notice PD-off scenario for CnStakingV2 GCs: V2 admin multisig unstakes the entire
 ///         balance, transfers to a freshly deployed V4, then performs the ABv1 swap.
-///         Same migration pattern as Abv1SwapFork (V3 PD-off); only the V3 ↔ V2 contract
+///         Same migration pattern as Abv1V3SwapFork (V3 PD-off); only the V3 ↔ V2 contract
 ///         interface differs.
 ///
 /// Targets: V2 GCs with EOA reward addresses (12 out of 27 V2 entries on mainnet).
