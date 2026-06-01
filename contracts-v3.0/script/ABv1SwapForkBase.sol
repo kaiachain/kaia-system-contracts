@@ -15,7 +15,7 @@ interface IAddressBookV1 {
     function submitUnregisterCnStakingContract(address cnNodeId) external;
 }
 
-/// @title Abv1SwapForkBase
+/// @title ABv1SwapForkBase
 /// @notice Shared scaffolding for V3 → V4 mainnet-fork swap rehearsals.
 ///         Implements the parts that don't change across scenarios:
 ///         V4 infra deploy, setLegacyAbv1Info, ABv1 multisig swap, common verification.
@@ -26,7 +26,7 @@ interface IAddressBookV1 {
 ///   _extractFromV3   : how to free funds from V3 (admin multisig vs PD.redeem etc.)
 ///   _injectToV4      : how to put those funds into V4 (cn.delegate vs PD.stake etc.)
 ///   _verifyScenario  : extra post-swap invariants specific to the scenario
-abstract contract Abv1SwapForkBase is Script {
+abstract contract ABv1SwapForkBase is Script {
     address internal constant ADDRESS_BOOK = 0x0000000000000000000000000000000000000400;
     uint256 internal constant MIN_STAKE = 5_000_000 ether;
 

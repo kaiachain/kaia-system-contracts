@@ -2,7 +2,7 @@
 pragma solidity 0.8.25;
 
 import {console} from "forge-std/Script.sol";
-import {Abv1SwapForkBase} from "./Abv1SwapForkBase.sol";
+import {ABv1SwapForkBase} from "./ABv1SwapForkBase.sol";
 import {CnStakingV4} from "../src/CnStaking/CnStakingV4/CnStakingV4.sol";
 import {CnStakingV4Factory} from "../src/CnStaking/CnStakingV4Factory/CnStakingV4Factory.sol";
 
@@ -21,11 +21,11 @@ interface IMainnetMultiSig {
     function withdrawApprovedStaking(uint256 id) external;
 }
 
-/// @title Abv1PdOffMultiSigForkBase
+/// @title ABv1PdOffMultiSigForkBase
 /// @notice Shared PD-off multisig migration flow for CnStakingV2 and CnStakingV3 GCs.
 ///         Implements every step that is identical between V2 and V3 — children only
 ///         supply scenario constants and the admin getter (`_fetchAdmins`).
-abstract contract Abv1PdOffMultiSigForkBase is Abv1SwapForkBase {
+abstract contract ABv1PdOffMultiSigForkBase is ABv1SwapForkBase {
     /// @dev `Functions.ApproveStakingWithdrawal` enum index — position 6 in both
     ///      ICnStakingV3MultiSig.sol:46-59 and ICnStakingV2.sol:116-128.
     uint8 internal constant FN_APPROVE_STAKING_WITHDRAWAL = 6;
@@ -40,7 +40,7 @@ abstract contract Abv1PdOffMultiSigForkBase is Abv1SwapForkBase {
     string internal LEGACY_LABEL;
 
     constructor(address _nodeId, address _oldCn, address _reward, string memory _label)
-        Abv1SwapForkBase(_nodeId, _oldCn)
+        ABv1SwapForkBase(_nodeId, _oldCn)
     {
         TARGET_REWARD = _reward;
         LEGACY = IMainnetMultiSig(_oldCn);

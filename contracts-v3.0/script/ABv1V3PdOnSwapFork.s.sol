@@ -2,7 +2,7 @@
 pragma solidity 0.8.25;
 
 import {console} from "forge-std/Script.sol";
-import {Abv1SwapForkBase} from "./Abv1SwapForkBase.sol";
+import {ABv1SwapForkBase} from "./ABv1SwapForkBase.sol";
 import {CnStakingV4} from "../src/CnStaking/CnStakingV4/CnStakingV4.sol";
 import {CnStakingV4Factory} from "../src/CnStaking/CnStakingV4Factory/CnStakingV4Factory.sol";
 import {IPublicDelegation} from "../src/PublicDelegation/interfaces/IPublicDelegation.sol";
@@ -20,12 +20,12 @@ interface IV3 {
     function unstaking() external view returns (uint256);
 }
 
-/// @title Abv1V3PdOnSwapFork
+/// @title ABv1V3PdOnSwapFork
 /// @notice PD-on "yes" scenario: a GC that already holds >=5M share in V3 PD redeems
 ///         those shares, re-stakes into a freshly deployed V4 + PD V2, then performs
 ///         the ABv1 swap. Patched V4's legacy ABv1 getters bridge the call from ABv1.
 ///
-/// Differences vs PD-off (Abv1V3SwapFork):
+/// Differences vs PD-off (ABv1V3SwapFork):
 ///   - V4 deployed via deployCnStakingWithPD (atomic V4 + PD V2)
 ///   - V3 funds freed via V3 PD.redeem (single tx, no multisig — PD already holds the role)
 ///   - Only the GC's own share (5M) leaves V3 PD; other holders' shares stay in V3 PD,
@@ -33,9 +33,9 @@ interface IV3 {
 ///   - V4 funds injected via V4 PD.stake (PD-on V4's `receive` is gated to PD only)
 ///
 /// Usage:
-///   forge script script/Abv1V3PdOnSwapFork.s.sol \
+///   forge script script/ABv1V3PdOnSwapFork.s.sol \
 ///     --fork-url https://public-en.node.kaia.io -vv
-contract Abv1V3PdOnSwapFork is Abv1SwapForkBase {
+contract ABv1V3PdOnSwapFork is ABv1SwapForkBase {
     // PD-on target (effective 29.8M, picked from AuditPdOwnerStake output)
     address internal constant TARGET_NODE_ID_ = 0x7AA64D5f97402c1b84A5027A254151BC6129CC4e;
     address internal constant TARGET_V3_      = 0xEA217C25FB244FAf32F9B274517dB735CeCb989C;
@@ -43,7 +43,7 @@ contract Abv1V3PdOnSwapFork is Abv1SwapForkBase {
 
     uint256 internal constant GC_SELF_SHARE = 5_000_000 ether;
 
-    constructor() Abv1SwapForkBase(TARGET_NODE_ID_, TARGET_V3_) {}
+    constructor() ABv1SwapForkBase(TARGET_NODE_ID_, TARGET_V3_) {}
 
     function _logInitialState() internal view override {
         IV3 v3 = IV3(TARGET_OLD_CN);
