@@ -9,7 +9,7 @@ import {IPublicDelegation} from "../../src/PublicDelegation/interfaces/IPublicDe
 
 /// @title LegacyAbv1Test
 /// @notice Coverage for the ABv1 legacy compatibility layer on CnStakingV4:
-///         setLegacyAbv1Info, clearLegacyAbv1Info, and the three legacy getters
+///         setLegacyAbv1Info and the three legacy getters
 ///         (nodeId, rewardAddress, isInitialized).
 contract LegacyAbv1Test is CnStakingBase {
     CnStakingV4 internal cn;
@@ -18,7 +18,6 @@ contract LegacyAbv1Test is CnStakingBase {
     address internal rewardAddr;
 
     event LegacyAbv1InfoSet(address indexed nodeId, address indexed rewardAddress);
-    event LegacyAbv1InfoCleared();
 
     function setUp() public override {
         super.setUp();
@@ -83,71 +82,6 @@ contract LegacyAbv1Test is CnStakingBase {
         assertEq(cn.rewardAddress(), rewardAddr);
     }
 
-    /* ========== clearLegacyAbv1Info ========== */
-
-    function test_Clear_RevertsWhenNotOwner() public {
-        vm.prank(owner);
-        cn.setLegacyAbv1Info(nodeIdAddr, rewardAddr);
-
-        vm.prank(user1);
-        vm.expectRevert();
-        cn.clearLegacyAbv1Info();
-    }
-
-    function test_Clear_ZeroesFieldsAndEmits() public {
-        vm.prank(owner);
-        cn.setLegacyAbv1Info(nodeIdAddr, rewardAddr);
-
-        vm.expectEmit(false, false, false, false, address(cn));
-        emit LegacyAbv1InfoCleared();
-
-        vm.prank(owner);
-        cn.clearLegacyAbv1Info();
-    }
-
-    function test_Clear_AllowedBeforeSet() public {
-        // No prior set — clear should still work and toggle the cleared flag.
-        vm.prank(owner);
-        cn.clearLegacyAbv1Info();
-
-        vm.expectRevert(ICnStaking.LegacyCleared.selector);
-        cn.nodeId();
-    }
-
-    /* ========== POST-CLEAR REVERT SEMANTICS ========== */
-
-    function test_PostClear_NodeIdReverts() public {
-        _setThenClear();
-        vm.expectRevert(ICnStaking.LegacyCleared.selector);
-        cn.nodeId();
-    }
-
-    function test_PostClear_RewardAddressReverts() public {
-        _setThenClear();
-        vm.expectRevert(ICnStaking.LegacyCleared.selector);
-        cn.rewardAddress();
-    }
-
-    function test_PostClear_IsInitializedReverts() public {
-        _setThenClear();
-        vm.expectRevert(ICnStaking.LegacyCleared.selector);
-        cn.isInitialized();
-    }
-
-    function test_PostClear_SetReverts() public {
-        _setThenClear();
-        vm.prank(owner);
-        vm.expectRevert(ICnStaking.LegacyCleared.selector);
-        cn.setLegacyAbv1Info(nodeIdAddr, rewardAddr);
-    }
-
-    function test_PostClear_DoubleClearReverts() public {
-        _setThenClear();
-        vm.prank(owner);
-        vm.expectRevert(ICnStaking.LegacyCleared.selector);
-        cn.clearLegacyAbv1Info();
-    }
-
     /* ========== STORAGE ISOLATION ========== */
 
     /// @notice Sanity check that the legacy storage namespace does not collide with the main
@@ -160,14 +94,6 @@ contract LegacyAbv1Test is CnStakingBase {
 
         vm.prank(owner);
         cn.setLegacyAbv1Info(nodeIdAddr, rewardAddr);
-
-        assertEq(cn.staking(), stakingBefore);
-        assertEq(cn.unstaking(), unstakingBefore);
-        assertEq(cn.withdrawalRequestCount(), wrCountBefore);
-        assertEq(cn.publicDelegation(), pdBefore);
-
-        vm.prank(owner);
-        cn.clearLegacyAbv1Info();
 
         assertEq(cn.staking(), stakingBefore);
         assertEq(cn.unstaking(), unstakingBefore);
@@ -206,24 +132,5 @@ contract LegacyAbv1Test is CnStakingBase {
 
         // PD wiring untouched
         assertEq(pdCn.publicDelegation(), address(pd));
-
-        // Clear semantics also unchanged under PD-on
-        vm.prank(pdOwner);
-        pdCn.clearLegacyAbv1Info();
-
-        vm.expectRevert(ICnStaking.LegacyCleared.selector);
-        pdCn.nodeId();
-
-        // PD wiring still untouched after clear
-        assertEq(pdCn.publicDelegation(), address(pd));
-    }
-
-    /* ========== HELPERS ========== */
-
-    function _setThenClear() private {
-        vm.startPrank(owner);
-        cn.setLegacyAbv1Info(nodeIdAddr, rewardAddr);
-        cn.clearLegacyAbv1Info();
-        vm.stopPrank();
     }
 }

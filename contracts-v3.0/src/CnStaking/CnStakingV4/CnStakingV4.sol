@@ -84,11 +84,8 @@ contract CnStakingV4 is ICnStaking, Initializable, OwnableUpgradeable, Reentranc
         address nodeId;
         /// @notice rewardAddress returned by the legacy `rewardAddress()` getter.
         address rewardAddress;
-        /// @notice Reflected by the legacy `isInitialized()` getter. Cleared by clearLegacyAbv1Info.
+        /// @notice Reflected by the legacy `isInitialized()` getter.
         bool initialized;
-        /// @notice Monotonic flag — set to true on clearLegacyAbv1Info and never reset. Once true,
-        ///         the legacy getters revert and setLegacyAbv1Info is blocked.
-        bool cleared;
     }
 
     // keccak256(abi.encode(uint256(keccak256("cnstakingv4.storage.LegacyAbv1")) - 1)) & ~bytes32(uint256(0xff))
@@ -432,7 +429,7 @@ contract CnStakingV4 is ICnStaking, Initializable, OwnableUpgradeable, Reentranc
     /* ========== ABv1 LEGACY COMPATIBILITY ========== */
 
     /// @inheritdoc ICnStaking
-    /// @dev Reverts if already set (nodeId != 0) or if previously cleared. If the wrong value
+    /// @dev Reverts if already set (nodeId != 0). If the wrong value
     ///      was supplied before AddressBookV1 register, redeploy the contract rather than
     ///      attempting to reuse this one.
     function setLegacyAbv1Info(
@@ -440,7 +437,6 @@ contract CnStakingV4 is ICnStaking, Initializable, OwnableUpgradeable, Reentranc
         address _rewardAddress
     ) external override onlyOwner notNull(_nodeId) notNull(_rewardAddress) {
         LegacyAbv1Storage storage $ = _getLegacyAbv1Storage();
-        if ($.cleared) revert LegacyCleared();
         if ($.nodeId != address(0)) revert LegacyAlreadySet();
         $.initialized = true;
         $.nodeId = _nodeId;
@@ -449,36 +445,20 @@ contract CnStakingV4 is ICnStaking, Initializable, OwnableUpgradeable, Reentranc
     }
 
     /// @inheritdoc ICnStaking
-    /// @dev Permanently disables the legacy interface — getters revert and setLegacyAbv1Info is
-    ///      blocked thereafter. Intended for post-HF cleanup.
-    function clearLegacyAbv1Info() external override onlyOwner {
-        LegacyAbv1Storage storage $ = _getLegacyAbv1Storage();
-        if ($.cleared) revert LegacyCleared();
-        $.nodeId = address(0);
-        $.rewardAddress = address(0);
-        $.initialized = false;
-        $.cleared = true;
-        emit LegacyAbv1InfoCleared();
-    }
-
-    /// @inheritdoc ICnStaking
     function nodeId() external view override returns (address) {
         LegacyAbv1Storage storage $ = _getLegacyAbv1Storage();
-        if ($.cleared) revert LegacyCleared();
         return $.nodeId;
     }
 
     /// @inheritdoc ICnStaking
     function rewardAddress() external view override returns (address) {
         LegacyAbv1Storage storage $ = _getLegacyAbv1Storage();
-        if ($.cleared) revert LegacyCleared();
         return $.rewardAddress;
     }
 
     /// @inheritdoc ICnStaking
     function isInitialized() external view override returns (bool) {
         LegacyAbv1Storage storage $ = _getLegacyAbv1Storage();
-        if ($.cleared) revert LegacyCleared();
         return $.initialized;
     }
 }
