@@ -3,9 +3,9 @@ pragma solidity 0.8.25;
 
 import {console} from "forge-std/Script.sol";
 import {ABv1SwapForkBase} from "./ABv1SwapForkBase.sol";
-import {CnStakingV4} from "../src/CnStaking/CnStakingV4/CnStakingV4.sol";
-import {CnStakingV4Factory} from "../src/CnStaking/CnStakingV4Factory/CnStakingV4Factory.sol";
-import {IPublicDelegation} from "../src/PublicDelegation/interfaces/IPublicDelegation.sol";
+import {CnStakingV4} from "../../src/CnStaking/CnStakingV4/CnStakingV4.sol";
+import {CnStakingV4Factory} from "../../src/CnStaking/CnStakingV4Factory/CnStakingV4Factory.sol";
+import {IPublicDelegation} from "../../src/PublicDelegation/interfaces/IPublicDelegation.sol";
 
 interface IV3PDV1 {
     function stake() external payable;
@@ -33,7 +33,7 @@ interface IV3 {
 ///   - V4 funds injected via V4 PD.stake (PD-on V4's `receive` is gated to PD only)
 ///
 /// Usage:
-///   forge script script/ABv1V3PdOnSwapFork.s.sol \
+///   forge script script/rehearsal/ABv1V3PdOnSwapFork.s.sol \
 ///     --fork-url https://public-en.node.kaia.io -vv
 contract ABv1V3PdOnSwapFork is ABv1SwapForkBase {
     // PD-on target (effective 29.8M, picked from AuditPdOwnerStake output)

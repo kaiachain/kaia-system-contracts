@@ -3,9 +3,9 @@ pragma solidity 0.8.25;
 
 import {Script, console} from "forge-std/Script.sol";
 import {UpgradeableBeacon} from "@openzeppelin/contracts/proxy/beacon/UpgradeableBeacon.sol";
-import {CnStakingV4} from "../src/CnStaking/CnStakingV4/CnStakingV4.sol";
-import {PublicDelegation} from "../src/PublicDelegation/PublicDelegation.sol";
-import {CnStakingV4Factory} from "../src/CnStaking/CnStakingV4Factory/CnStakingV4Factory.sol";
+import {CnStakingV4} from "../../src/CnStaking/CnStakingV4/CnStakingV4.sol";
+import {PublicDelegation} from "../../src/PublicDelegation/PublicDelegation.sol";
+import {CnStakingV4Factory} from "../../src/CnStaking/CnStakingV4Factory/CnStakingV4Factory.sol";
 
 interface IAddressBookV1 {
     function getState() external view returns (address[] memory adminList, uint256 requirement);

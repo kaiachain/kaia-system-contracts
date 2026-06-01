@@ -18,7 +18,7 @@ interface IMainnetV3AdminGetter {
 ///         scenario-specific.
 ///
 /// Usage:
-///   forge script script/ABv1V3SwapFork.s.sol \
+///   forge script script/rehearsal/ABv1V3SwapFork.s.sol \
 ///     --fork-url https://public-en.node.kaia.io -vv
 contract ABv1V3SwapFork is ABv1PdOffMultiSigForkBase {
     // GC #5 in cnNodeIdList — V3 PD off, ~14.7M staking, multisig requirement = 3

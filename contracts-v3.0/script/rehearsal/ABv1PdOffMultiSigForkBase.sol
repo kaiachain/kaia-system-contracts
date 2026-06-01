@@ -3,8 +3,8 @@ pragma solidity 0.8.25;
 
 import {console} from "forge-std/Script.sol";
 import {ABv1SwapForkBase} from "./ABv1SwapForkBase.sol";
-import {CnStakingV4} from "../src/CnStaking/CnStakingV4/CnStakingV4.sol";
-import {CnStakingV4Factory} from "../src/CnStaking/CnStakingV4Factory/CnStakingV4Factory.sol";
+import {CnStakingV4} from "../../src/CnStaking/CnStakingV4/CnStakingV4.sol";
+import {CnStakingV4Factory} from "../../src/CnStaking/CnStakingV4Factory/CnStakingV4Factory.sol";
 
 /// @dev Subset of the CnStakingV2/V3MultiSig surface that the PD-off migration drives.
 ///      Both contracts expose the same Functions enum (ApproveStakingWithdrawal = 6) and

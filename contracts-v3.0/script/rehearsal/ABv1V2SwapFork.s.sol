@@ -32,7 +32,7 @@ interface IMainnetV2AdminGetter {
 ///          V2 GCs with self-vault reward (Kommuendo-like, 15/27) are out of scope.
 ///
 /// Usage:
-///   forge script script/ABv1V2SwapFork.s.sol \
+///   forge script script/rehearsal/ABv1V2SwapFork.s.sol \
 ///     --fork-url https://public-en.node.kaia.io -vv
 contract ABv1V2SwapFork is ABv1PdOffMultiSigForkBase {
     // V2 PD-off target (effective 9.6M, EOA reward)
