@@ -18,7 +18,7 @@ This monorepo contains the official system contracts for the Kaia blockchain.
 ## Installation
 
 ```bash
-npm install @kaiachain/system-contracts-v2.2
+npm install @kaiachain/system-contracts-v3.0
 ```
 
 ## Usage
@@ -26,7 +26,8 @@ npm install @kaiachain/system-contracts-v2.2
 Import contracts in your Solidity files:
 
 ```solidity
-import "@kaiachain/system-contracts-v2.2/contracts/ValidatorManager.sol";
+import "@kaiachain/system-contracts-v3.0/src/AddressBookV2/AddressBookV2.sol";
+import "@kaiachain/system-contracts-v3.0/src/CnStaking/CnStakingV4/CnStakingV4.sol";
 ```
 
 ## Development
@@ -34,7 +35,7 @@ import "@kaiachain/system-contracts-v2.2/contracts/ValidatorManager.sol";
 ### Prerequisites
 
 - Node.js >= 20
-- Foundry (for contracts-v2.2)
+- Foundry (for contracts-v2.2 and v3.0)
 
 ### Setup
 
