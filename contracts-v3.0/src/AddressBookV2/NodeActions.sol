@@ -66,6 +66,16 @@ abstract contract NodeActions is AddressBookV2Base {
 
         ABv2Storage storage $ = _getStorage();
         NodeInfo storage info = $.nodeInfo[nodeId];
+
+        // Zero out voterAddress before deletion so STv3 clears its voter mappings.
+        if (info.voterAddress != address(0)) {
+            info.voterAddress = address(0);
+            address tracker = IRegistry(REGISTRY_ADDRESS).getActiveAddr("StakingTracker");
+            if (tracker != address(0)) {
+                try IStakingTracker(tracker).refreshVoter(nodeId) {} catch {}
+            }
+        }
+
         NodeVerifier.unregisterAddresses($.usedAddresses, nodeId, info.stakingContract, info.rewardAddress);
 
         $.stateCount[State.Registered]--;
