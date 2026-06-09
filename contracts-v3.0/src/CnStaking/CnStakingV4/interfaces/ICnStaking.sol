@@ -47,6 +47,10 @@ interface ICnStaking {
         uint256 value
     );
 
+    /// @notice Emitted when legacy ABv1 info is set on this contract.
+    /// @dev Used only during V3 → V4 migration to satisfy AddressBookV1.register validation.
+    event LegacyAbv1InfoSet(address indexed nodeId, address indexed rewardAddress);
+
     /* ========== ERRORS ========== */
 
     error ZeroAddress();
@@ -63,6 +67,7 @@ interface ICnStaking {
     error TransferFailed();
     error InvalidStakeFor();
     error BaseCnStakingMismatch();
+    error LegacyAlreadySet();
 
     /* ========== INITIALIZATION FUNCTIONS ========== */
 
@@ -158,4 +163,26 @@ interface ICnStaking {
     function getApprovedStakingWithdrawalInfo(
         uint256 _index
     ) external view returns (address to, uint256 value, uint256 withdrawableFrom, WithdrawalStakingState state);
+
+    /* ========== ABv1 LEGACY COMPATIBILITY ========== */
+    // The functions below exist solely to let CnStakingV4 instances be registered in the legacy
+    // AddressBookV1, which validates `nodeId()`, `rewardAddress()`, and `isInitialized()` on the
+    // staking contract during `registerCnStakingContract`. They are intended to be used only during
+    // the V3 → V4 migration window and become dead code once AddressBookV2 takes over post-fork.
+
+    /// @notice Set the legacy ABv1 identity info.
+    /// @dev Reverts if nodeId is already non-zero (already set). If the wrong value is supplied,
+    ///      redeploy the contract rather than re-setting.
+    /// @param _nodeId         The validator's nodeId (same as the council member address).
+    /// @param _rewardAddress  The address that AddressBookV1 should bind to this staking contract.
+    function setLegacyAbv1Info(address _nodeId, address _rewardAddress) external;
+
+    /// @notice Legacy ABv1 getter: validator nodeId set via setLegacyAbv1Info.
+    function nodeId() external view returns (address);
+
+    /// @notice Legacy ABv1 getter: reward address set via setLegacyAbv1Info.
+    function rewardAddress() external view returns (address);
+
+    /// @notice Legacy ABv1 getter: true once setLegacyAbv1Info has been called.
+    function isInitialized() external view returns (bool);
 }
