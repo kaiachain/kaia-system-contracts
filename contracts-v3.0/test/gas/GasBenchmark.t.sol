@@ -10,6 +10,7 @@ import {IRegistry} from "../../src/system/IRegistry.sol";
 import {ERC1967Proxy} from "@openzeppelin/contracts/proxy/ERC1967/ERC1967Proxy.sol";
 import {State, NodeInfo, BlsPublicKeyInfo} from "../../src/types/Node.sol";
 import {MockCnStaking} from "../../src/CnStaking/mocks/MockCnStaking.sol";
+import {NodeIdSigUtil} from "../base/NodeIdSigUtil.sol";
 
 /// @title GasBenchmark
 /// @notice Gas benchmarks for epoch transitions and getters at scale (50, 100, 150 nodes).
@@ -20,6 +21,16 @@ contract GasBenchmark is DeployHelpers {
     uint256 internal constant BENCHMARK_MAX_READY_CAND_COUNT = 200;
 
     address internal owner;
+
+    /// @dev Produces the nodeId ownership signature that createNode requires: an ECDSA
+    ///      signature by nodeId over (caller, nodeId, stakingContract, chainId, addressBook).
+    function _signNodeIdFor(uint256 nodeIdPk, address caller, address nodeId, address staking)
+        internal
+        view
+        returns (bytes memory)
+    {
+        return NodeIdSigUtil.sign(nodeIdPk, caller, nodeId, staking, address(abv2));
+    }
 
     function setUp() public {
         owner = makeAddr("owner");
@@ -86,15 +97,16 @@ contract GasBenchmark is DeployHelpers {
 
         for (uint256 i; i < count; i++) {
             string memory idx = vm.toString(startIdx + i);
-            address nodeId = makeAddr(string.concat("cand", idx));
+            (address nodeId, uint256 nodeIdPk) = makeAddrAndKey(string.concat("cand", idx));
             address mgr = makeAddr(string.concat("cmgr", idx));
             MockCnStaking staking = deployMockCnStaking(MIN_STAKE, 0);
             address reward = makeAddr(string.concat("crew", idx));
             address voter = makeAddr(string.concat("cvot", idx));
 
             _mockDeployer(address(staking), mgr);
+            bytes memory sig = _signNodeIdFor(nodeIdPk, mgr, nodeId, address(staking));
             vm.prank(mgr);
-            abv2.createNode(nodeId, address(staking), reward, voter, _makeBlsInfo(), string.concat("cand", idx), "");
+            abv2.createNode(nodeId, address(staking), reward, voter, _makeBlsInfo(), string.concat("cand", idx), "", sig);
             vm.deal(nodeId, 10 ether);
             vm.prank(nodeId);
             abv2.readyCandidate(nodeId);
@@ -309,12 +321,6 @@ contract GasBenchmark is DeployHelpers {
         vm.snapshotGasLastCall("getAllBlsInfo_50");
     }
 
-    function test_gas_getNodeInfos_50() public {
-        address[] memory ids = _bootstrapValidators(50, 0);
-        abv2.getNodeInfos(ids);
-        vm.snapshotGasLastCall("getNodeInfos_50");
-    }
-
     /* ========== GETTERS: 100 nodes ========== */
 
     function test_gas_getAllProfiles_100() public {
@@ -329,12 +335,6 @@ contract GasBenchmark is DeployHelpers {
         vm.snapshotGasLastCall("getAllBlsInfo_100");
     }
 
-    function test_gas_getNodeInfos_100() public {
-        address[] memory ids = _bootstrapValidators(100, 0);
-        abv2.getNodeInfos(ids);
-        vm.snapshotGasLastCall("getNodeInfos_100");
-    }
-
     /* ========== GETTERS: 150 nodes ========== */
 
     function test_gas_getAllProfiles_150() public {
@@ -347,12 +347,6 @@ contract GasBenchmark is DeployHelpers {
         _bootstrapValidators(150, 0);
         abv2.getAllBlsInfo();
         vm.snapshotGasLastCall("getAllBlsInfo_150");
-    }
-
-    function test_gas_getNodeInfos_150() public {
-        address[] memory ids = _bootstrapValidators(150, 0);
-        abv2.getNodeInfos(ids);
-        vm.snapshotGasLastCall("getNodeInfos_150");
     }
 
 }

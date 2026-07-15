@@ -24,7 +24,7 @@ contract NodeManagementTest is Base {
         emit IAddressBookV2.NodeCreated(n.nodeId);
 
         vm.prank(n.manager);
-        abv2.createNode(n.nodeId, address(n.staking), n.rewardAddr, n.voterAddr, _makeBlsInfo(), "testnode", "meta");
+        abv2.createNode(n.nodeId, address(n.staking), n.rewardAddr, n.voterAddr, _makeBlsInfo(), "testnode", "meta", _signNodeId(n));
 
         // Verify manager stored in NC
         assertEq(abv2.getNodeInfo(n.nodeId).manager, n.manager);
@@ -50,7 +50,7 @@ contract NodeManagementTest is Base {
 
         vm.expectRevert(IAddressBookV2.NodeAlreadyExists.selector);
         vm.prank(g.manager);
-        abv2.createNode(g.nodeId, address(g.staking), g.rewardAddr, g.voterAddr, _makeBlsInfo(), "testnode", "");
+        abv2.createNode(g.nodeId, address(g.staking), g.rewardAddr, g.voterAddr, _makeBlsInfo(), "testnode", "", _signNodeId(g));
     }
 
     function test_createNode_revert_InvalidInput_zeroNodeId() public {
@@ -58,7 +58,7 @@ contract NodeManagementTest is Base {
 
         vm.expectRevert(IAddressBookV2.InvalidInput.selector);
         vm.prank(n.manager);
-        abv2.createNode(address(0), address(n.staking), n.rewardAddr, n.voterAddr, _makeBlsInfo(), "testnode", "");
+        abv2.createNode(address(0), address(n.staking), n.rewardAddr, n.voterAddr, _makeBlsInfo(), "testnode", "", _signNodeId(n));
     }
 
     function test_createNode_revert_InvalidInput_zeroStaking() public {
@@ -66,7 +66,7 @@ contract NodeManagementTest is Base {
 
         vm.expectRevert(IAddressBookV2.InvalidInput.selector);
         vm.prank(n.manager);
-        abv2.createNode(n.nodeId, address(0), n.rewardAddr, n.voterAddr, _makeBlsInfo(), "testnode", "");
+        abv2.createNode(n.nodeId, address(0), n.rewardAddr, n.voterAddr, _makeBlsInfo(), "testnode", "", _signNodeId(n));
     }
 
     function test_createNode_revert_InvalidInput_zeroReward() public {
@@ -74,7 +74,7 @@ contract NodeManagementTest is Base {
 
         vm.expectRevert(IAddressBookV2.InvalidInput.selector);
         vm.prank(n.manager);
-        abv2.createNode(n.nodeId, address(n.staking), address(0), n.voterAddr, _makeBlsInfo(), "testnode", "");
+        abv2.createNode(n.nodeId, address(n.staking), address(0), n.voterAddr, _makeBlsInfo(), "testnode", "", _signNodeId(n));
     }
 
     function test_createNode_revert_InvalidInput_duplicateAddresses() public {
@@ -83,17 +83,17 @@ contract NodeManagementTest is Base {
         // nodeId == stakingContract
         vm.expectRevert(IAddressBookV2.InvalidInput.selector);
         vm.prank(n.manager);
-        abv2.createNode(n.nodeId, n.nodeId, n.rewardAddr, n.voterAddr, _makeBlsInfo(), "testnode", "");
+        abv2.createNode(n.nodeId, n.nodeId, n.rewardAddr, n.voterAddr, _makeBlsInfo(), "testnode", "", _signNodeId(n));
 
         // nodeId == rewardAddress
         vm.expectRevert(IAddressBookV2.InvalidInput.selector);
         vm.prank(n.manager);
-        abv2.createNode(n.nodeId, address(n.staking), n.nodeId, n.voterAddr, _makeBlsInfo(), "testnode", "");
+        abv2.createNode(n.nodeId, address(n.staking), n.nodeId, n.voterAddr, _makeBlsInfo(), "testnode", "", _signNodeId(n));
 
         // stakingContract == rewardAddress
         vm.expectRevert(IAddressBookV2.InvalidInput.selector);
         vm.prank(n.manager);
-        abv2.createNode(n.nodeId, n.rewardAddr, n.rewardAddr, n.voterAddr, _makeBlsInfo(), "testnode", "");
+        abv2.createNode(n.nodeId, n.rewardAddr, n.rewardAddr, n.voterAddr, _makeBlsInfo(), "testnode", "", _signNodeId(n));
     }
 
     function test_createNode_revert_InvalidInput_blsPublicKeyWrongSize() public {
@@ -103,7 +103,7 @@ contract NodeManagementTest is Base {
 
         vm.expectRevert(IAddressBookV2.InvalidInput.selector);
         vm.prank(n.manager);
-        abv2.createNode(n.nodeId, address(n.staking), n.rewardAddr, n.voterAddr, badBls, "testnode", "");
+        abv2.createNode(n.nodeId, address(n.staking), n.rewardAddr, n.voterAddr, badBls, "testnode", "", _signNodeId(n));
     }
 
     function test_createNode_revert_InvalidInput_blsPopWrongSize() public {
@@ -113,7 +113,7 @@ contract NodeManagementTest is Base {
 
         vm.expectRevert(IAddressBookV2.InvalidInput.selector);
         vm.prank(n.manager);
-        abv2.createNode(n.nodeId, address(n.staking), n.rewardAddr, n.voterAddr, badBls, "testnode", "");
+        abv2.createNode(n.nodeId, address(n.staking), n.rewardAddr, n.voterAddr, badBls, "testnode", "", _signNodeId(n));
     }
 
     function test_createNode_revert_InvalidInput_blsPublicKeyZero() public {
@@ -123,7 +123,7 @@ contract NodeManagementTest is Base {
 
         vm.expectRevert(IAddressBookV2.InvalidInput.selector);
         vm.prank(n.manager);
-        abv2.createNode(n.nodeId, address(n.staking), n.rewardAddr, n.voterAddr, badBls, "testnode", "");
+        abv2.createNode(n.nodeId, address(n.staking), n.rewardAddr, n.voterAddr, badBls, "testnode", "", _signNodeId(n));
     }
 
     function test_createNode_revert_InvalidInput_blsPopZero() public {
@@ -133,7 +133,7 @@ contract NodeManagementTest is Base {
 
         vm.expectRevert(IAddressBookV2.InvalidInput.selector);
         vm.prank(n.manager);
-        abv2.createNode(n.nodeId, address(n.staking), n.rewardAddr, n.voterAddr, badBls, "testnode", "");
+        abv2.createNode(n.nodeId, address(n.staking), n.rewardAddr, n.voterAddr, badBls, "testnode", "", _signNodeId(n));
     }
 
     function test_createNode_revert_StakingDeployerMismatch() public {
@@ -145,15 +145,15 @@ contract NodeManagementTest is Base {
 
         vm.expectRevert(NodeVerifier.StakingDeployerMismatch.selector);
         vm.prank(n.manager);
-        abv2.createNode(n.nodeId, address(n.staking), n.rewardAddr, n.voterAddr, _makeBlsInfo(), "testnode", "");
+        abv2.createNode(n.nodeId, address(n.staking), n.rewardAddr, n.voterAddr, _makeBlsInfo(), "testnode", "", _signNodeId(n));
     }
 
     function test_createNode_revert_AddressAlreadyRegistered_nodeId() public {
-        NodeBundle memory g = genesis[0];
+        (address dup, uint256 dupPk) = makeAddrAndKey("reward1"); // == genesis[0].rewardAddr, already used, not a node
         NodeBundle memory n = _makeNodeBundle(5);
         vm.expectRevert(NodeVerifier.AddressAlreadyRegistered.selector);
         vm.prank(n.manager);
-        abv2.createNode(address(g.staking), address(n.staking), n.rewardAddr, n.voterAddr, _makeBlsInfo(), "testnode", "");
+        abv2.createNode(dup, address(n.staking), n.rewardAddr, n.voterAddr, _makeBlsInfo(), "testnode", "", _signNodeIdFor(dupPk, n.manager, dup, address(n.staking)));
     }
 
     function test_createNode_revert_AddressAlreadyRegistered_staking() public {
@@ -162,7 +162,7 @@ contract NodeManagementTest is Base {
         _mockDeployer(address(g.staking), n.manager);
         vm.expectRevert(NodeVerifier.AddressAlreadyRegistered.selector);
         vm.prank(n.manager);
-        abv2.createNode(n.nodeId, address(g.staking), n.rewardAddr, n.voterAddr, _makeBlsInfo(), "testnode", "");
+        abv2.createNode(n.nodeId, address(g.staking), n.rewardAddr, n.voterAddr, _makeBlsInfo(), "testnode", "", _signNodeIdFor(n.nodeIdPk, n.manager, n.nodeId, address(g.staking)));
     }
 
     function test_createNode_revert_AddressAlreadyRegistered_reward() public {
@@ -171,7 +171,7 @@ contract NodeManagementTest is Base {
 
         vm.expectRevert(NodeVerifier.AddressAlreadyRegistered.selector);
         vm.prank(n.manager);
-        abv2.createNode(n.nodeId, address(n.staking), g.rewardAddr, n.voterAddr, _makeBlsInfo(), "testnode", "");
+        abv2.createNode(n.nodeId, address(n.staking), g.rewardAddr, n.voterAddr, _makeBlsInfo(), "testnode", "", _signNodeId(n));
     }
 
     function test_createNode_revert_InvalidInput_emptyName() public {
@@ -179,7 +179,70 @@ contract NodeManagementTest is Base {
 
         vm.expectRevert(IAddressBookV2.InvalidInput.selector);
         vm.prank(n.manager);
-        abv2.createNode(n.nodeId, address(n.staking), n.rewardAddr, n.voterAddr, _makeBlsInfo(), "", "");
+        abv2.createNode(n.nodeId, address(n.staking), n.rewardAddr, n.voterAddr, _makeBlsInfo(), "", "", _signNodeId(n));
+    }
+
+    /* ========== createNode: nodeId ownership proof ========== */
+
+    /// @dev Positive control: the exact same setup that the wrong-* cases below reject succeeds
+    ///      when a valid nodeId signature is presented.
+    function test_createNode_nodeIdProof_validSig_succeeds() public {
+        NodeBundle memory n = _makeNodeBundle(5);
+
+        vm.expectEmit(true, false, false, true);
+        emit IAddressBookV2.NodeCreated(n.nodeId);
+
+        vm.prank(n.manager);
+        abv2.createNode(n.nodeId, address(n.staking), n.rewardAddr, n.voterAddr, _makeBlsInfo(), "testnode", "", _signNodeId(n));
+
+        assertEq(abv2.getNodeInfo(n.nodeId).manager, n.manager);
+        assertEq(uint256(abv2.getNodeInfo(n.nodeId).state), uint256(State.Registered));
+    }
+
+    /// @dev A signature by anyone other than nodeId is rejected — a caller cannot register a
+    ///      nodeId it does not control.
+    function test_createNode_revert_NodeIdProofInvalid_wrongSigner() public {
+        NodeBundle memory n = _makeNodeBundle(5);
+        (, uint256 attackerPk) = makeAddrAndKey("attacker");
+        bytes memory badSig = _signNodeIdFor(attackerPk, n.manager, n.nodeId, address(n.staking));
+
+        vm.expectRevert(NodeVerifier.NodeIdProofInvalid.selector);
+        vm.prank(n.manager);
+        abv2.createNode(n.nodeId, address(n.staking), n.rewardAddr, n.voterAddr, _makeBlsInfo(), "testnode", "", badSig);
+    }
+
+    /// @dev An empty / malformed signature is rejected.
+    function test_createNode_revert_NodeIdProofInvalid_emptySig() public {
+        NodeBundle memory n = _makeNodeBundle(5);
+
+        vm.expectRevert(NodeVerifier.NodeIdProofInvalid.selector);
+        vm.prank(n.manager);
+        abv2.createNode(n.nodeId, address(n.staking), n.rewardAddr, n.voterAddr, _makeBlsInfo(), "testnode", "", "");
+    }
+
+    /// @dev A valid nodeId signature is bound to one caller; a different caller cannot replay it
+    ///      (front-running / squat defense). The alternate caller still passes the deployer check.
+    function test_createNode_revert_NodeIdProofInvalid_wrongCaller() public {
+        NodeBundle memory n = _makeNodeBundle(5);
+        bytes memory sigForManager = _signNodeId(n); // authorizes n.manager as the registrant
+
+        address frontrunner = makeAddr("frontrunner");
+        _mockDeployer(address(n.staking), frontrunner);
+
+        vm.expectRevert(NodeVerifier.NodeIdProofInvalid.selector);
+        vm.prank(frontrunner);
+        abv2.createNode(n.nodeId, address(n.staking), n.rewardAddr, n.voterAddr, _makeBlsInfo(), "testnode", "", sigForManager);
+    }
+
+    /// @dev A signature bound to a different staking contract is rejected.
+    function test_createNode_revert_NodeIdProofInvalid_wrongStaking() public {
+        NodeBundle memory n = _makeNodeBundle(5);
+        NodeBundle memory other = _makeNodeBundle(6);
+        bytes memory sigForOtherStaking = _signNodeIdFor(n.nodeIdPk, n.manager, n.nodeId, address(other.staking));
+
+        vm.expectRevert(NodeVerifier.NodeIdProofInvalid.selector);
+        vm.prank(n.manager);
+        abv2.createNode(n.nodeId, address(n.staking), n.rewardAddr, n.voterAddr, _makeBlsInfo(), "testnode", "", sigForOtherStaking);
     }
 
     /* ========== deleteNode ========== */
@@ -232,7 +295,7 @@ contract NodeManagementTest is Base {
         NodeBundle memory n = _makeNodeBundle(5);
         _mockDeployer(oldStaking, n.manager);
         vm.prank(n.manager);
-        abv2.createNode(oldNodeId, oldStaking, oldReward, n.voterAddr, _makeBlsInfo(), "testnode", "");
+        abv2.createNode(oldNodeId, oldStaking, oldReward, n.voterAddr, _makeBlsInfo(), "testnode", "", _signNodeIdFor(g.nodeIdPk, n.manager, oldNodeId, oldStaking));
 
         // Verify it was created
         _assertNodeState(oldNodeId, State.Registered);
@@ -257,7 +320,7 @@ contract NodeManagementTest is Base {
         address newManager = makeAddr("newManager");
         _mockDeployer(stakingAddr, newManager);
         vm.prank(newManager);
-        abv2.createNode(nodeId, stakingAddr, rewardAddr, g.voterAddr, _makeBlsInfo(), "testnode", "re-registered");
+        abv2.createNode(nodeId, stakingAddr, rewardAddr, g.voterAddr, _makeBlsInfo(), "testnode", "re-registered", _signNodeIdFor(g.nodeIdPk, newManager, nodeId, stakingAddr));
 
         _assertNodeState(nodeId, State.Registered);
         assertEq(abv2.getNodeInfo(nodeId).manager, newManager);
@@ -269,7 +332,7 @@ contract NodeManagementTest is Base {
     function test_createNode_stakingUnderflow_reverts_onActivate() public {
         string memory idx = vm.toString(uint256(5));
         NodeBundle memory n;
-        n.nodeId = makeAddr(string.concat("node", idx));
+        (n.nodeId, n.nodeIdPk) = makeAddrAndKey(string.concat("node", idx));
         n.manager = makeAddr(string.concat("manager", idx));
         n.staking = deployMockCnStaking(MIN_STAKE, MIN_STAKE + 1); // unstaking > staking
         n.rewardAddr = makeAddr(string.concat("reward", idx));
@@ -277,7 +340,7 @@ contract NodeManagementTest is Base {
 
         _mockDeployer(address(n.staking), n.manager);
         vm.prank(n.manager);
-        abv2.createNode(n.nodeId, address(n.staking), n.rewardAddr, n.voterAddr, _makeBlsInfo(), "testnode", "");
+        abv2.createNode(n.nodeId, address(n.staking), n.rewardAddr, n.voterAddr, _makeBlsInfo(), "testnode", "", _signNodeId(n));
 
         vm.expectRevert();
         _readyCand(n);
@@ -288,7 +351,7 @@ contract NodeManagementTest is Base {
     function test_createNode_zeroVoterAddress() public {
         NodeBundle memory n = _makeNodeBundle(5);
         vm.prank(n.manager);
-        abv2.createNode(n.nodeId, address(n.staking), n.rewardAddr, address(0), _makeBlsInfo(), "testnode", "");
+        abv2.createNode(n.nodeId, address(n.staking), n.rewardAddr, address(0), _makeBlsInfo(), "testnode", "", _signNodeId(n));
         NodeInfo memory info = abv2.getNodeInfo(n.nodeId);
         assertEq(info.voterAddress, address(0));
     }
@@ -296,7 +359,7 @@ contract NodeManagementTest is Base {
     function test_createNode_voterSameAsNodeId() public {
         NodeBundle memory n = _makeNodeBundle(5);
         vm.prank(n.manager);
-        abv2.createNode(n.nodeId, address(n.staking), n.rewardAddr, n.nodeId, _makeBlsInfo(), "testnode", "");
+        abv2.createNode(n.nodeId, address(n.staking), n.rewardAddr, n.nodeId, _makeBlsInfo(), "testnode", "", _signNodeId(n));
         NodeInfo memory info = abv2.getNodeInfo(n.nodeId);
         assertEq(info.voterAddress, n.nodeId);
     }
@@ -308,11 +371,11 @@ contract NodeManagementTest is Base {
 
         NodeBundle memory n5 = _makeNodeBundle(5);
         vm.prank(n5.manager);
-        abv2.createNode(n5.nodeId, address(n5.staking), n5.rewardAddr, n5.voterAddr, sameBlsInfo, "testnode", "");
+        abv2.createNode(n5.nodeId, address(n5.staking), n5.rewardAddr, n5.voterAddr, sameBlsInfo, "testnode", "", _signNodeId(n5));
 
         NodeBundle memory n6 = _makeNodeBundle(6);
         vm.prank(n6.manager);
-        abv2.createNode(n6.nodeId, address(n6.staking), n6.rewardAddr, n6.voterAddr, sameBlsInfo, "testnode", "");
+        abv2.createNode(n6.nodeId, address(n6.staking), n6.rewardAddr, n6.voterAddr, sameBlsInfo, "testnode", "", _signNodeId(n6));
 
         NodeInfo memory info5 = abv2.getNodeInfo(n5.nodeId);
         NodeInfo memory info6 = abv2.getNodeInfo(n6.nodeId);
@@ -324,7 +387,7 @@ contract NodeManagementTest is Base {
     function test_createNode_emptyMetadata() public {
         NodeBundle memory n = _makeNodeBundle(5);
         vm.prank(n.manager);
-        abv2.createNode(n.nodeId, address(n.staking), n.rewardAddr, n.voterAddr, _makeBlsInfo(), "testnode", "");
+        abv2.createNode(n.nodeId, address(n.staking), n.rewardAddr, n.voterAddr, _makeBlsInfo(), "testnode", "", _signNodeId(n));
         NodeInfo memory info = abv2.getNodeInfo(n.nodeId);
         assertEq(bytes(info.metadata).length, 0);
     }
@@ -333,7 +396,7 @@ contract NodeManagementTest is Base {
         NodeBundle memory n = _makeNodeBundle(5);
         string memory longMeta = "abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789";
         vm.prank(n.manager);
-        abv2.createNode(n.nodeId, address(n.staking), n.rewardAddr, n.voterAddr, _makeBlsInfo(), "testnode", longMeta);
+        abv2.createNode(n.nodeId, address(n.staking), n.rewardAddr, n.voterAddr, _makeBlsInfo(), "testnode", longMeta, _signNodeId(n));
         NodeInfo memory info = abv2.getNodeInfo(n.nodeId);
         assertEq(keccak256(bytes(info.metadata)), keccak256(bytes(longMeta)));
     }
@@ -345,7 +408,7 @@ contract NodeManagementTest is Base {
         NodeBundle memory n = _makeNodeBundle(5);
         _mockDeployer(address(n.staking), caller);
         vm.prank(caller);
-        abv2.createNode(n.nodeId, address(n.staking), n.rewardAddr, n.voterAddr, _makeBlsInfo(), "testnode", "");
+        abv2.createNode(n.nodeId, address(n.staking), n.rewardAddr, n.voterAddr, _makeBlsInfo(), "testnode", "", _signNodeIdFor(n.nodeIdPk, caller, n.nodeId, address(n.staking)));
         assertEq(abv2.getNodeInfo(n.nodeId).manager, caller);
     }
 
@@ -368,7 +431,8 @@ contract NodeManagementTest is Base {
             genesis[0].voterAddr,
             _makeBlsInfo(),
             "testnode",
-            ""
+            "",
+            _signNodeIdFor(genesis[0].nodeIdPk, newMgr, genesis[0].nodeId, address(genesis[0].staking))
         );
         assertEq(abv2.getStateCount(State.Registered), 4);
     }
@@ -725,7 +789,7 @@ contract NodeManagementTest is Base {
         string memory longMeta = new string(2049);
         vm.expectRevert(IAddressBookV2.InvalidInput.selector);
         vm.prank(n.manager);
-        abv2.createNode(n.nodeId, address(n.staking), n.rewardAddr, n.voterAddr, _makeBlsInfo(), "testnode", longMeta);
+        abv2.createNode(n.nodeId, address(n.staking), n.rewardAddr, n.voterAddr, _makeBlsInfo(), "testnode", longMeta, _signNodeId(n));
     }
 
     function test_createNode_success_atMaxMetadataLength() public {
@@ -735,7 +799,7 @@ contract NodeManagementTest is Base {
         string memory maxMeta = string(raw);
 
         vm.prank(n.manager);
-        abv2.createNode(n.nodeId, address(n.staking), n.rewardAddr, n.voterAddr, _makeBlsInfo(), "testnode", maxMeta);
+        abv2.createNode(n.nodeId, address(n.staking), n.rewardAddr, n.voterAddr, _makeBlsInfo(), "testnode", maxMeta, _signNodeId(n));
 
         assertEq(bytes(abv2.getNodeInfo(n.nodeId).metadata).length, 2048);
     }
