@@ -171,8 +171,7 @@ interface IAddressBookV2 {
     /// @param blsInfo The BLS public key and proof-of-possession
     /// @param name The human-readable name of the node (must be non-empty)
     /// @param metadata The node metadata in JSON format
-    /// @param nodeIdSig ECDSA signature by nodeId over (caller, nodeId, stakingContract, chainId, addressBook),
-    ///        proving control of the nodeId key and binding the registration to the caller
+    /// @param nodeIdSig ECDSA signature by nodeId over (caller, nodeId, stakingContract, chainId, addressBook)
     function createNode(
         address nodeId,
         address stakingContract,

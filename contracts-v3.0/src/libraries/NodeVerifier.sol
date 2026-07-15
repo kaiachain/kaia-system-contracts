@@ -5,6 +5,7 @@ import {BlsPublicKeyInfo} from "../types/Node.sol";
 import {IRegistry} from "../system/IRegistry.sol";
 import {ICnStaking} from "../CnStaking/CnStakingV4/interfaces/ICnStaking.sol";
 import {ICnStakingV4Factory} from "../CnStaking/CnStakingV4Factory/interfaces/ICnStakingV4Factory.sol";
+import {ECDSA} from "@openzeppelin/contracts/utils/cryptography/ECDSA.sol";
 
 /// @title NodeVerifier
 /// @notice Validates node registration inputs and manages address uniqueness registry.
@@ -22,8 +23,7 @@ library NodeVerifier {
     bytes32 private constant ZERO96HASH = 0x46700b4d40ac5c35af2c22dda2787a91eb567b06c924a8fb8ae9a05b20c08c21; // keccak256(hex"00"*96)
 
     /// @notice Validates node registration inputs, verifies the staking contract deployer, and registers addresses.
-    /// @dev Used by NodeActions.createNode() at runtime. Checks that msg.sender deployed the staking contract
-    ///      and that the registrant controls the nodeId key.
+    /// @dev Used by NodeActions.createNode(). Checks msg.sender deployed the staking contract and controls nodeId.
     /// @param registry The used-address registry for uniqueness checks
     /// @param nodeId The node address
     /// @param stakingContract The staking contract address
@@ -52,25 +52,12 @@ library NodeVerifier {
         _registerAddresses(registry, nodeId, stakingContract, rewardAddress);
     }
 
-    /// @dev Reverts unless nodeIdSig is a 65-byte ECDSA signature by nodeId over
-    ///      keccak256(caller, nodeId, stakingContract, chainId, addressBook). Binding the caller, chain and
-    ///      contract prevents replaying the proof under a different registrant, chain or deployment; a failed
-    ///      recovery yields address(0), which never equals a valid (non-zero) nodeId. Uses the raw ecrecover
-    ///      precompile (no OpenZeppelin ECDSA) to keep AddressBookV2 within the EIP-170 code-size limit.
-    ///      Signature malleability is harmless here: a nodeId can be registered only once (NodeAlreadyExists),
-    ///      so there is no replayable state a malleated variant could bypass.
+    /// @dev Reverts unless nodeIdSig is nodeId's ECDSA signature over
+    ///      keccak256(caller, nodeId, stakingContract, chainId, addressBook). tryRecover rejects malleable sigs.
     function _verifyNodeIdProof(address nodeId, address stakingContract, bytes memory nodeIdSig) private view {
-        if (nodeIdSig.length != 65) revert NodeIdProofInvalid();
         bytes32 digest = keccak256(abi.encode(msg.sender, nodeId, stakingContract, block.chainid, address(this)));
-        bytes32 r;
-        bytes32 s;
-        uint8 v;
-        assembly {
-            r := mload(add(nodeIdSig, 0x20))
-            s := mload(add(nodeIdSig, 0x40))
-            v := byte(0, mload(add(nodeIdSig, 0x60)))
-        }
-        if (ecrecover(digest, v, r, s) != nodeId) revert NodeIdProofInvalid();
+        (address recovered, ECDSA.RecoverError err,) = ECDSA.tryRecover(digest, nodeIdSig);
+        if (err != ECDSA.RecoverError.NoError || recovered != nodeId) revert NodeIdProofInvalid();
     }
 
     /// @notice Validates node registration inputs without factory check.
