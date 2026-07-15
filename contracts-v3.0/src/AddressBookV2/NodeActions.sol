@@ -32,14 +32,15 @@ abstract contract NodeActions is AddressBookV2Base {
         address voterAddress,
         BlsPublicKeyInfo memory blsInfo,
         string memory name,
-        string memory metadata
+        string memory metadata,
+        bytes memory nodeIdSig
     ) external {
         if (_getNodeState(nodeId) != State.Unknown) revert NodeAlreadyExists();
         if (bytes(name).length == 0) revert InvalidInput();
         if (bytes(metadata).length > MAX_METADATA_LENGTH) revert InvalidInput();
 
         ABv2Storage storage $ = _getStorage();
-        NodeVerifier.registerNode($.usedAddresses, nodeId, stakingContract, rewardAddress, blsInfo);
+        NodeVerifier.registerNode($.usedAddresses, nodeId, stakingContract, rewardAddress, blsInfo, nodeIdSig);
 
         NodeInfo memory info = NodeInfo({
             manager: msg.sender,

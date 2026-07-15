@@ -171,6 +171,8 @@ interface IAddressBookV2 {
     /// @param blsInfo The BLS public key and proof-of-possession
     /// @param name The human-readable name of the node (must be non-empty)
     /// @param metadata The node metadata in JSON format
+    /// @param nodeIdSig ECDSA signature by nodeId over (caller, nodeId, stakingContract, chainId, addressBook),
+    ///        proving control of the nodeId key and binding the registration to the caller
     function createNode(
         address nodeId,
         address stakingContract,
@@ -178,7 +180,8 @@ interface IAddressBookV2 {
         address voterAddress,
         BlsPublicKeyInfo memory blsInfo,
         string memory name,
-        string memory metadata
+        string memory metadata,
+        bytes memory nodeIdSig
     ) external;
 
     /// @notice Removes a Registered entry entirely
@@ -394,11 +397,6 @@ interface IAddressBookV2 {
     /// @param nodeId The address of the node
     /// @return The NodeInfo struct
     function getNodeInfo(address nodeId) external view returns (NodeInfo memory);
-
-    /// @notice Returns NodeInfo structs for multiple nodes
-    /// @param nodeIds Array of node addresses to fetch
-    /// @return Array of NodeInfo structs in the same order as nodeIds
-    function getNodeInfos(address[] calldata nodeIds) external view returns (NodeInfo[] memory);
 
     /// @notice Returns lightweight profiles for all nodes (including suspended validators)
     /// @dev Iterates allNodes. Cross-reference getSuspendedValidators() to identify suspended nodes.
