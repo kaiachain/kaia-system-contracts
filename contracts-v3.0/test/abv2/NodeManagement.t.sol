@@ -184,8 +184,7 @@ contract NodeManagementTest is Base {
 
     /* ========== createNode: nodeId ownership proof ========== */
 
-    /// @dev Positive control: the exact same setup that the wrong-* cases below reject succeeds
-    ///      when a valid nodeId signature is presented.
+    /// @dev Positive control: same setup as the wrong-* cases, but with a valid signature.
     function test_createNode_nodeIdProof_validSig_succeeds() public {
         NodeBundle memory n = _makeNodeBundle(5);
 
@@ -199,8 +198,7 @@ contract NodeManagementTest is Base {
         assertEq(uint256(abv2.getNodeInfo(n.nodeId).state), uint256(State.Registered));
     }
 
-    /// @dev A signature by anyone other than nodeId is rejected — a caller cannot register a
-    ///      nodeId it does not control.
+    /// @dev A signature by anyone other than nodeId is rejected.
     function test_createNode_revert_NodeIdProofInvalid_wrongSigner() public {
         NodeBundle memory n = _makeNodeBundle(5);
         (, uint256 attackerPk) = makeAddrAndKey("attacker");
@@ -220,8 +218,7 @@ contract NodeManagementTest is Base {
         abv2.createNode(n.nodeId, address(n.staking), n.rewardAddr, n.voterAddr, _makeBlsInfo(), "testnode", "", "");
     }
 
-    /// @dev A valid nodeId signature is bound to one caller; a different caller cannot replay it
-    ///      (front-running / squat defense). The alternate caller still passes the deployer check.
+    /// @dev A signature is bound to one caller; a different caller cannot replay it.
     function test_createNode_revert_NodeIdProofInvalid_wrongCaller() public {
         NodeBundle memory n = _makeNodeBundle(5);
         bytes memory sigForManager = _signNodeId(n); // authorizes n.manager as the registrant

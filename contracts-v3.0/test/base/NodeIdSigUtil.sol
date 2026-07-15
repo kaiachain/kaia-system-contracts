@@ -4,11 +4,8 @@ pragma solidity ^0.8.20;
 import {Vm} from "forge-std/Vm.sol";
 
 /// @title NodeIdSigUtil
-/// @notice Single source for the nodeId ownership signature that AddressBookV2.createNode /
-///         NodeVerifier.registerNode require. The digest matches NodeVerifier._verifyNodeIdProof:
-///         keccak256(caller, nodeId, stakingContract, chainId, target), where `target` is the contract
-///         that runs the check (the AddressBookV2 proxy in end-to-end tests, or the library harness in
-///         NodeVerifier unit tests).
+/// @notice Builds the nodeId ownership signature for createNode. Digest matches
+///         NodeVerifier._verifyNodeIdProof; `target` is the verifying contract.
 library NodeIdSigUtil {
     Vm private constant vm = Vm(address(uint160(uint256(keccak256("hevm cheat code")))));
 

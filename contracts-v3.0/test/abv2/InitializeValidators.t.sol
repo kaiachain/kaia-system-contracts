@@ -11,23 +11,12 @@ import {ERC1967Proxy} from "@openzeppelin/contracts/proxy/ERC1967/ERC1967Proxy.s
 import {NodeVerifier} from "../../src/libraries/NodeVerifier.sol";
 import {State, NodeInfo, BlsPublicKeyInfo} from "../../src/types/Node.sol";
 import {MockCnStaking} from "../../src/CnStaking/mocks/MockCnStaking.sol";
-import {NodeIdSigUtil} from "../base/NodeIdSigUtil.sol";
 
 /// @title InitializeValidatorsTest
 /// @notice Tests for ABv2 initialization via ABv2DataContract — genesis validator setup.
 ///         Uses a clean deployment to simulate real genesis with data contract pattern.
 contract InitializeValidatorsTest is DeployHelpers {
     address internal owner;
-
-    /// @dev Produces the nodeId ownership signature that createNode requires: an ECDSA
-    ///      signature by nodeId over (caller, nodeId, stakingContract, chainId, addressBook).
-    function _signNodeIdFor(uint256 nodeIdPk, address caller, address nodeId, address staking)
-        internal
-        view
-        returns (bytes memory)
-    {
-        return NodeIdSigUtil.sign(nodeIdPk, caller, nodeId, staking, address(abv2));
-    }
 
     function setUp() public {
         owner = makeAddr("owner");

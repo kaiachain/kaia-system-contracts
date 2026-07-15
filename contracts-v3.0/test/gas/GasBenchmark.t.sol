@@ -10,7 +10,6 @@ import {IRegistry} from "../../src/system/IRegistry.sol";
 import {ERC1967Proxy} from "@openzeppelin/contracts/proxy/ERC1967/ERC1967Proxy.sol";
 import {State, NodeInfo, BlsPublicKeyInfo} from "../../src/types/Node.sol";
 import {MockCnStaking} from "../../src/CnStaking/mocks/MockCnStaking.sol";
-import {NodeIdSigUtil} from "../base/NodeIdSigUtil.sol";
 
 /// @title GasBenchmark
 /// @notice Gas benchmarks for epoch transitions and getters at scale (50, 100, 150 nodes).
@@ -21,16 +20,6 @@ contract GasBenchmark is DeployHelpers {
     uint256 internal constant BENCHMARK_MAX_READY_CAND_COUNT = 200;
 
     address internal owner;
-
-    /// @dev Produces the nodeId ownership signature that createNode requires: an ECDSA
-    ///      signature by nodeId over (caller, nodeId, stakingContract, chainId, addressBook).
-    function _signNodeIdFor(uint256 nodeIdPk, address caller, address nodeId, address staking)
-        internal
-        view
-        returns (bytes memory)
-    {
-        return NodeIdSigUtil.sign(nodeIdPk, caller, nodeId, staking, address(abv2));
-    }
 
     function setUp() public {
         owner = makeAddr("owner");

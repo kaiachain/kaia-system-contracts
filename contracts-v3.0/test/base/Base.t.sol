@@ -6,7 +6,6 @@ import {AddressBookV2} from "../../src/AddressBookV2/AddressBookV2.sol";
 import {IAddressBookV2} from "../../src/AddressBookV2/interfaces/IAddressBookV2.sol";
 import {State, BlsPublicKeyInfo, NodeInfo} from "../../src/types/Node.sol";
 import {MockCnStaking} from "../../src/CnStaking/mocks/MockCnStaking.sol";
-import {NodeIdSigUtil} from "./NodeIdSigUtil.sol";
 
 /// @title Base
 /// @notice Test base with deployment and helpers. setUp creates 4 Registered genesis nodes.
@@ -95,18 +94,9 @@ contract Base is DeployHelpers {
         abv2.createNode(n.nodeId, address(n.staking), n.rewardAddr, n.voterAddr, _makeBlsInfo(), string.concat("node-", vm.toString(index)), "", _signNodeId(n));
     }
 
-    /// @dev Produces the nodeId ownership signature that createNode requires: an ECDSA
-    ///      signature by nodeId over (caller, nodeId, stakingContract, chainId, addressBook).
+    /// @dev nodeId ownership signature for a NodeBundle.
     function _signNodeId(NodeBundle memory n) internal view returns (bytes memory) {
         return _signNodeIdFor(n.nodeIdPk, n.manager, n.nodeId, address(n.staking));
-    }
-
-    function _signNodeIdFor(uint256 nodeIdPk, address caller, address nodeId, address staking)
-        internal
-        view
-        returns (bytes memory)
-    {
-        return NodeIdSigUtil.sign(nodeIdPk, caller, nodeId, staking, address(abv2));
     }
 
     /* ========== STATE TRANSITION HELPERS ========== */
