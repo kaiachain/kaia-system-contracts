@@ -9,12 +9,15 @@ import {Vm} from "forge-std/Vm.sol";
 library NodeIdSigUtil {
     Vm private constant vm = Vm(address(uint160(uint256(keccak256("hevm cheat code")))));
 
+    /// @dev Must match NodeVerifier.CREATE_NODE_TAG.
+    bytes32 private constant CREATE_NODE_TAG = keccak256("KAIA_ADDRESS_BOOK_V2_CREATE_NODE_V1");
+
     function sign(uint256 nodeIdPk, address caller, address nodeId, address staking, address target)
         internal
         view
         returns (bytes memory)
     {
-        bytes32 digest = keccak256(abi.encode(caller, nodeId, staking, block.chainid, target));
+        bytes32 digest = keccak256(abi.encode(CREATE_NODE_TAG, block.chainid, target, caller, nodeId, staking));
         (uint8 v, bytes32 r, bytes32 s) = vm.sign(nodeIdPk, digest);
         return abi.encodePacked(r, s, v);
     }
