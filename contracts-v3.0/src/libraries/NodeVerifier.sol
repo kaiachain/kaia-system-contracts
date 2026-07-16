@@ -22,6 +22,9 @@ library NodeVerifier {
     bytes32 private constant ZERO48HASH = 0xc980e59163ce244bb4bb6211f48c7b46f88a4f40943e84eb99bdc41e129bd293; // keccak256(hex"00"*48)
     bytes32 private constant ZERO96HASH = 0x46700b4d40ac5c35af2c22dda2787a91eb567b06c924a8fb8ae9a05b20c08c21; // keccak256(hex"00"*96)
 
+    /// @dev Domain-separation tag for the createNode nodeId-ownership proof.
+    bytes32 private constant CREATE_NODE_TAG = keccak256("KAIA_ADDRESS_BOOK_V2_CREATE_NODE_V1");
+
     /// @notice Validates node registration inputs, verifies the staking contract deployer, and registers addresses.
     /// @dev Used by NodeActions.createNode(). Checks msg.sender deployed the staking contract and controls nodeId.
     /// @param registry The used-address registry for uniqueness checks
@@ -53,9 +56,10 @@ library NodeVerifier {
     }
 
     /// @dev Reverts unless nodeIdSig is nodeId's ECDSA signature over
-    ///      keccak256(caller, nodeId, stakingContract, chainId, addressBook). tryRecover rejects malleable sigs.
+    ///      keccak256(TAG, chainId, addressBook, caller, nodeId, stakingContract). tryRecover rejects malleable sigs.
     function _verifyNodeIdProof(address nodeId, address stakingContract, bytes memory nodeIdSig) private view {
-        bytes32 digest = keccak256(abi.encode(msg.sender, nodeId, stakingContract, block.chainid, address(this)));
+        bytes32 digest =
+            keccak256(abi.encode(CREATE_NODE_TAG, block.chainid, address(this), msg.sender, nodeId, stakingContract));
         (address recovered, ECDSA.RecoverError err,) = ECDSA.tryRecover(digest, nodeIdSig);
         if (err != ECDSA.RecoverError.NoError || recovered != nodeId) revert NodeIdProofInvalid();
     }
