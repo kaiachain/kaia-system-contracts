@@ -34,6 +34,7 @@
     "clean": "rm -rf out cache",
     "compile": "forge build",
     "test": "forge test",
+    "size": "node script/check-sizes.js",
     "lint": "forge fmt --check",
     "lint:fix": "forge fmt"
   }
