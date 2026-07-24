@@ -7,6 +7,30 @@ import {AuctionEntryPoint} from "../../src/Auction/AuctionEntryPoint.sol";
 import {IAuctionEntryPoint} from "../../src/Auction/interfaces/IAuctionEntryPoint.sol";
 import {AuctionError} from "../../src/Auction/AuctionError.sol";
 import {MockAuctionDepositVault} from "./mocks/MockAuctionDepositVault.sol";
+import {AuctionCallExecutor} from "../../src/Auction/AuctionCallExecutor.sol";
+
+/// @dev A contract that trusts the EntryPoint. Used to prove the searcher-supplied call
+///      neither originates from the EntryPoint nor can reach a function gated to it.
+contract ConfusedDeputyProbe {
+    address public immutable trustedEntryPoint;
+    address public lastCaller;
+    bool public privilegedRan;
+
+    constructor(address entryPoint_) {
+        trustedEntryPoint = entryPoint_;
+    }
+
+    /// @dev Records the caller; used to check the call's origin.
+    function recordCaller() external {
+        lastCaller = msg.sender;
+    }
+
+    /// @dev Mimics a vault function gated to the trusted EntryPoint (e.g. takeBid).
+    function privileged() external {
+        require(msg.sender == trustedEntryPoint, "only entrypoint");
+        privilegedRan = true;
+    }
+}
 
 /// @title AuctionEntryPoint diff tests
 /// @notice Targets ONLY the v3.0 change: tx.gasprice <= auctionTx.maxGasPrice upper-bound check
@@ -90,6 +114,35 @@ contract AuctionEntryPointTest is Test {
             maxGasPrice: maxGasPrice,
             callGasLimit: 100_000,
             data: hex"",
+            searcherSig: bytes(""),
+            auctioneerSig: bytes("")
+        });
+
+        bytes32 digest = keccak256(abi.encodePacked("\x19\x01", _domainSeparator(), _structHash(a)));
+        (uint8 vS, bytes32 rS, bytes32 sS) = vm.sign(searcher.privateKey, digest);
+        a.searcherSig = abi.encodePacked(rS, sS, vS);
+
+        bytes32 ethDigest = MessageHashUtils.toEthSignedMessageHash(a.searcherSig);
+        (uint8 vA, bytes32 rA, bytes32 sA) = vm.sign(auctioneer.privateKey, ethDigest);
+        a.auctioneerSig = abi.encodePacked(rA, sA, vA);
+    }
+
+    /// @dev Builds and signs an AuctionTx that invokes `data_` on `to_`. Fixed 25 gwei ceiling;
+    ///      submit with tx.gasprice <= 25 gwei.
+    function _buildSignedCall(
+        address to_,
+        bytes memory data_
+    ) internal view returns (IAuctionEntryPoint.AuctionTx memory a) {
+        a = IAuctionEntryPoint.AuctionTx({
+            targetTxHash: bytes32(uint256(0x1234)),
+            blockNumber: block.number,
+            sender: searcher.addr,
+            to: to_,
+            nonce: entryPoint.nonces(searcher.addr),
+            bid: 1 ether,
+            maxGasPrice: 25 gwei,
+            callGasLimit: 100_000,
+            data: data_,
             searcherSig: bytes(""),
             auctioneerSig: bytes("")
         });
@@ -191,5 +244,44 @@ contract AuctionEntryPointTest is Test {
         vm.txGasPrice(1 gwei);
         vm.expectRevert(AuctionError.OnlyProposer.selector);
         entryPoint.call(a); // msg.sender = test contract, not block.coinbase
+    }
+
+    /* ========== TESTS: searcher call is isolated from EntryPoint authority ========== */
+
+    function test_executor_is_wired_to_entrypoint() public view {
+        assertEq(entryPoint.executor().entryPoint(), address(entryPoint), "executor not wired to entrypoint");
+    }
+
+    /// @dev The searcher-supplied call runs from the executor, not from the EntryPoint.
+    function test_searcher_call_originates_from_executor() public {
+        ConfusedDeputyProbe probe = new ConfusedDeputyProbe(address(entryPoint));
+        IAuctionEntryPoint.AuctionTx memory a = _buildSignedCall(
+            address(probe),
+            abi.encodeCall(ConfusedDeputyProbe.recordCaller, ())
+        );
+
+        vm.txGasPrice(25 gwei);
+        vm.prank(proposer);
+        entryPoint.call(a);
+
+        assertEq(probe.lastCaller(), address(entryPoint.executor()), "call must originate from executor");
+        assertTrue(probe.lastCaller() != address(entryPoint), "call must not originate from entrypoint");
+    }
+
+    /// @dev A function gated to the EntryPoint on a contract that trusts it must NOT be reachable
+    ///      through the searcher-supplied call, since that call arrives from the unprivileged executor.
+    function test_searcher_call_cannot_use_entrypoint_authority() public {
+        ConfusedDeputyProbe probe = new ConfusedDeputyProbe(address(entryPoint));
+        IAuctionEntryPoint.AuctionTx memory a = _buildSignedCall(
+            address(probe),
+            abi.encodeCall(ConfusedDeputyProbe.privileged, ())
+        );
+
+        vm.txGasPrice(25 gwei);
+        vm.prank(proposer);
+        entryPoint.call(a); // auction call succeeds; the inner gated call reverts and is ignored
+
+        assertFalse(probe.privilegedRan(), "entrypoint-gated action must not run via the searcher call");
+        assertEq(entryPoint.nonces(searcher.addr), 1, "bid/gas settlement should still run");
     }
 }

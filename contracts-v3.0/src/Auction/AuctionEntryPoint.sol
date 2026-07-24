@@ -24,6 +24,7 @@ import "@openzeppelin/contracts/utils/cryptography/ECDSA.sol";
 import "@openzeppelin/contracts/utils/cryptography/MessageHashUtils.sol";
 import "@openzeppelin/contracts/utils/Nonces.sol";
 import "./AuctionError.sol";
+import "./AuctionCallExecutor.sol";
 import "./interfaces/IAuctionEntryPoint.sol";
 import "./interfaces/IAuctionDepositVault.sol";
 
@@ -47,6 +48,9 @@ contract AuctionEntryPoint is IAuctionEntryPoint, AuctionError, Nonces, EIP712, 
 
     IAuctionDepositVault public depositVault;
     address public auctioneer;
+
+    /// @dev Runs the searcher-supplied call from an unprivileged account; deployed by the constructor.
+    AuctionCallExecutor public immutable executor;
 
     uint256 public gasPerByteIntrinsic = 16; // Base gas cost per byte of msg.data (approximated from 16 gas per non-zero byte + 4 gas per zero byte)
     uint256 public gasPerByteEip7623 = 40; // Minimum gas cost per byte of msg.data under EIP-7623 (approximated from 40 gas per non-zero byte + 10 gas per zero byte)
@@ -75,6 +79,7 @@ contract AuctionEntryPoint is IAuctionEntryPoint, AuctionError, Nonces, EIP712, 
     ) EIP712(AUCTION_NAME, AUCTION_VERSION) Ownable(initialOwner) notNull(_depositVault) notNull(_auctioneer) {
         depositVault = IAuctionDepositVault(_depositVault);
         auctioneer = _auctioneer;
+        executor = new AuctionCallExecutor(address(this));
     }
 
     /* ========== ENTRYPOINT IMPLEMENTATION ========== */
@@ -94,9 +99,9 @@ contract AuctionEntryPoint is IAuctionEntryPoint, AuctionError, Nonces, EIP712, 
         // 2. Take bid first
         if (!_checkAndTakeBid(searcher, auctionTx.bid, callGasLimit)) revert();
 
-        // 3. Execute call and refund execution gas
+        // 3. Execute the searcher call through `executor` and refund execution gas.
         uint256 nonce = _useNonce(searcher);
-        (bool success, ) = auctionTx.to.call{gas: callGasLimit}(auctionTx.data);
+        bool success = executor.execute(auctionTx.to, callGasLimit, auctionTx.data);
         if (success) {
             emit Call(searcher, nonce);
         } else {
