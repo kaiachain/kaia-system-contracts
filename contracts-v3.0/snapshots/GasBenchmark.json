@@ -9,12 +9,12 @@
   "getAllBlsInfo_100": "384186",
   "getAllBlsInfo_150": "585713",
   "getAllBlsInfo_50": "189466",
-  "getAllProfiles_100": "178322",
-  "getAllProfiles_150": "271006",
-  "getAllProfiles_50": "88382",
-  "getNodeInfos_100": "738315",
-  "getNodeInfos_150": "1159790",
-  "getNodeInfos_50": "352191",
-  "initialize_100": "34339408",
-  "initialize_50": "17353724"
+  "getAllProfiles_100": "178388",
+  "getAllProfiles_150": "271072",
+  "getAllProfiles_50": "88448",
+  "getNodeInfos_100": "738292",
+  "getNodeInfos_150": "1159767",
+  "getNodeInfos_50": "352168",
+  "initialize_100": "34361938",
+  "initialize_50": "17365054"
 }
