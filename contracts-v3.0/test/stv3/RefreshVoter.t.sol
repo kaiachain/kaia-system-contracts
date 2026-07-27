@@ -103,4 +103,60 @@ contract RefreshVoterTest is STv3Base {
             assertEq(stv3.voterToGCId(gc[i].voterAddr), gc[i].gcId);
         }
     }
+
+    /* ========== revokeVoter ========== */
+
+    function test_revokeGcId_clearsVoterMapping() public {
+        stv3.refreshVoter(gc[0].nodeId);
+        assertEq(stv3.voterToGCId(gc[0].voterAddr), gc[0].gcId);
+        assertEq(stv3.gcIdToVoter(gc[0].gcId), gc[0].voterAddr);
+
+        vm.prank(makeAddr("configurator"));
+        abv2.revokeGcId(gc[0].nodeId);
+
+        // Both directions of the tracker voter mapping are cleared.
+        assertEq(stv3.voterToGCId(gc[0].voterAddr), 0);
+        assertEq(stv3.gcIdToVoter(gc[0].gcId), address(0));
+    }
+
+    function test_revokeGcId_voterReusableAfterReassign() public {
+        stv3.refreshVoter(gc[0].nodeId);
+
+        vm.prank(makeAddr("configurator"));
+        abv2.revokeGcId(gc[0].nodeId);
+
+        // revokeGcId leaves the node's voterAddress intact, so re-assigning a gcId and
+        // refreshing re-registers the same voter under the new gcId.
+        vm.prank(makeAddr("configurator"));
+        abv2.assignGcId(gc[0].nodeId);
+        uint256 newGcId = abv2.getNodeInfo(gc[0].nodeId).gcId;
+        assertGt(newGcId, 0);
+
+        stv3.refreshVoter(gc[0].nodeId);
+        assertEq(stv3.voterToGCId(gc[0].voterAddr), newGcId);
+        assertEq(stv3.gcIdToVoter(newGcId), gc[0].voterAddr);
+    }
+
+    function test_revokeVoter_revert_notAddressBook() public {
+        stv3.refreshVoter(gc[0].nodeId);
+        vm.prank(makeAddr("attacker"));
+        vm.expectRevert(IStakingTrackerV3.NotAddressBook.selector);
+        stv3.revokeVoter(gc[0].gcId);
+    }
+
+    function test_revokeGcId_seversVoterFromExistingTracker() public {
+        uint256 trackerId = _createTracker(100);
+        stv3.refreshVoter(gc[0].nodeId);
+        (, uint256 votesBefore) = stv3.getTrackedGC(trackerId, gc[0].gcId);
+        assertGt(votesBefore, 0);
+
+        vm.prank(makeAddr("configurator"));
+        abv2.revokeGcId(gc[0].nodeId);
+
+        // The pre-existing tracker still records the GC's frozen votes ...
+        (, uint256 votesAfter) = stv3.getTrackedGC(trackerId, gc[0].gcId);
+        assertEq(votesAfter, votesBefore);
+        // ... but the voter no longer resolves to any GC, so Voting.getVotes() yields gcId 0.
+        assertEq(stv3.voterToGCId(gc[0].voterAddr), 0);
+    }
 }
