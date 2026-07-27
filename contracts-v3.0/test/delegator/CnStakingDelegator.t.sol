@@ -764,12 +764,18 @@ contract CnStakingDelegatorTest is CnStakingBase {
     ======================================================== */
 
     function testTransferCnOwnership() public {
-        address newOwner = makeAddr("newOwner");
+        vm.prank(delegator);
+        d.transferCnOwnership(delegatee);
+
+        assertEq(cn.owner(), delegatee);
+    }
+
+    function testTransferCnOwnership_nonDelegatee_reverts() public {
+        address notDelegatee = makeAddr("notDelegatee");
 
         vm.prank(delegator);
-        d.transferCnOwnership(newOwner);
-
-        assertEq(cn.owner(), newOwner);
+        vm.expectRevert(ICnStakingDelegator.NotDelegatee.selector);
+        d.transferCnOwnership(notDelegatee);
     }
 
     function testTransferCnOwnership_withDelegation_reverts() public {
@@ -785,9 +791,8 @@ contract CnStakingDelegatorTest is CnStakingBase {
         // Only validator stakes (no delegation), so ownership transfer is allowed
         _validatorStake(50 ether);
 
-        address newOwner = makeAddr("newOwner");
         vm.prank(delegator);
-        d.transferCnOwnership(newOwner);
+        d.transferCnOwnership(delegatee);
 
         // Delegation still works (permissionless staking)
         vm.deal(delegator, 10 ether);

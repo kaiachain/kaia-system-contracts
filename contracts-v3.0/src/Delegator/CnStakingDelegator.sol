@@ -160,9 +160,11 @@ contract CnStakingDelegator is ICnStakingDelegator, AccessControlEnumerable {
 
     /* ========== ADMIN FUNCTIONS ========== */
 
-    /// @dev Transfers CnStakingV4 ownership. Only callable by delegator when delegation is empty.
+    /// @dev Transfers CnStakingV4 ownership to the delegatee. Only callable by delegator when delegation is empty.
+    ///      _newOwner must hold DELEGATEE_ROLE, so ownership can only move to the designated delegatee.
     function transferCnOwnership(address _newOwner) external override onlyRole(DELEGATOR_ROLE) notNull(_newOwner) {
         if (delegation != 0) revert DelegationNotEmpty();
+        if (!hasRole(DELEGATEE_ROLE, _newOwner)) revert NotDelegatee();
         Ownable(address(CN)).transferOwnership(_newOwner);
     }
 
