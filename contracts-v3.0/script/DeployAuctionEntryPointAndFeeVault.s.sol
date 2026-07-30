@@ -3,6 +3,7 @@ pragma solidity 0.8.25;
 
 import {Script, console} from "forge-std/Script.sol";
 import {AuctionEntryPoint} from "../src/Auction/AuctionEntryPoint.sol";
+import {AuctionCallExecutor} from "../src/Auction/AuctionCallExecutor.sol";
 import {AuctionFeeVault} from "../src/Auction/AuctionFeeVault.sol";
 import {IAuctionDepositVault} from "../src/Auction/interfaces/IAuctionDepositVault.sol";
 
@@ -81,11 +82,14 @@ contract DeployAuctionEntryPointAndFeeVault is Script {
         require(entryPoint.owner() == owner, "EntryPoint owner mismatch");
         require(entryPoint.auctioneer() == auctioneer, "auctioneer mismatch");
         require(address(entryPoint.depositVault()) == depositVault, "depositVault mismatch");
+        AuctionCallExecutor executor = entryPoint.executor();
+        require(executor.entryPoint() == address(entryPoint), "executor wiring mismatch");
 
         console.log("");
         console.log("=== Deployed ===");
-        console.log("AuctionFeeVault   :", address(feeVault));
-        console.log("AuctionEntryPoint :", address(entryPoint));
+        console.log("AuctionFeeVault     :", address(feeVault));
+        console.log("AuctionEntryPoint   :", address(entryPoint));
+        console.log("AuctionCallExecutor :", address(executor));
 
         console.log("");
         console.log("=== Required governance actions (NOT executed) ===");
