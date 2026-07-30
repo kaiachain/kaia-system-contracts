@@ -32,6 +32,7 @@ interface ICnStakingDelegator {
     error InsufficientStaking();
     error InvalidWithdrawalId();
     error DelegationNotEmpty();
+    error NotDelegatee();
 
     /* ========== EVENTS ========== */
 
