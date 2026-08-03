@@ -26,7 +26,11 @@ contract AuctionCallExecutor {
     /// @notice The only address allowed to drive execution (the AuctionEntryPoint).
     address public immutable entryPoint;
 
+    /// @dev Gas a call charges the caller without forwarding it, mostly the cold account access.
+    uint256 private constant CALL_ENTRY_GAS = 3_000;
+
     error OnlyEntryPoint();
+    error InsufficientGas();
 
     constructor(address _entryPoint) {
         entryPoint = _entryPoint;
@@ -40,6 +44,8 @@ contract AuctionCallExecutor {
     /// @dev Restricted to `entryPoint`.
     function execute(address to, uint256 gasLimit, bytes calldata data) external returns (bool success) {
         if (msg.sender != entryPoint) revert OnlyEntryPoint();
+        // A call receives at most 63/64 of the gas left at the call site.
+        if ((gasleft() * 63) / 64 < gasLimit + CALL_ENTRY_GAS) revert InsufficientGas();
         (success, ) = to.call{gas: gasLimit}(data);
     }
 }
