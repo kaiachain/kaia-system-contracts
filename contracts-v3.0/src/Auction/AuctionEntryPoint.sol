@@ -184,6 +184,12 @@ contract AuctionEntryPoint is IAuctionEntryPoint, AuctionError, Nonces, EIP712, 
     }
 
     function _verifyInputIntegrity(AuctionTx calldata auctionTx) internal view returns (bool) {
+        /// 0. Require calldata to be the exact canonical encoding of auctionTx.
+        ///    Gas accounting reads msg.data.length, so extra/trailing bytes are not accepted.
+        if (keccak256(msg.data) != keccak256(abi.encodeWithSelector(IAuctionEntryPoint.call.selector, auctionTx))) {
+            return false;
+        }
+
         /// 1. Check if the block number is correct
         if (auctionTx.blockNumber != block.number) {
             return false;

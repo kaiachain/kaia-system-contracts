@@ -284,4 +284,25 @@ contract AuctionEntryPointTest is Test {
         assertFalse(probe.privilegedRan(), "entrypoint-gated action must not run via the searcher call");
         assertEq(entryPoint.nonces(searcher.addr), 1, "bid/gas settlement should still run");
     }
+
+    /* ========== TESTS: calldata canonicality ========== */
+
+    /// @dev A proposer must not append unsigned trailing calldata. The ABI decoder ignores it,
+    ///      but it would inflate the msg.data.length-based gas charge debited from the searcher.
+    ///      Such non-canonical calldata is rejected before any bid/gas is taken.
+    function test_trailing_calldata_rejected() public {
+        uint256 g = 25 gwei;
+        IAuctionEntryPoint.AuctionTx memory a = _buildSignedTx(g);
+
+        // Canonically-encoded call() + 50KB of unsigned trailing zero bytes.
+        bytes memory padded = bytes.concat(abi.encodeWithSelector(IAuctionEntryPoint.call.selector, a), new bytes(50_000));
+
+        vm.txGasPrice(g);
+        vm.prank(proposer);
+        (bool ok, ) = address(entryPoint).call(padded);
+
+        assertFalse(ok, "non-canonical (padded) calldata must be rejected");
+        assertEq(entryPoint.nonces(searcher.addr), 0, "nonce must not advance on reject");
+        assertEq(vault.takeGasCallCount(), 0, "takeGas must not run on reject");
+    }
 }
