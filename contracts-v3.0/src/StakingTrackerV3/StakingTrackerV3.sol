@@ -145,6 +145,13 @@ contract StakingTrackerV3 is IStakingTrackerV3, Initializable, OwnableUpgradeabl
         emit RefreshVoter(info.gcId, info.voterAddress);
     }
 
+    /// @inheritdoc IStakingTrackerV3
+    function revokeVoter(uint256 gcId) external override {
+        if (msg.sender != _ADDRESS_BOOK) revert NotAddressBook();
+        _updateVoter(gcId, address(0));
+        emit RefreshVoter(gcId, address(0));
+    }
+
     /* ========== INTERNAL: POPULATE ========== */
 
     function _populateTracker(uint256 trackerId) private {

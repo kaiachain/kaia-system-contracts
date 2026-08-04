@@ -6,6 +6,7 @@ import {AddressBookLegacy} from "./AddressBookLegacy.sol";
 import {IAddressBookV2} from "./interfaces/IAddressBookV2.sol";
 import {IABv2DataContract} from "./interfaces/IABv2DataContract.sol";
 import {IRegistry} from "../system/IRegistry.sol";
+import {IStakingTracker} from "../system/IStakingTracker.sol";
 import {SlotMath} from "../libraries/SlotMath.sol";
 import {ABv2ConfigLib} from "../libraries/ABv2ConfigLib.sol";
 import {State, BlsPublicKeyInfo, NodeInfo, Profile, GovernanceInfo} from "../types/Node.sol";
@@ -115,6 +116,12 @@ contract AddressBookV2 is NodeActions, AddressBookLegacy {
         ABv2Storage storage $ = _getStorage();
         uint256 gcId = $.nodeInfo[nodeId].gcId;
         if (gcId == 0) revert GcIdNotAssigned();
+
+        address tracker = IRegistry(REGISTRY_ADDRESS).getActiveAddr("StakingTracker");
+        if (tracker != address(0)) {
+            try IStakingTracker(tracker).revokeVoter(gcId) {} catch {}
+        }
+
         $.nodeInfo[nodeId].gcId = 0;
     }
 

@@ -25,6 +25,8 @@ interface IStakingTrackerV3 {
 
     error InvalidCLRegistry();
 
+    error NotAddressBook();
+
     // ========== CONSTANTS ==========
 
     /// @notice Returns contract type identifier ("StakingTracker")
@@ -59,6 +61,13 @@ interface IStakingTrackerV3 {
     /// @dev Silently ignores gcId == 0 (node not yet in governance). Anyone can call.
     /// @param nodeId The node address to refresh voter for
     function refreshVoter(address nodeId) external;
+
+    /// @notice Deletes the voter mapping for `gcId` (`gcIdToVoter[gcId]` and its `voterToGCId`).
+    /// @dev Only the AddressBook (0x400) may call. `refreshVoter` re-derives state from ABv2 so
+    ///      anyone may call it; this clears the given `gcId` unconditionally, so restricting the
+    ///      caller keeps it from wiping a live GC's voter.
+    /// @param gcId The GC ID whose voter mapping to clear
+    function revokeVoter(uint256 gcId) external;
 
     // ========== GETTERS ==========
 
