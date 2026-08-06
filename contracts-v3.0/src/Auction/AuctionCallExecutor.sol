@@ -44,8 +44,12 @@ contract AuctionCallExecutor {
     /// @dev Restricted to `entryPoint`.
     function execute(address to, uint256 gasLimit, bytes calldata data) external returns (bool success) {
         if (msg.sender != entryPoint) revert OnlyEntryPoint();
+        bytes memory payload = data;
         // A call receives at most 63/64 of the gas left at the call site.
         if ((gasleft() * 63) / 64 < gasLimit + CALL_ENTRY_GAS) revert InsufficientGas();
-        (success, ) = to.call{gas: gasLimit}(data);
+        // Call the buffer in place; `to.call(payload)` would copy it again after the check.
+        assembly {
+            success := call(gasLimit, to, 0, add(payload, 0x20), mload(payload), 0, 0)
+        }
     }
 }
