@@ -5,6 +5,7 @@ import {BlsPublicKeyInfo} from "../types/Node.sol";
 import {IRegistry} from "../system/IRegistry.sol";
 import {ICnStaking} from "../CnStaking/CnStakingV4/interfaces/ICnStaking.sol";
 import {ICnStakingV4Factory} from "../CnStaking/CnStakingV4Factory/interfaces/ICnStakingV4Factory.sol";
+import {ECDSA} from "@openzeppelin/contracts/utils/cryptography/ECDSA.sol";
 
 /// @title NodeVerifier
 /// @notice Validates node registration inputs and manages address uniqueness registry.
@@ -14,25 +15,31 @@ library NodeVerifier {
     error AddressAlreadyRegistered();
     error FactoryNotFound();
     error StakingDeployerMismatch();
+    error NodeIdProofInvalid();
 
     address private constant REGISTRY_ADDRESS = address(0x401);
 
     bytes32 private constant ZERO48HASH = 0xc980e59163ce244bb4bb6211f48c7b46f88a4f40943e84eb99bdc41e129bd293; // keccak256(hex"00"*48)
     bytes32 private constant ZERO96HASH = 0x46700b4d40ac5c35af2c22dda2787a91eb567b06c924a8fb8ae9a05b20c08c21; // keccak256(hex"00"*96)
 
+    /// @dev Domain-separation tag for the createNode nodeId-ownership proof.
+    bytes32 private constant CREATE_NODE_TAG = keccak256("KAIA_ADDRESS_BOOK_V2_CREATE_NODE_V1");
+
     /// @notice Validates node registration inputs, verifies the staking contract deployer, and registers addresses.
-    /// @dev Used by NodeActions.createNode() at runtime. Checks that msg.sender deployed the staking contract.
+    /// @dev Used by NodeActions.createNode(). Checks msg.sender deployed the staking contract and controls nodeId.
     /// @param registry The used-address registry for uniqueness checks
     /// @param nodeId The node address
     /// @param stakingContract The staking contract address
     /// @param rewardAddress The reward address
     /// @param blsInfo The BLS public key and proof-of-possession
+    /// @param nodeIdSig ECDSA signature by nodeId authorizing this registration (see _verifyNodeIdProof)
     function registerNode(
         mapping(address => bool) storage registry,
         address nodeId,
         address stakingContract,
         address rewardAddress,
-        BlsPublicKeyInfo memory blsInfo
+        BlsPublicKeyInfo memory blsInfo,
+        bytes memory nodeIdSig
     ) internal {
         _checkInputs(nodeId, stakingContract, rewardAddress, blsInfo);
 
@@ -41,8 +48,20 @@ library NodeVerifier {
         if (factory == address(0)) revert FactoryNotFound();
         if (ICnStakingV4Factory(factory).getDeployer(stakingContract) != msg.sender) revert StakingDeployerMismatch();
 
+        // Ownership check: the registrant must prove control of the nodeId key.
+        _verifyNodeIdProof(nodeId, stakingContract, nodeIdSig);
+
         _checkPublicDelegation(stakingContract, rewardAddress);
         _registerAddresses(registry, nodeId, stakingContract, rewardAddress);
+    }
+
+    /// @dev Reverts unless nodeIdSig is nodeId's ECDSA signature over
+    ///      keccak256(TAG, chainId, addressBook, caller, nodeId, stakingContract). tryRecover rejects malleable sigs.
+    function _verifyNodeIdProof(address nodeId, address stakingContract, bytes memory nodeIdSig) private view {
+        bytes32 digest =
+            keccak256(abi.encode(CREATE_NODE_TAG, block.chainid, address(this), msg.sender, nodeId, stakingContract));
+        (address recovered, ECDSA.RecoverError err,) = ECDSA.tryRecover(digest, nodeIdSig);
+        if (err != ECDSA.RecoverError.NoError || recovered != nodeId) revert NodeIdProofInvalid();
     }
 
     /// @notice Validates node registration inputs without factory check.

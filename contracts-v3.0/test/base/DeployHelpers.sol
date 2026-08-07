@@ -9,6 +9,7 @@ import {IABv2DataContract} from "../../src/AddressBookV2/interfaces/IABv2DataCon
 import {IRegistry} from "../../src/system/IRegistry.sol";
 import {NodeInfo, BlsPublicKeyInfo} from "../../src/types/Node.sol";
 import {MockCnStaking} from "../../src/CnStaking/mocks/MockCnStaking.sol";
+import {NodeIdSigUtil} from "./NodeIdSigUtil.sol";
 
 /// @title DeployHelpers
 /// @notice Deployment mechanics for test infrastructure. No test logic or node creation.
@@ -41,6 +42,17 @@ contract DeployHelpers is Test {
     /* ========== STATE ========== */
 
     AddressBookV2 internal abv2;
+
+    /* ========== NODE ID SIGNATURE HELPER ========== */
+
+    /// @dev nodeId ownership signature required by createNode.
+    function _signNodeIdFor(uint256 nodeIdPk, address caller, address nodeId, address staking)
+        internal
+        view
+        returns (bytes memory)
+    {
+        return NodeIdSigUtil.sign(nodeIdPk, caller, nodeId, staking, address(abv2));
+    }
 
     /* ========== DEPLOY: ADDRESS BOOK V2 AT 0x400 ========== */
 

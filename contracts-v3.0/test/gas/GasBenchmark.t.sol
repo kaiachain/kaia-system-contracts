@@ -86,15 +86,16 @@ contract GasBenchmark is DeployHelpers {
 
         for (uint256 i; i < count; i++) {
             string memory idx = vm.toString(startIdx + i);
-            address nodeId = makeAddr(string.concat("cand", idx));
+            (address nodeId, uint256 nodeIdPk) = makeAddrAndKey(string.concat("cand", idx));
             address mgr = makeAddr(string.concat("cmgr", idx));
             MockCnStaking staking = deployMockCnStaking(MIN_STAKE, 0);
             address reward = makeAddr(string.concat("crew", idx));
             address voter = makeAddr(string.concat("cvot", idx));
 
             _mockDeployer(address(staking), mgr);
+            bytes memory sig = _signNodeIdFor(nodeIdPk, mgr, nodeId, address(staking));
             vm.prank(mgr);
-            abv2.createNode(nodeId, address(staking), reward, voter, _makeBlsInfo(), string.concat("cand", idx), "");
+            abv2.createNode(nodeId, address(staking), reward, voter, _makeBlsInfo(), string.concat("cand", idx), "", sig);
             vm.deal(nodeId, 10 ether);
             vm.prank(nodeId);
             abv2.readyCandidate(nodeId);
@@ -309,12 +310,6 @@ contract GasBenchmark is DeployHelpers {
         vm.snapshotGasLastCall("getAllBlsInfo_50");
     }
 
-    function test_gas_getNodeInfos_50() public {
-        address[] memory ids = _bootstrapValidators(50, 0);
-        abv2.getNodeInfos(ids);
-        vm.snapshotGasLastCall("getNodeInfos_50");
-    }
-
     /* ========== GETTERS: 100 nodes ========== */
 
     function test_gas_getAllProfiles_100() public {
@@ -329,12 +324,6 @@ contract GasBenchmark is DeployHelpers {
         vm.snapshotGasLastCall("getAllBlsInfo_100");
     }
 
-    function test_gas_getNodeInfos_100() public {
-        address[] memory ids = _bootstrapValidators(100, 0);
-        abv2.getNodeInfos(ids);
-        vm.snapshotGasLastCall("getNodeInfos_100");
-    }
-
     /* ========== GETTERS: 150 nodes ========== */
 
     function test_gas_getAllProfiles_150() public {
@@ -347,12 +336,6 @@ contract GasBenchmark is DeployHelpers {
         _bootstrapValidators(150, 0);
         abv2.getAllBlsInfo();
         vm.snapshotGasLastCall("getAllBlsInfo_150");
-    }
-
-    function test_gas_getNodeInfos_150() public {
-        address[] memory ids = _bootstrapValidators(150, 0);
-        abv2.getNodeInfos(ids);
-        vm.snapshotGasLastCall("getNodeInfos_150");
     }
 
 }

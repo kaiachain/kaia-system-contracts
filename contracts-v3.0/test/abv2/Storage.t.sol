@@ -25,35 +25,6 @@ contract StorageTest is Base {
         abv2.getNodeInfo(nonExistent);
     }
 
-    /* ========== getNodeInfos ========== */
-
-    function test_getNodeInfos_success() public view {
-        address[] memory ids = new address[](2);
-        ids[0] = genesis[0].nodeId;
-        ids[1] = genesis[1].nodeId;
-
-        NodeInfo[] memory infos = abv2.getNodeInfos(ids);
-        assertEq(infos.length, 2);
-        assertEq(infos[0].stakingContract, address(genesis[0].staking));
-        assertEq(infos[1].stakingContract, address(genesis[1].staking));
-    }
-
-    function test_getNodeInfos_emptyArray() public view {
-        address[] memory ids = new address[](0);
-        NodeInfo[] memory infos = abv2.getNodeInfos(ids);
-        assertEq(infos.length, 0);
-    }
-
-    function test_getNodeInfos_unknownNode_returnsDefault() public {
-        address[] memory ids = new address[](1);
-        ids[0] = makeAddr("nonExistent");
-
-        // getNodeInfos does NOT revert for unknown nodes — returns default struct
-        NodeInfo[] memory infos = abv2.getNodeInfos(ids);
-        assertEq(infos.length, 1);
-        assertEq(uint256(infos[0].state), uint256(State.Unknown));
-    }
-
     /* ========== getAllProfiles ========== */
 
     function test_getAllProfiles_initialState() public view {
@@ -350,22 +321,6 @@ contract StorageTest is Base {
 
     function test_epochVACount_zeroBeforeGenesisCommittee() public view {
         assertEq(abv2.getEpochVACount(), 0);
-    }
-
-    /* ========== getNodeInfos: mixed existing and non-existing ========== */
-
-    function test_getNodeInfos_mixedExistingAndNonExisting() public {
-        address phantom = makeAddr("phantom");
-        address[] memory ids = new address[](3);
-        ids[0] = genesis[0].nodeId;
-        ids[1] = phantom;
-        ids[2] = genesis[1].nodeId;
-
-        NodeInfo[] memory infos = abv2.getNodeInfos(ids);
-        assertEq(infos.length, 3);
-        assertEq(uint256(infos[0].state), uint256(State.Registered));
-        assertEq(uint256(infos[1].state), uint256(State.Unknown));
-        assertEq(uint256(infos[2].state), uint256(State.Registered));
     }
 
     /* ========== stateCount: all 9 states initially zero (except Registered) ========== */

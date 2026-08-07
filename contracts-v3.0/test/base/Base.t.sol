@@ -15,6 +15,7 @@ contract Base is DeployHelpers {
 
     struct NodeBundle {
         address nodeId;
+        uint256 nodeIdPk;
         address manager;
         MockCnStaking staking;
         address rewardAddr;
@@ -57,8 +58,10 @@ contract Base is DeployHelpers {
     ///         Also mocks getDeployer so the bundle's manager is recognized as the staking deployer.
     function _makeNodeBundle(uint256 index) internal returns (NodeBundle memory n) {
         string memory idx = vm.toString(index);
+        (address nodeId, uint256 nodeIdPk) = makeAddrAndKey(string.concat("node", idx));
         n = NodeBundle({
-            nodeId: makeAddr(string.concat("node", idx)),
+            nodeId: nodeId,
+            nodeIdPk: nodeIdPk,
             manager: makeAddr(string.concat("manager", idx)),
             staking: deployMockCnStaking(MIN_STAKE, 0),
             rewardAddr: makeAddr(string.concat("reward", idx)),
@@ -71,14 +74,16 @@ contract Base is DeployHelpers {
     function _createNode(uint256 index) internal returns (NodeBundle memory n) {
         n = _makeNodeBundle(index);
         vm.prank(n.manager);
-        abv2.createNode(n.nodeId, address(n.staking), n.rewardAddr, n.voterAddr, _makeBlsInfo(), string.concat("node-", vm.toString(index)), "");
+        abv2.createNode(n.nodeId, address(n.staking), n.rewardAddr, n.voterAddr, _makeBlsInfo(), string.concat("node-", vm.toString(index)), "", _signNodeId(n));
     }
 
     /// @notice Creates a node via AddressBookV2 with a custom stake amount
     function _createNodeCustomStake(uint256 index, uint256 stake) internal returns (NodeBundle memory n) {
         string memory idx = vm.toString(index);
+        (address nodeId, uint256 nodeIdPk) = makeAddrAndKey(string.concat("node", idx));
         n = NodeBundle({
-            nodeId: makeAddr(string.concat("node", idx)),
+            nodeId: nodeId,
+            nodeIdPk: nodeIdPk,
             manager: makeAddr(string.concat("manager", idx)),
             staking: deployMockCnStaking(stake, 0),
             rewardAddr: makeAddr(string.concat("reward", idx)),
@@ -86,7 +91,12 @@ contract Base is DeployHelpers {
         });
         _mockDeployer(address(n.staking), n.manager);
         vm.prank(n.manager);
-        abv2.createNode(n.nodeId, address(n.staking), n.rewardAddr, n.voterAddr, _makeBlsInfo(), string.concat("node-", vm.toString(index)), "");
+        abv2.createNode(n.nodeId, address(n.staking), n.rewardAddr, n.voterAddr, _makeBlsInfo(), string.concat("node-", vm.toString(index)), "", _signNodeId(n));
+    }
+
+    /// @dev nodeId ownership signature for a NodeBundle.
+    function _signNodeId(NodeBundle memory n) internal view returns (bytes memory) {
+        return _signNodeIdFor(n.nodeIdPk, n.manager, n.nodeId, address(n.staking));
     }
 
     /* ========== STATE TRANSITION HELPERS ========== */

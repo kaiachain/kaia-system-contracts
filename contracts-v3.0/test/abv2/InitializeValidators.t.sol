@@ -215,7 +215,7 @@ contract InitializeValidatorsTest is DeployHelpers {
         IABv2DataContract.InitData memory data = _buildInitData(2);
         deployAddressBookV2WithValidators(data);
 
-        address newNode = makeAddr("newnode");
+        (address newNode, uint256 newNodePk) = makeAddrAndKey("newnode");
         address newManager = makeAddr("newmanager");
         MockCnStaking newStaking = deployMockCnStaking(MIN_STAKE, 0);
         address newReward = makeAddr("newreward");
@@ -223,7 +223,16 @@ contract InitializeValidatorsTest is DeployHelpers {
 
         _mockDeployer(address(newStaking), newManager);
         vm.prank(newManager);
-        abv2.createNode(newNode, address(newStaking), newReward, newVoter, _makeBlsInfo(), "newnode", "");
+        abv2.createNode(
+            newNode,
+            address(newStaking),
+            newReward,
+            newVoter,
+            _makeBlsInfo(),
+            "newnode",
+            "",
+            _signNodeIdFor(newNodePk, newManager, newNode, address(newStaking))
+        );
 
         assertEq(uint256(abv2.getNodeState(newNode)), uint256(State.Registered));
         assertEq(abv2.getNodeInfo(newNode).manager, newManager);
@@ -240,7 +249,7 @@ contract InitializeValidatorsTest is DeployHelpers {
         }
 
         // Create a new node — gcId is NOT auto-assigned at creation (must call assignGcId)
-        address newNode = makeAddr("newnode");
+        (address newNode, uint256 newNodePk) = makeAddrAndKey("newnode");
         address newManager = makeAddr("newmanager");
         MockCnStaking newStaking = deployMockCnStaking(MIN_STAKE, 0);
         address newReward = makeAddr("newreward");
@@ -248,7 +257,16 @@ contract InitializeValidatorsTest is DeployHelpers {
 
         _mockDeployer(address(newStaking), newManager);
         vm.prank(newManager);
-        abv2.createNode(newNode, address(newStaking), newReward, newVoter, _makeBlsInfo(), "newnode", "");
+        abv2.createNode(
+            newNode,
+            address(newStaking),
+            newReward,
+            newVoter,
+            _makeBlsInfo(),
+            "newnode",
+            "",
+            _signNodeIdFor(newNodePk, newManager, newNode, address(newStaking))
+        );
 
         NodeInfo memory newInfo = abv2.getNodeInfo(newNode);
         assertEq(newInfo.gcId, 0, "post-init node should have gcId=0 until assignGcId is called");

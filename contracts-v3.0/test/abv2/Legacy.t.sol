@@ -11,6 +11,7 @@ import {IRegistry} from "../../src/system/IRegistry.sol";
 import {MockAddressBookV1} from "../../src/AddressBookV2/mocks/MockAddressBookV1.sol";
 import {MockCnStaking} from "../../src/CnStaking/mocks/MockCnStaking.sol";
 import {State, BlsPublicKeyInfo, NodeInfo} from "../../src/types/Node.sol";
+import {NodeIdSigUtil} from "../base/NodeIdSigUtil.sol";
 
 /// @dev Interface for deprecated legacy functions removed from AddressBookLegacy.
 ///      Used only in tests to encode correct selectors for fallback revert verification.
@@ -196,16 +197,36 @@ contract LegacyCompatibilityTest is Test {
     }
 
     function _createNode(string memory name) internal returns (address nodeId, MockCnStaking staking, address reward) {
-        nodeId = makeAddr(string.concat(name, "_node"));
+        uint256 nodeIdPk;
+        (nodeId, nodeIdPk) = makeAddrAndKey(string.concat(name, "_node"));
         address manager = makeAddr(string.concat(name, "_manager"));
         staking = new MockCnStaking();
         staking.mockSetStaking(MIN_STAKE);
         reward = makeAddr(string.concat(name, "_reward"));
-        address voter = makeAddr(string.concat(name, "_voter"));
 
         _mockDeployer(address(staking), manager);
+        bytes memory sig = _signNodeIdFor(nodeIdPk, manager, nodeId, address(staking));
         vm.prank(manager);
-        abv2.createNode(nodeId, address(staking), reward, voter, _makeBlsInfo(), name, "");
+        abv2.createNode(
+            nodeId,
+            address(staking),
+            reward,
+            makeAddr(string.concat(name, "_voter")),
+            _makeBlsInfo(),
+            name,
+            "",
+            sig
+        );
+    }
+
+    /// @dev Produces the nodeId ownership signature that createNode requires: an ECDSA
+    ///      signature by nodeId over (caller, nodeId, stakingContract, chainId, addressBook).
+    function _signNodeIdFor(uint256 nodeIdPk, address caller, address nodeId, address staking)
+        internal
+        view
+        returns (bytes memory)
+    {
+        return NodeIdSigUtil.sign(nodeIdPk, caller, nodeId, staking, address(abv2));
     }
 
     function _rollToNextEpoch() internal {

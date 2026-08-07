@@ -271,16 +271,6 @@ contract AddressBookV2 is NodeActions, AddressBookLegacy {
     }
 
     /// @inheritdoc IAddressBookV2
-    function getNodeInfos(address[] calldata nodeIds) external view override returns (NodeInfo[] memory infos) {
-        ABv2Storage storage $ = _getStorage();
-        uint256 len = nodeIds.length;
-        infos = new NodeInfo[](len);
-        for (uint256 i; i < len; ++i) {
-            infos[i] = $.nodeInfo[nodeIds[i]];
-        }
-    }
-
-    /// @inheritdoc IAddressBookV2
     function getAllProfiles() external view override returns (Profile[] memory profiles) {
         ABv2Storage storage $ = _getStorage();
         uint256 len = $.allNodes.length();

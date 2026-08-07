@@ -5,6 +5,7 @@ import {Test} from "forge-std/Test.sol";
 import {NodeVerifier} from "../../src/libraries/NodeVerifier.sol";
 import {IRegistry} from "../../src/system/IRegistry.sol";
 import {BlsPublicKeyInfo} from "../../src/types/Node.sol";
+import {NodeIdSigUtil} from "../base/NodeIdSigUtil.sol";
 
 /// @dev Wrapper to expose NodeVerifier as external calls (needed for vm.expectRevert with external subcalls)
 contract NodeVerifierHarness {
@@ -18,9 +19,10 @@ contract NodeVerifierHarness {
         address nodeId,
         address stakingContract,
         address rewardAddress,
-        BlsPublicKeyInfo memory blsInfo
+        BlsPublicKeyInfo memory blsInfo,
+        bytes memory nodeIdSig
     ) external {
-        NodeVerifier.registerNode(registry, nodeId, stakingContract, rewardAddress, blsInfo);
+        NodeVerifier.registerNode(registry, nodeId, stakingContract, rewardAddress, blsInfo, nodeIdSig);
     }
 
     function registerNodeGenesis(
@@ -72,13 +74,26 @@ contract NodeVerifierTest is Test {
         return BlsPublicKeyInfo({publicKey: pk, pop: pop});
     }
 
+    /// @dev Produces the nodeId ownership signature that registerNode requires: an ECDSA
+    ///      signature by nodeId over (caller, nodeId, stakingContract, chainId, addressBook).
+    ///      Note: NodeVerifier.registerNode is an internal library function, so `address(this)`
+    ///      inside it resolves to the calling contract — here, the harness.
+    function _signNodeIdFor(uint256 nodeIdPk, address caller, address nodeId, address staking)
+        internal
+        view
+        returns (bytes memory)
+    {
+        return NodeIdSigUtil.sign(nodeIdPk, caller, nodeId, staking, address(harness));
+    }
+
     /* ========== registerNode (deployer check) ========== */
 
     function test_registerNode_success() public {
+        (address node4, uint256 node4Pk) = makeAddrAndKey("node4");
         // msg.sender must match getDeployer result (DEPLOYER)
         vm.prank(DEPLOYER);
-        harness.registerNode(address(0x4), address(0x5), address(0x6), _validBls());
-        assertTrue(harness.registry(address(0x4)));
+        harness.registerNode(node4, address(0x5), address(0x6), _validBls(), _signNodeIdFor(node4Pk, DEPLOYER, node4, address(0x5)));
+        assertTrue(harness.registry(node4));
         assertTrue(harness.registry(address(0x5)));
         assertTrue(harness.registry(address(0x6)));
     }
@@ -86,25 +101,25 @@ contract NodeVerifierTest is Test {
     function test_registerNode_revert_zeroNodeId() public {
         vm.expectRevert(NodeVerifier.InvalidInput.selector);
         vm.prank(DEPLOYER);
-        harness.registerNode(address(0), address(0x5), address(0x6), _validBls());
+        harness.registerNode(address(0), address(0x5), address(0x6), _validBls(), "");
     }
 
     function test_registerNode_revert_zeroStaking() public {
         vm.expectRevert(NodeVerifier.InvalidInput.selector);
         vm.prank(DEPLOYER);
-        harness.registerNode(address(0x4), address(0), address(0x6), _validBls());
+        harness.registerNode(address(0x4), address(0), address(0x6), _validBls(), "");
     }
 
     function test_registerNode_revert_zeroReward() public {
         vm.expectRevert(NodeVerifier.InvalidInput.selector);
         vm.prank(DEPLOYER);
-        harness.registerNode(address(0x4), address(0x5), address(0), _validBls());
+        harness.registerNode(address(0x4), address(0x5), address(0), _validBls(), "");
     }
 
     function test_registerNode_revert_duplicateAddresses() public {
         vm.expectRevert(NodeVerifier.InvalidInput.selector);
         vm.prank(DEPLOYER);
-        harness.registerNode(address(0x4), address(0x4), address(0x6), _validBls());
+        harness.registerNode(address(0x4), address(0x4), address(0x6), _validBls(), "");
     }
 
     function test_registerNode_revert_blsPublicKeyWrongSize() public {
@@ -112,7 +127,7 @@ contract NodeVerifierTest is Test {
         bls.pop[0] = 0x01;
         vm.expectRevert(NodeVerifier.InvalidInput.selector);
         vm.prank(DEPLOYER);
-        harness.registerNode(address(0x4), address(0x5), address(0x6), bls);
+        harness.registerNode(address(0x4), address(0x5), address(0x6), bls, "");
     }
 
     function test_registerNode_revert_blsPopWrongSize() public {
@@ -120,7 +135,7 @@ contract NodeVerifierTest is Test {
         bls.publicKey[0] = 0x01;
         vm.expectRevert(NodeVerifier.InvalidInput.selector);
         vm.prank(DEPLOYER);
-        harness.registerNode(address(0x4), address(0x5), address(0x6), bls);
+        harness.registerNode(address(0x4), address(0x5), address(0x6), bls, "");
     }
 
     function test_registerNode_revert_blsPublicKeyZero() public {
@@ -128,7 +143,7 @@ contract NodeVerifierTest is Test {
         bls.pop[0] = 0x01;
         vm.expectRevert(NodeVerifier.InvalidInput.selector);
         vm.prank(DEPLOYER);
-        harness.registerNode(address(0x4), address(0x5), address(0x6), bls);
+        harness.registerNode(address(0x4), address(0x5), address(0x6), bls, "");
     }
 
     function test_registerNode_revert_blsPopZero() public {
@@ -136,13 +151,15 @@ contract NodeVerifierTest is Test {
         bls.publicKey[0] = 0x01;
         vm.expectRevert(NodeVerifier.InvalidInput.selector);
         vm.prank(DEPLOYER);
-        harness.registerNode(address(0x4), address(0x5), address(0x6), bls);
+        harness.registerNode(address(0x4), address(0x5), address(0x6), bls, "");
     }
 
     function test_registerNode_revert_addressAlreadyRegistered() public {
+        (address dup, uint256 dupPk) = makeAddrAndKey("alreadyRegisteredNode");
+        harness.setRegistry(dup, true);
         vm.expectRevert(NodeVerifier.AddressAlreadyRegistered.selector);
         vm.prank(DEPLOYER);
-        harness.registerNode(address(0x1), address(0x5), address(0x6), _validBls());
+        harness.registerNode(dup, address(0x5), address(0x6), _validBls(), _signNodeIdFor(dupPk, DEPLOYER, dup, address(0x5)));
     }
 
     function test_registerNode_revert_factoryNotFound() public {
@@ -154,7 +171,7 @@ contract NodeVerifierTest is Test {
         );
         vm.expectRevert(NodeVerifier.FactoryNotFound.selector);
         vm.prank(DEPLOYER);
-        harness.registerNode(address(0x4), address(0x5), address(0x6), _validBls());
+        harness.registerNode(address(0x4), address(0x5), address(0x6), _validBls(), "");
     }
 
     function test_registerNode_revert_deployerMismatch() public {
@@ -162,7 +179,7 @@ contract NodeVerifierTest is Test {
         address notDeployer = address(0xBAD);
         vm.prank(notDeployer);
         vm.expectRevert(NodeVerifier.StakingDeployerMismatch.selector);
-        harness.registerNode(address(0x4), address(0x5), address(0x6), _validBls());
+        harness.registerNode(address(0x4), address(0x5), address(0x6), _validBls(), "");
     }
 
     function test_registerNode_revert_notFactoryDeployed() public {
@@ -174,26 +191,28 @@ contract NodeVerifierTest is Test {
         );
         vm.prank(DEPLOYER);
         vm.expectRevert(NodeVerifier.StakingDeployerMismatch.selector);
-        harness.registerNode(address(0x4), address(0x5), address(0x6), _validBls());
+        harness.registerNode(address(0x4), address(0x5), address(0x6), _validBls(), "");
     }
 
     function test_registerNode_success_withPD() public {
+        (address node4, uint256 node4Pk) = makeAddrAndKey("node4");
         // PD is set → rewardAddress must equal PD
         address pd = address(0x6);
         vm.mockCall(address(0x5), abi.encodeWithSignature("publicDelegation()"), abi.encode(pd));
         vm.prank(DEPLOYER);
-        harness.registerNode(address(0x4), address(0x5), pd, _validBls());
-        assertTrue(harness.registry(address(0x4)));
+        harness.registerNode(node4, address(0x5), pd, _validBls(), _signNodeIdFor(node4Pk, DEPLOYER, node4, address(0x5)));
+        assertTrue(harness.registry(node4));
         assertTrue(harness.registry(address(0x5)));
         assertTrue(harness.registry(pd));
     }
 
     function test_registerNode_revert_pdMismatch() public {
+        (address node4, uint256 node4Pk) = makeAddrAndKey("node4");
         // PD is set but rewardAddress != PD
         vm.mockCall(address(0x5), abi.encodeWithSignature("publicDelegation()"), abi.encode(address(0x99)));
         vm.expectRevert(NodeVerifier.InvalidInput.selector);
         vm.prank(DEPLOYER);
-        harness.registerNode(address(0x4), address(0x5), address(0x6), _validBls());
+        harness.registerNode(node4, address(0x5), address(0x6), _validBls(), _signNodeIdFor(node4Pk, DEPLOYER, node4, address(0x5)));
     }
 
     /* ========== registerNodeGenesis (factory-only check) ========== */
