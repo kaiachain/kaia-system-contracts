@@ -901,6 +901,7 @@ contract NodeManagementTest is Base {
             abi.encode(MOCK_FACTORY)
         );
         vm.mockCall(MOCK_FACTORY, abi.encodeWithSignature("isDeployedCnStaking(address)"), abi.encode(true));
+        vm.mockCall(MOCK_FACTORY, abi.encodeWithSignature("isDeployedPublicDelegation(address)"), abi.encode(false));
 
         AddressBookV2Harness impl = new AddressBookV2Harness(EPOCH_BLOCK_INTERVAL);
         bytes memory callData = abi.encodeCall(AddressBookV2.initialize, ());
