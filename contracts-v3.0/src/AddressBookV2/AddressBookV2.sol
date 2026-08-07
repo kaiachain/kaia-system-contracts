@@ -108,6 +108,12 @@ contract AddressBookV2 is NodeActions, AddressBookLegacy {
         if ($.nodeInfo[nodeId].gcId != 0) revert GcIdAlreadyAssigned();
         uint256 gcId = ++$.lastAssignedGCId;
         $.nodeInfo[nodeId].gcId = gcId;
+
+        address tracker = IRegistry(REGISTRY_ADDRESS).getActiveAddr("StakingTracker");
+        if (tracker != address(0)) {
+            try IStakingTracker(tracker).refreshVoter(nodeId) {} catch {}
+        }
+
         emit GcIdAssigned(nodeId, gcId);
     }
 
