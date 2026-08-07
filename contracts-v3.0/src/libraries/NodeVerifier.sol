@@ -5,6 +5,7 @@ import {BlsPublicKeyInfo} from "../types/Node.sol";
 import {IRegistry} from "../system/IRegistry.sol";
 import {ICnStaking} from "../CnStaking/CnStakingV4/interfaces/ICnStaking.sol";
 import {ICnStakingV4Factory} from "../CnStaking/CnStakingV4Factory/interfaces/ICnStakingV4Factory.sol";
+import {IPublicDelegation} from "../PublicDelegation/interfaces/IPublicDelegation.sol";
 import {ECDSA} from "@openzeppelin/contracts/utils/cryptography/ECDSA.sol";
 
 /// @title NodeVerifier
@@ -52,6 +53,16 @@ library NodeVerifier {
         _verifyNodeIdProof(nodeId, stakingContract, nodeIdSig);
 
         _checkPublicDelegation(stakingContract, rewardAddress);
+
+        // A PublicDelegation is tied to the CnStaking it was deployed with, so no other node may
+        // claim it as its reward address.
+        if (
+            ICnStakingV4Factory(factory).isDeployedPublicDelegation(rewardAddress)
+                && IPublicDelegation(payable(rewardAddress)).baseCnStaking() != stakingContract
+        ) {
+            revert InvalidInput();
+        }
+
         _registerAddresses(registry, nodeId, stakingContract, rewardAddress);
     }
 

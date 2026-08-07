@@ -137,6 +137,21 @@ contract RefreshVoterTest is STv3Base {
         assertEq(stv3.gcIdToVoter(newGcId), gc[0].voterAddr);
     }
 
+    function test_assignGcId_registersVoterMapping() public {
+        // Revoke first so the node has no gcId, making assignGcId the only thing that could
+        // register its voter. No manual refreshVoter here - that is the point of the test.
+        vm.prank(makeAddr("configurator"));
+        abv2.revokeGcId(gc[0].nodeId);
+        assertEq(stv3.voterToGCId(gc[0].voterAddr), 0);
+
+        vm.prank(makeAddr("configurator"));
+        abv2.assignGcId(gc[0].nodeId);
+
+        uint256 newGcId = abv2.getNodeInfo(gc[0].nodeId).gcId;
+        assertEq(stv3.voterToGCId(gc[0].voterAddr), newGcId, "assignGcId must register the voter");
+        assertEq(stv3.gcIdToVoter(newGcId), gc[0].voterAddr);
+    }
+
     function test_revokeVoter_revert_notAddressBook() public {
         stv3.refreshVoter(gc[0].nodeId);
         vm.prank(makeAddr("attacker"));

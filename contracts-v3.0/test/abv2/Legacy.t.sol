@@ -127,6 +127,7 @@ contract LegacyCompatibilityTest is Test {
             abi.encode(address(0x501))
         );
         vm.mockCall(address(0x501), abi.encodeWithSignature("isDeployedCnStaking(address)"), abi.encode(true));
+        vm.mockCall(address(0x501), abi.encodeWithSignature("isDeployedPublicDelegation(address)"), abi.encode(false));
         // Default getDeployer mock — returns address(0).
         // Tests that call createNode must override this per staking contract.
         vm.mockCall(address(0x501), abi.encodeWithSignature("getDeployer(address)"), abi.encode(address(0)));

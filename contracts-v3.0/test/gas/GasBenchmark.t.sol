@@ -31,6 +31,7 @@ contract GasBenchmark is DeployHelpers {
             abi.encode(address(0x501))
         );
         vm.mockCall(address(0x501), abi.encodeWithSignature("isDeployedCnStaking(address)"), abi.encode(true));
+        vm.mockCall(address(0x501), abi.encodeWithSignature("isDeployedPublicDelegation(address)"), abi.encode(false));
     }
 
     /* ========== HELPERS ========== */
