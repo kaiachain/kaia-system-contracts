@@ -5,7 +5,6 @@ import {BlsPublicKeyInfo} from "../types/Node.sol";
 import {IRegistry} from "../system/IRegistry.sol";
 import {ICnStaking} from "../CnStaking/CnStakingV4/interfaces/ICnStaking.sol";
 import {ICnStakingV4Factory} from "../CnStaking/CnStakingV4Factory/interfaces/ICnStakingV4Factory.sol";
-import {IPublicDelegation} from "../PublicDelegation/interfaces/IPublicDelegation.sol";
 import {ECDSA} from "@openzeppelin/contracts/utils/cryptography/ECDSA.sol";
 
 /// @title NodeVerifier
@@ -52,13 +51,11 @@ library NodeVerifier {
         // Ownership check: the registrant must prove control of the nodeId key.
         _verifyNodeIdProof(nodeId, stakingContract, nodeIdSig);
 
-        _checkPublicDelegation(stakingContract, rewardAddress);
-
-        // A PublicDelegation is tied to the CnStaking it was deployed with, so no other node may
-        // claim it as its reward address.
+        // A PublicDelegation is tied to the CnStaking it was deployed with. When this node's own
+        // staking contract has none, any deployed PublicDelegation belongs to another node.
         if (
-            ICnStakingV4Factory(factory).isDeployedPublicDelegation(rewardAddress)
-                && IPublicDelegation(payable(rewardAddress)).baseCnStaking() != stakingContract
+            _checkPublicDelegation(stakingContract, rewardAddress) == address(0)
+                && ICnStakingV4Factory(factory).isDeployedPublicDelegation(rewardAddress)
         ) {
             revert InvalidInput();
         }
@@ -107,8 +104,8 @@ library NodeVerifier {
         if (keccak256(blsInfo.publicKey) == ZERO48HASH || keccak256(blsInfo.pop) == ZERO96HASH) revert InvalidInput();
     }
 
-    function _checkPublicDelegation(address stakingContract, address rewardAddress) private view {
-        address pd = ICnStaking(payable(stakingContract)).publicDelegation();
+    function _checkPublicDelegation(address stakingContract, address rewardAddress) private view returns (address pd) {
+        pd = ICnStaking(payable(stakingContract)).publicDelegation();
         if (pd != address(0) && pd != rewardAddress) revert InvalidInput();
     }
 
