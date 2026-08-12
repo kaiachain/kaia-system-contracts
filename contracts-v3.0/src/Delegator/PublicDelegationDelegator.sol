@@ -27,7 +27,7 @@ import {AccessControlEnumerable} from "@openzeppelin/contracts/access/extensions
 ///
 /// Separates the delegator's delegation from the delegatee's reward.
 /// - DELEGATOR_ROLE: provides delegation, withdraws/claims delegation.
-/// - DELEGATEE_ROLE: withdraws/claims reward (PD.maxWithdraw - delegation).
+/// - DELEGATEE_ROLE: withdraws/claims reward (share value beyond the delegation).
 ///
 /// Both delegation and reward flow through the PublicDelegation (ERC4626 vault).
 /// PD uses CN withdrawal request IDs directly — this contract tracks those IDs
@@ -171,10 +171,12 @@ contract PublicDelegationDelegator is IPublicDelegationDelegator, AccessControlE
     /* ========== GETTERS ========== */
 
     /// @dev Returns the maximum withdrawable reward in KAIA.
+    /// Reserves the ceil-rounded shares needed to cover the full delegation first,
+    /// so a reward withdrawal can never burn shares backing the principal.
     function withdrawableReward() public view override returns (uint256) {
-        /// @dev Since maxWithdraw is floor-rounded, it may be less than delegation, which would cause underflow.
-        uint256 _maxWithdraw = PD.maxWithdraw(address(this));
-        return _maxWithdraw > delegation ? _maxWithdraw - delegation : 0;
+        uint256 _shares = PD.maxRedeem(address(this));
+        uint256 _reserved = PD.previewWithdraw(delegation);
+        return _shares > _reserved ? PD.previewRedeem(_shares - _reserved) : 0;
     }
 
     /// @dev Returns the delegation withdrawal ids.
