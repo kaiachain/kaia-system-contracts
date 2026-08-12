@@ -72,6 +72,7 @@ contract STv3Base is Test {
             REGISTRY_ADDRESS, abi.encodeCall(IRegistry.getActiveAddr, ("CnStakingFactory")), abi.encode(MOCK_FACTORY)
         );
         vm.mockCall(MOCK_FACTORY, abi.encodeWithSignature("isDeployedCnStaking(address)"), abi.encode(true));
+        vm.mockCall(MOCK_FACTORY, abi.encodeWithSignature("isDeployedPublicDelegation(address)"), abi.encode(false));
         vm.mockCall(MOCK_FACTORY, abi.encodeWithSignature("getDeployer(address)"), abi.encode(address(0)));
 
         // Mock StakingTracker → address(0) initially

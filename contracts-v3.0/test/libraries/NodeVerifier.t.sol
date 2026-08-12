@@ -62,6 +62,7 @@ contract NodeVerifierTest is Test {
         vm.mockCall(MOCK_FACTORY, abi.encodeWithSignature("getDeployer(address)", address(0x5)), abi.encode(DEPLOYER));
         // Default: isDeployedCnStaking returns true
         vm.mockCall(MOCK_FACTORY, abi.encodeWithSignature("isDeployedCnStaking(address)"), abi.encode(true));
+        vm.mockCall(MOCK_FACTORY, abi.encodeWithSignature("isDeployedPublicDelegation(address)"), abi.encode(false));
         // Default: staking(0x5) has no publicDelegation
         vm.mockCall(address(0x5), abi.encodeWithSignature("publicDelegation()"), abi.encode(address(0)));
     }
@@ -213,6 +214,37 @@ contract NodeVerifierTest is Test {
         vm.expectRevert(NodeVerifier.InvalidInput.selector);
         vm.prank(DEPLOYER);
         harness.registerNode(node4, address(0x5), address(0x6), _validBls(), _signNodeIdFor(node4Pk, DEPLOYER, node4, address(0x5)));
+    }
+
+    /// @dev Marks `pd` as a factory-deployed PublicDelegation linked to `baseCnStaking`.
+    function _mockPD(address pd, address baseCnStaking) internal {
+        vm.mockCall(MOCK_FACTORY, abi.encodeWithSignature("isDeployedPublicDelegation(address)", pd), abi.encode(true));
+        vm.mockCall(pd, abi.encodeWithSignature("baseCnStaking()"), abi.encode(baseCnStaking));
+    }
+
+    function test_registerNode_revert_rewardIsForeignPD() public {
+        (address node4, uint256 node4Pk) = makeAddrAndKey("node4");
+        // The reward address is a PD linked to someone else's staking contract.
+        address foreignPd = address(0x6);
+        _mockPD(foreignPd, address(0x77));
+        vm.expectRevert(NodeVerifier.InvalidInput.selector);
+        vm.prank(DEPLOYER);
+        harness.registerNode(
+            node4, address(0x5), foreignPd, _validBls(), _signNodeIdFor(node4Pk, DEPLOYER, node4, address(0x5))
+        );
+    }
+
+    function test_registerNode_success_rewardIsOwnPD() public {
+        (address node4, uint256 node4Pk) = makeAddrAndKey("node4");
+        // The reward address is this staking contract's own PD, so it stays acceptable.
+        address ownPd = address(0x6);
+        vm.mockCall(address(0x5), abi.encodeWithSignature("publicDelegation()"), abi.encode(ownPd));
+        _mockPD(ownPd, address(0x5));
+        vm.prank(DEPLOYER);
+        harness.registerNode(
+            node4, address(0x5), ownPd, _validBls(), _signNodeIdFor(node4Pk, DEPLOYER, node4, address(0x5))
+        );
+        assertTrue(harness.registry(ownPd));
     }
 
     /* ========== registerNodeGenesis (factory-only check) ========== */

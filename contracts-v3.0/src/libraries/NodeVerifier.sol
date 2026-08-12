@@ -51,7 +51,15 @@ library NodeVerifier {
         // Ownership check: the registrant must prove control of the nodeId key.
         _verifyNodeIdProof(nodeId, stakingContract, nodeIdSig);
 
-        _checkPublicDelegation(stakingContract, rewardAddress);
+        // A PublicDelegation is tied to the CnStaking it was deployed with. When this node's own
+        // staking contract has none, any deployed PublicDelegation belongs to another node.
+        if (
+            _checkPublicDelegation(stakingContract, rewardAddress) == address(0)
+                && ICnStakingV4Factory(factory).isDeployedPublicDelegation(rewardAddress)
+        ) {
+            revert InvalidInput();
+        }
+
         _registerAddresses(registry, nodeId, stakingContract, rewardAddress);
     }
 
@@ -96,8 +104,8 @@ library NodeVerifier {
         if (keccak256(blsInfo.publicKey) == ZERO48HASH || keccak256(blsInfo.pop) == ZERO96HASH) revert InvalidInput();
     }
 
-    function _checkPublicDelegation(address stakingContract, address rewardAddress) private view {
-        address pd = ICnStaking(payable(stakingContract)).publicDelegation();
+    function _checkPublicDelegation(address stakingContract, address rewardAddress) private view returns (address pd) {
+        pd = ICnStaking(payable(stakingContract)).publicDelegation();
         if (pd != address(0) && pd != rewardAddress) revert InvalidInput();
     }
 

@@ -107,6 +107,7 @@ contract DeployHelpers is Test {
             abi.encode(MOCK_FACTORY)
         );
         vm.mockCall(MOCK_FACTORY, abi.encodeWithSignature("isDeployedCnStaking(address)"), abi.encode(true));
+        vm.mockCall(MOCK_FACTORY, abi.encodeWithSignature("isDeployedPublicDelegation(address)"), abi.encode(false));
         // Default getDeployer mock — returns address(0).
         // Tests that call createNode must override this per staking contract.
         vm.mockCall(MOCK_FACTORY, abi.encodeWithSignature("getDeployer(address)"), abi.encode(address(0)));

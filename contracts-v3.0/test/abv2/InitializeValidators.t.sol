@@ -28,6 +28,7 @@ contract InitializeValidatorsTest is DeployHelpers {
             abi.encode(MOCK_FACTORY)
         );
         vm.mockCall(MOCK_FACTORY, abi.encodeWithSignature("isDeployedCnStaking(address)"), abi.encode(true));
+        vm.mockCall(MOCK_FACTORY, abi.encodeWithSignature("isDeployedPublicDelegation(address)"), abi.encode(false));
     }
 
     /* ========== HELPERS ========== */
