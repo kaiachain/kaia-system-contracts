@@ -38,6 +38,30 @@ jobs:
       - name: Test
         run: npm test
 
+  size:
+    name: Contract size (EIP-170)
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Install Foundry
+        uses: foundry-rs/foundry-toolchain@v1
+        with:
+          version: nightly
+
+      - name: Check contract sizes
+        working-directory: contracts-v3.0
+        run: npm run size
+
   lint:
     name: Lint
     runs-on: ubuntu-latest
