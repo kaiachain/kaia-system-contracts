@@ -304,7 +304,9 @@ contract PublicDelegationDelegatorTest is CnStakingBase {
         _simulateReward(pd, 10 ether);
 
         uint256 reward = pdd.withdrawableReward();
-        assertEq(reward, _delegateeReward(10 ether));
+        assertEq(reward, _expectedReward());
+        assertApproxEqAbs(reward, _delegateeReward(10 ether), 2);
+        assertLe(reward, _delegateeReward(10 ether));
     }
 
     function testWithdrawReward_basic() public {
@@ -422,7 +424,9 @@ contract PublicDelegationDelegatorTest is CnStakingBase {
         _simulateReward(pd, 20 ether);
 
         uint256 reward1 = pdd.withdrawableReward();
-        assertEq(reward1, _delegateeReward(20 ether));
+        assertEq(reward1, _expectedReward());
+        assertApproxEqAbs(reward1, _delegateeReward(20 ether), 2);
+        assertLe(reward1, _delegateeReward(20 ether));
 
         // Phase 2: Withdraw some delegation
         vm.prank(delegator);
@@ -435,7 +439,7 @@ contract PublicDelegationDelegatorTest is CnStakingBase {
 
         // Phase 3: Withdraw reward
         uint256 reward2 = pdd.withdrawableReward();
-        assertEq(reward2, reward1);
+        assertApproxEqAbs(reward2, reward1, 2);
 
         vm.prank(delegatee);
         pdd.withdrawReward(delegatee, reward2);
@@ -462,12 +466,16 @@ contract PublicDelegationDelegatorTest is CnStakingBase {
         // First reward: 10 ether → 9 ether pure (10% commission), minus dead share dilution
         _simulateReward(pd, 10 ether);
         uint256 reward1 = pdd.withdrawableReward();
-        assertEq(reward1, _delegateeReward(10 ether));
+        assertEq(reward1, _expectedReward());
+        assertApproxEqAbs(reward1, _delegateeReward(10 ether), 2);
+        assertLe(reward1, _delegateeReward(10 ether));
 
         // More reward: total pd balance now 20 ether
         _simulateReward(pd, 10 ether);
         uint256 reward2 = pdd.withdrawableReward();
-        assertEq(reward2, _delegateeReward(20 ether));
+        assertEq(reward2, _expectedReward());
+        assertApproxEqAbs(reward2, _delegateeReward(20 ether), 2);
+        assertLe(reward2, _delegateeReward(20 ether));
         assertGt(reward2, reward1);
     }
 
@@ -604,12 +612,13 @@ contract PublicDelegationDelegatorTest is CnStakingBase {
         vm.prank(delegator);
         pdd.withdrawDelegation(delegator, 30 ether);
 
-        // After withdrawal, delegation=70 but shares were burned
-        // withdrawableReward = maxWithdraw(pdd) - delegation
+        // After withdrawal, delegation=70 but shares were burned. The reserve is
+        // re-ceiled against the new totals, so the reward may shift by up to
+        // ~1 share's asset value in either direction.
         uint256 rewardAfter = pdd.withdrawableReward();
 
-        // Reward should still be positive
-        assertEq(rewardAfter, rewardBefore);
+        uint256 shareValue = (pd.totalAssets() + pd.totalSupply() - 1) / pd.totalSupply();
+        assertApproxEqAbs(rewardAfter, rewardBefore, shareValue + 1);
     }
 
     /* ========================================================
@@ -668,32 +677,79 @@ contract PublicDelegationDelegatorTest is CnStakingBase {
         // PDD gets proportional share: pureReward * pddShares / totalSupply
         // pddShares=100e18, user1Shares=100e18, deadShares=1e9
         uint256 pddReward = pdd.withdrawableReward();
-        assertEq(pddReward, _delegateeReward(20 ether));
+        assertEq(pddReward, _expectedReward());
+        assertApproxEqAbs(pddReward, _delegateeReward(20 ether), 2);
+        assertLe(pddReward, _delegateeReward(20 ether));
 
         // Also verify user1 gets roughly the same as PDD (both staked 100 ether)
         uint256 user1MaxWithdraw = pd.maxWithdraw(user1);
-        assertEq(user1MaxWithdraw - 100 ether, pddReward);
+        assertApproxEqAbs(user1MaxWithdraw - 100 ether, pddReward, 2);
+    }
+
+    /* ========================================================
+              REWARD DRAIN MUST NOT BLOCK DELEGATION
+    ======================================================== */
+
+    /// @dev Regression: withdrawing the maximum reported reward burns
+    /// ceil-rounded shares; the old formula (maxWithdraw - delegation) could let
+    /// that burn eat into shares backing the principal, making the full
+    /// delegation temporarily unwithdrawable.
+    function test_fullDelegationWithdrawableAfterRewardDrain() public {
+        _pddDelegatorStake(100 ether);
+        // Known counterexample against the old formula: with this reward the old
+        // code reverts with ERC20InsufficientBalance (1 share short) on the
+        // final withdrawDelegation.
+        _simulateReward(pd, 965720747295990506439747);
+
+        uint256 reward = pdd.withdrawableReward();
+        vm.prank(delegatee);
+        pdd.withdrawReward(delegatee, reward);
+
+        // The full recorded delegation must still be withdrawable
+        vm.prank(delegator);
+        pdd.withdrawDelegation(delegator, 100 ether);
+        assertEq(pdd.delegation(), 0);
+    }
+
+    function testFuzz_fullDelegationWithdrawableAfterRewardDrain(uint256 _reward) public {
+        _reward = bound(_reward, 1, 1_000_000 ether);
+
+        _pddDelegatorStake(100 ether);
+        _simulateReward(pd, _reward);
+
+        uint256 reward = pdd.withdrawableReward();
+        if (reward > 0) {
+            vm.prank(delegatee);
+            pdd.withdrawReward(delegatee, reward);
+        }
+
+        vm.prank(delegator);
+        pdd.withdrawDelegation(delegator, 100 ether);
+        assertEq(pdd.delegation(), 0);
     }
 
     /* ========================================================
                     HELPERS
     ======================================================== */
 
-    /// @dev Compute expected reward for simple cases (no sweep/burn between reward and check).
-    /// Formula: pureReward * pddShares / totalSupply (exact when exchange rate hasn't changed).
+    /// @dev Compute the economically expected reward for simple cases (no sweep/burn
+    /// between reward and check). Formula: pureReward * pddShares / totalSupply.
+    /// The contract's conservative computation may return up to a few wei less;
+    /// compare with assertApproxEqAbs + assertLe.
     function _delegateeReward(uint256 _totalReward) internal view returns (uint256) {
         uint256 rewardAfterCommission = _totalReward - (_totalReward * pd.commissionRate()) / 10000;
         return (rewardAfterCommission * pd.balanceOf(address(pdd))) / pd.totalSupply();
     }
 
-    /// @dev Compute expected reward from PD/CN state (works after sweep+burn).
-    /// Independently recomputes maxWithdraw from low-level components, then subtracts delegation.
+    /// @dev Independently mirrors the contract's conservative computation:
+    /// reserve ceil-rounded shares covering the full delegation, then value the
+    /// remaining shares floor-rounded.
     function _expectedReward() internal view returns (uint256) {
         uint256 shares = pd.balanceOf(address(pdd));
         uint256 supply = pd.totalSupply();
         uint256 assets = pd.totalAssets();
-        uint256 expectedMaxWithdraw = (shares * assets) / supply;
-        return expectedMaxWithdraw - pdd.delegation();
+        uint256 reserved = (pdd.delegation() * supply + assets - 1) / assets;
+        return shares > reserved ? ((shares - reserved) * assets) / supply : 0;
     }
 
     function _pddDelegatorStake(uint256 _amount) internal {

@@ -120,7 +120,8 @@ interface IPublicDelegationDelegator {
     function delegation() external view returns (uint256);
 
     /// @notice Returns the maximum reward withdrawable by the delegatee in KAIA.
-    ///         Computed as PD.maxWithdraw(this) - delegation.
+    ///         The value of the delegator's shares beyond those reserved
+    ///         (ceil-rounded) to cover the full delegation.
     function withdrawableReward() external view returns (uint256);
 
     /// @notice Returns the pending delegation withdrawal request IDs.
