@@ -103,6 +103,7 @@ abstract contract NodeActions is AddressBookV2Base {
 
         // Reward address is immutable when public delegation is enabled
         if (ICnStaking(payable(info.stakingContract)).publicDelegation() != address(0)) revert PDEnabled();
+        NodeVerifier.checkNotForeignPublicDelegation(newRewardAddress);
         if ($.usedAddresses[newRewardAddress]) revert NodeVerifier.AddressAlreadyRegistered();
 
         address oldRewardAddress = info.rewardAddress;

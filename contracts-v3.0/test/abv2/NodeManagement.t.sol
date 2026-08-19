@@ -660,6 +660,27 @@ contract NodeManagementTest is Base {
         abv2.updateRewardAddress(g.nodeId, makeAddr("newReward"));
     }
 
+    function test_updateRewardAddress_revert_rewardIsForeignPD() public {
+        NodeBundle memory g = genesis[0];
+        // This node has no PublicDelegation, so a factory-deployed one belongs to another node.
+        address foreignPd = makeAddr("foreignPd");
+        vm.mockCall(
+            MOCK_FACTORY,
+            abi.encodeWithSignature("isDeployedPublicDelegation(address)", foreignPd),
+            abi.encode(true)
+        );
+
+        vm.expectRevert(NodeVerifier.InvalidInput.selector);
+        vm.prank(g.manager);
+        abv2.updateRewardAddress(g.nodeId, foreignPd);
+
+        // A plain address is still accepted while that mock stands.
+        address plain = makeAddr("plainReward");
+        vm.prank(g.manager);
+        abv2.updateRewardAddress(g.nodeId, plain);
+        assertTrue(abv2.isUsedAddress(plain));
+    }
+
     function test_updateRewardAddress_revert_AddressAlreadyRegistered() public {
         // genesis[1].rewardAddr is already registered
         vm.expectRevert(NodeVerifier.AddressAlreadyRegistered.selector);
