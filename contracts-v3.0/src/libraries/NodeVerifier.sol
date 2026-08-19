@@ -63,6 +63,14 @@ library NodeVerifier {
         _registerAddresses(registry, nodeId, stakingContract, rewardAddress);
     }
 
+    /// @notice Reverts when rewardAddress is a PublicDelegation deployed for another node.
+    /// @dev Caller must have established that its own staking contract has no PublicDelegation.
+    function checkNotForeignPublicDelegation(address rewardAddress) internal view {
+        address factory = _getFactory();
+        if (factory == address(0)) revert FactoryNotFound();
+        if (ICnStakingV4Factory(factory).isDeployedPublicDelegation(rewardAddress)) revert InvalidInput();
+    }
+
     /// @dev Reverts unless nodeIdSig is nodeId's ECDSA signature over
     ///      keccak256(TAG, chainId, addressBook, caller, nodeId, stakingContract). tryRecover rejects malleable sigs.
     function _verifyNodeIdProof(address nodeId, address stakingContract, bytes memory nodeIdSig) private view {
