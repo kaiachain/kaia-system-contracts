@@ -170,6 +170,13 @@ contract PublicDelegationDelegator is IPublicDelegationDelegator, AccessControlE
 
     /* ========== GETTERS ========== */
 
+    /// @dev Returns the delegation currently withdrawable in KAIA. Shares are minted
+    /// floor-rounded, so their value can sit just below the recorded `delegation`.
+    function withdrawableDelegation() public view override returns (uint256) {
+        uint256 _max = PD.maxWithdraw(address(this));
+        return _max < delegation ? _max : delegation;
+    }
+
     /// @dev Returns the maximum withdrawable reward in KAIA.
     /// Reserves the ceil-rounded shares needed to cover the full delegation first,
     /// so a reward withdrawal can never burn shares backing the principal.
