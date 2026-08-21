@@ -158,6 +158,7 @@ abstract contract NodeActions is AddressBookV2Base {
     function readyValidator(address nodeId) external onlyNodeId(nodeId) {
         if (!_isNodeAtState(nodeId, State.ValInactive)) revert InvalidState();
         if (!_isNodeOverMinStake(nodeId)) revert StakingTooLow();
+        _revertIfTimeoutExpired(nodeId);
 
         _transition(nodeId, State.ValReady, _getTimeoutAt(nodeId));
     }

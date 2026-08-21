@@ -44,6 +44,16 @@ contract UserTransitionsTest is Base {
         _readyVal(genesis[3]);
     }
 
+    function test_readyValidator_revert_TimeoutExpired() public {
+        _setupWithOneIdle(); // genesis[3] = ValInactive (timeout = now + idleTimeout)
+
+        // Advance to the idle timeout: the system transition to Registered is pending
+        vm.warp(abv2.getNodeInfo(genesis[3].nodeId).timeoutAt);
+
+        vm.expectRevert(IAddressBookV2.TimeoutExpired.selector);
+        _readyVal(genesis[3]);
+    }
+
     function test_readyValidator_revert_InvalidState() public {
         _setupGenesisCommittee();
         // genesis[0] is ValActive, not ValInactive
