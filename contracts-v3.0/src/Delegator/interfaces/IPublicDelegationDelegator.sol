@@ -119,6 +119,10 @@ interface IPublicDelegationDelegator {
     /// @notice Returns the delegator's tracked delegation in KAIA.
     function delegation() external view returns (uint256);
 
+    /// @notice Returns the delegation currently withdrawable by the delegator in KAIA.
+    ///         `delegation` capped by the floor-rounded value of the shares held.
+    function withdrawableDelegation() external view returns (uint256);
+
     /// @notice Returns the maximum reward withdrawable by the delegatee in KAIA.
     ///         The value of the delegator's shares beyond those reserved
     ///         (ceil-rounded) to cover the full delegation.

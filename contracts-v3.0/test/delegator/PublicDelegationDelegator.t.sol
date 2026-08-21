@@ -729,6 +729,83 @@ contract PublicDelegationDelegatorTest is CnStakingBase {
     }
 
     /* ========================================================
+                    WITHDRAWABLE DELEGATION
+    ======================================================== */
+
+    /// @dev With an outside delegator already holding shares and a reward accrued, the
+    /// share price is above 1 and the first delegation mints floor-rounded shares worth
+    /// slightly less than msg.value. withdrawableDelegation() reports what can actually
+    /// be withdrawn, where the recorded delegation cannot.
+    function test_withdrawableDelegation_reportsShortfall() public {
+        _stakeViaPD(pd, user1, 100 ether);
+        _simulateReward(pd, 7 ether);
+        _pddDelegatorStake(1000 ether + 1);
+
+        uint256 recorded = pdd.delegation();
+        uint256 available = pdd.withdrawableDelegation();
+        assertLt(available, recorded, "fixture must produce a shortfall");
+
+        vm.prank(delegator);
+        vm.expectRevert();
+        pdd.withdrawDelegation(delegator, recorded);
+
+        vm.prank(delegator);
+        pdd.withdrawDelegation(delegator, available);
+        assertEq(pdd.delegation(), recorded - available);
+    }
+
+    /// @dev Once a reward has accrued the shares are worth more than the principal, and
+    /// the getter must stay capped at delegation — withdrawDelegation rejects anything above it.
+    function test_withdrawableDelegation_cappedByDelegation() public {
+        _pddDelegatorStake(100 ether);
+        _simulateReward(pd, 10 ether);
+
+        assertGt(pd.maxWithdraw(address(pdd)), pdd.delegation(), "fixture must have surplus reward");
+        uint256 available = pdd.withdrawableDelegation();
+        assertEq(available, pdd.delegation());
+
+        vm.prank(delegator);
+        pdd.withdrawDelegation(delegator, available);
+        assertEq(pdd.delegation(), 0);
+    }
+
+    /// @dev The reported amount must always be accepted by withdrawDelegation, and be the
+    /// largest such amount.
+    function testFuzz_withdrawableDelegation_isAlwaysWithdrawable(
+        uint256 _outsiderStake,
+        uint256 _reward,
+        uint256 _amount,
+        bool _drainReward
+    ) public {
+        _outsiderStake = bound(_outsiderStake, 1 ether, 100_000 ether);
+        _reward = bound(_reward, 0, 100_000 ether);
+        _amount = bound(_amount, 1 ether, 100_000 ether);
+
+        _stakeViaPD(pd, user1, _outsiderStake);
+        if (_reward > 0) _simulateReward(pd, _reward);
+        _pddDelegatorStake(_amount);
+
+        if (_drainReward) {
+            uint256 reward = pdd.withdrawableReward();
+            if (reward > 0) {
+                vm.prank(delegatee);
+                pdd.withdrawReward(delegatee, reward);
+            }
+        }
+
+        uint256 available = pdd.withdrawableDelegation();
+        if (available == 0) return;
+
+        // One peb more must not be withdrawable, or the getter is understating.
+        vm.prank(delegator);
+        vm.expectRevert();
+        pdd.withdrawDelegation(delegator, available + 1);
+
+        vm.prank(delegator);
+        pdd.withdrawDelegation(delegator, available);
+    }
+
+    /* ========================================================
                     HELPERS
     ======================================================== */
 
