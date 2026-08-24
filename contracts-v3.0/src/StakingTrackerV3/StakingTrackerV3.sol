@@ -102,6 +102,8 @@ contract StakingTrackerV3 is IStakingTrackerV3, Initializable, OwnableUpgradeabl
         uint256 trackStart,
         uint256 trackEnd
     ) external override onlyOwner returns (uint256 trackerId) {
+        if (trackStart > block.number || block.number >= trackEnd) revert InvalidTrackerRange();
+
         STv3Storage storage $ = _getStorage();
 
         trackerId = $.allTrackerIds.length + 1;

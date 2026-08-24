@@ -183,6 +183,33 @@ contract CreateTrackerTest is STv3Base {
         assertEq(totalVotes, 3);
     }
 
+    function test_createTracker_futureStart_reverts() public {
+        vm.prank(owner);
+        vm.expectRevert(IStakingTrackerV3.InvalidTrackerRange.selector);
+        stv3.createTracker(block.number + 1, block.number + 100);
+    }
+
+    function test_createTracker_alreadyEnded_reverts() public {
+        vm.prank(owner);
+        vm.expectRevert(IStakingTrackerV3.InvalidTrackerRange.selector);
+        stv3.createTracker(block.number, block.number);
+    }
+
+    function test_createTracker_minimalLiveRange() public {
+        // trackStart == block.number is what Voting passes, so the range bound is inclusive there
+        // and exclusive at trackEnd.
+        vm.prank(owner);
+        uint256 trackerId = stv3.createTracker(block.number, block.number + 1);
+
+        assertEq(stv3.getLiveTrackerIds().length, 1);
+
+        // One block later the range is over, so refreshStake retires it.
+        vm.roll(block.number + 1);
+        stv3.refreshStake(address(gc[0].staking));
+        assertEq(stv3.getLiveTrackerIds().length, 0);
+        assertEq(stv3.getAllTrackerIds()[0], trackerId);
+    }
+
     function test_createTracker_skipsGcIdZero() public {
         // Mock ABv2 to return a GovernanceInfo with gcId == 0
         // We can't easily do this with the real ABv2 since all nodes get gcId > 0
