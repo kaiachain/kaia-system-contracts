@@ -111,7 +111,7 @@ contract AddressBookV2 is NodeActions, AddressBookLegacy {
 
         address tracker = IRegistry(REGISTRY_ADDRESS).getActiveAddr("StakingTracker");
         if (tracker != address(0)) {
-            try IStakingTracker(tracker).refreshVoter(nodeId) {} catch {}
+            IStakingTracker(tracker).refreshVoter(nodeId);
         }
 
         emit GcIdAssigned(nodeId, gcId);

@@ -152,6 +152,43 @@ contract RefreshVoterTest is STv3Base {
         assertEq(stv3.gcIdToVoter(newGcId), gc[0].voterAddr);
     }
 
+    /// @dev A voter address already held by another GC must fail the assignment outright.
+    /// Committing the gcId anyway would leave the GC tracked with votes nobody can cast,
+    /// which inflates the quorum denominator for every proposal.
+    function test_assignGcId_revertsWhenVoterHeldByAnotherGC() public {
+        vm.prank(makeAddr("configurator"));
+        abv2.revokeGcId(gc[0].nodeId);
+
+        vm.prank(gc[1].manager);
+        abv2.updateVoterAddress(gc[1].nodeId, gc[0].voterAddr);
+        assertEq(stv3.voterToGCId(gc[0].voterAddr), gc[1].gcId, "fixture must park the voter elsewhere");
+
+        vm.prank(makeAddr("configurator"));
+        vm.expectRevert(IStakingTrackerV3.VoterAlreadyRegistered.selector);
+        abv2.assignGcId(gc[0].nodeId);
+
+        assertEq(abv2.getNodeInfo(gc[0].nodeId).gcId, 0, "gcId must not be committed");
+    }
+
+    /// @dev Rotating to a free address clears the conflict and the assignment goes through.
+    function test_assignGcId_succeedsAfterVoterRotation() public {
+        vm.prank(makeAddr("configurator"));
+        abv2.revokeGcId(gc[0].nodeId);
+        vm.prank(gc[1].manager);
+        abv2.updateVoterAddress(gc[1].nodeId, gc[0].voterAddr);
+
+        address free = makeAddr("freeVoter");
+        vm.prank(gc[0].manager);
+        abv2.updateVoterAddress(gc[0].nodeId, free);
+
+        vm.prank(makeAddr("configurator"));
+        abv2.assignGcId(gc[0].nodeId);
+
+        uint256 newGcId = abv2.getNodeInfo(gc[0].nodeId).gcId;
+        assertGt(newGcId, 0);
+        assertEq(stv3.gcIdToVoter(newGcId), free, "voter must sync in the same call");
+    }
+
     function test_revokeVoter_revert_notAddressBook() public {
         stv3.refreshVoter(gc[0].nodeId);
         vm.prank(makeAddr("attacker"));
