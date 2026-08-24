@@ -27,6 +27,8 @@ interface IStakingTrackerV3 {
 
     error NotAddressBook();
 
+    error InvalidTrackerRange();
+
     // ========== CONSTANTS ==========
 
     /// @notice Returns contract type identifier ("StakingTracker")
@@ -47,6 +49,7 @@ interface IStakingTrackerV3 {
     // ========== MUTATORS ==========
 
     /// @notice Creates a new tracker for a block range, only callable by owner, which is Voting contract
+    /// @dev Reverts unless the range is already live: trackStart <= block.number < trackEnd.
     /// @param trackStart Block number when tracker becomes active
     /// @param trackEnd Block number when tracker expires
     /// @return trackerId The new tracker ID (1-indexed, sequential)
