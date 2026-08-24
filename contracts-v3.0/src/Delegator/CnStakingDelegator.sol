@@ -97,6 +97,8 @@ contract CnStakingDelegator is ICnStakingDelegator, AccessControlEnumerable {
     /// @dev Delegates KAIA to CnStakingV4.
     function delegate() external payable override onlyRole(DELEGATOR_ROLE) {
         if (msg.value == 0) revert ZeroValue();
+        /// @dev Without ownership the wrapper can no longer unstake, so the funds would be stuck.
+        if (Ownable(address(CN)).owner() != address(this)) revert NotCnOwner();
         delegation += msg.value;
         CN.delegate{value: msg.value}();
 
@@ -162,9 +164,15 @@ contract CnStakingDelegator is ICnStakingDelegator, AccessControlEnumerable {
 
     /// @dev Transfers CnStakingV4 ownership to the delegatee. Only callable by delegator when delegation is empty.
     ///      _newOwner must hold DELEGATEE_ROLE, so ownership can only move to the designated delegatee.
+    ///      Ownership is the unstaking right, not an operating right — the delegatee runs the node as the
+    ///      ABv2 manager and can stake and unstake its own portion while ownership stays here — so this is
+    ///      a terminal step, taken once the delegator has fully exited.
     function transferCnOwnership(address _newOwner) external override onlyRole(DELEGATOR_ROLE) notNull(_newOwner) {
         if (delegation != 0) revert DelegationNotEmpty();
         if (!hasRole(DELEGATEE_ROLE, _newOwner)) revert NotDelegatee();
+        /// @dev delegation is reduced when a withdrawal is requested, not when it settles, so a
+        ///      pending request would survive the check above and become the new owner's to cancel.
+        if (CN.unstaking() != 0) revert WithdrawalPending();
         Ownable(address(CN)).transferOwnership(_newOwner);
     }
 

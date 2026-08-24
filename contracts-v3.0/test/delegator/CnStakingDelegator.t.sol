@@ -787,6 +787,47 @@ contract CnStakingDelegatorTest is CnStakingBase {
         d.transferCnOwnership(newOwner);
     }
 
+    /// @dev withdrawDelegation zeroes `delegation` when the request is made, not when it settles,
+    /// so the DelegationNotEmpty check alone would let the transfer through while the principal is
+    /// still cancellable by the incoming owner.
+    function testTransferCnOwnership_pendingDelegationWithdrawal_reverts() public {
+        _delegatorStake(100 ether);
+        vm.prank(delegator);
+        d.withdrawDelegation(delegator, 100 ether);
+
+        assertEq(d.delegation(), 0, "fixture must clear the recorded delegation");
+        assertEq(cn.unstaking(), 100 ether, "fixture must leave the principal in flight");
+
+        vm.prank(delegator);
+        vm.expectRevert(ICnStakingDelegator.WithdrawalPending.selector);
+        d.transferCnOwnership(delegatee);
+    }
+
+    function testTransferCnOwnership_pendingStakingWithdrawal_reverts() public {
+        _validatorStake(50 ether);
+        vm.prank(delegatee);
+        d.withdrawStaking(delegatee, 50 ether);
+
+        vm.prank(delegator);
+        vm.expectRevert(ICnStakingDelegator.WithdrawalPending.selector);
+        d.transferCnOwnership(delegatee);
+    }
+
+    function testTransferCnOwnership_afterWithdrawalSettles_succeeds() public {
+        _delegatorStake(100 ether);
+        vm.prank(delegator);
+        d.withdrawDelegation(delegator, 100 ether);
+        vm.warp(block.timestamp + STAKE_LOCKUP);
+        uint256 id = d.delegationWithdrawalIds()[0];
+        vm.prank(delegator);
+        d.claimDelegation(id);
+
+        assertEq(cn.unstaking(), 0);
+        vm.prank(delegator);
+        d.transferCnOwnership(delegatee);
+        assertEq(cn.owner(), delegatee);
+    }
+
     function testAfterOwnershipTransfer_operationsRevert() public {
         // Only validator stakes (no delegation), so ownership transfer is allowed
         _validatorStake(50 ether);
@@ -794,15 +835,11 @@ contract CnStakingDelegatorTest is CnStakingBase {
         vm.prank(delegator);
         d.transferCnOwnership(delegatee);
 
-        // Delegation still works (permissionless staking)
+        // New delegation is refused: the wrapper could no longer unstake it.
         vm.deal(delegator, 10 ether);
         vm.prank(delegator);
+        vm.expectRevert(ICnStakingDelegator.NotCnOwner.selector);
         d.delegate{value: 10 ether}();
-
-        // But withdrawal reverts (not owner anymore)
-        vm.prank(delegator);
-        vm.expectRevert(ICnStaking.NotUnstakingManager.selector);
-        d.withdrawDelegation(delegator, 10 ether);
 
         vm.prank(delegatee);
         vm.expectRevert(ICnStaking.NotUnstakingManager.selector);
