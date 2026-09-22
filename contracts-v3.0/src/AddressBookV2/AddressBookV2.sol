@@ -129,6 +129,8 @@ contract AddressBookV2 is NodeActions, AddressBookLegacy {
         }
 
         $.nodeInfo[nodeId].gcId = 0;
+
+        emit GcIdRevoked(nodeId, gcId);
     }
 
     /// @inheritdoc IAddressBookV2

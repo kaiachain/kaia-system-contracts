@@ -525,6 +525,8 @@ contract NodeManagementTest is Base {
         abv2.assignGcId(n.nodeId);
         assertEq(abv2.getNodeInfo(n.nodeId).gcId, 101);
 
+        vm.expectEmit(true, false, false, true);
+        emit IAddressBookV2.GcIdRevoked(n.nodeId, 101);
         vm.prank(owner);
         abv2.revokeGcId(n.nodeId);
         assertEq(abv2.getNodeInfo(n.nodeId).gcId, 0);

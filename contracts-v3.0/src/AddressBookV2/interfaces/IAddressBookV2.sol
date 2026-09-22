@@ -94,6 +94,11 @@ interface IAddressBookV2 {
     /// @param gcId The assigned governance council ID
     event GcIdAssigned(address indexed nodeId, uint256 gcId);
 
+    /// @notice Emitted when a node's gcId is revoked by the configurator
+    /// @param nodeId The address of the node
+    /// @param gcId The revoked governance council ID
+    event GcIdRevoked(address indexed nodeId, uint256 gcId);
+
     /// @notice Emitted when a node is deleted
     /// @param nodeId The address of the deleted node
     event NodeDeleted(address indexed nodeId);
