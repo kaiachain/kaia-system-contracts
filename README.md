@@ -30,6 +30,29 @@ import "@kaiachain/system-contracts-v3.0/src/AddressBookV2/AddressBookV2.sol";
 import "@kaiachain/system-contracts-v3.0/src/CnStaking/CnStakingV4/CnStakingV4.sol";
 ```
 
+You can also use interfaces to interact with on-chain system contracts. For example, reading CN reward addresses from the AddressBook:
+
+```solidity
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.0;
+
+import "@kaiachain/system-contracts-klaytn-v1.10/contracts/interfaces/IAddressBook.sol";
+
+contract AddressBookReader {
+    address constant ADDRESS_BOOK = 0x0000000000000000000000000000000000000400;
+
+    function getRewardAddresses() external view returns (address[] memory) {
+        (, address[] memory addressList) = IAddressBook(ADDRESS_BOOK).getAllAddress();
+        uint256 cnCount = (addressList.length - 2) / 3;
+        address[] memory rewards = new address[](cnCount);
+        for (uint256 i = 0; i < cnCount; i++) {
+            rewards[i] = addressList[i * 3 + 2];
+        }
+        return rewards;
+    }
+}
+```
+
 ## Development
 
 ### Prerequisites
