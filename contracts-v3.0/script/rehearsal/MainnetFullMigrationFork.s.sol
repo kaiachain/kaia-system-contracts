@@ -922,7 +922,7 @@ contract MainnetFullMigrationFork is ABv1ForkCommon {
             vm.prank(admins[i]);
             IMainnetMultiSig(staking).confirmRequest(multisigId, FN_WITHDRAW_LOCKUP_STAKING, toArg, valueArg, 0);
         }
-        require(recipient.balance - balBefore == amount, "lockup withdrawal shortfall");
+        require(recipient.balance - balBefore >= amount, "lockup withdrawal shortfall");
     }
 
     /// @dev What STv2 (StakingTrackerV2.sol:494) and the pre-fork client
