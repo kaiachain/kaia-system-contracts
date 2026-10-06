@@ -32,6 +32,8 @@ abstract contract ABv1ForkCommon is Script {
     /// @dev `Functions.ApproveStakingWithdrawal` enum index — identical position in
     ///      ICnStakingV2.sol (116-128) and ICnStakingV3MultiSig.sol (46-59).
     uint8 internal constant FN_APPROVE_STAKING_WITHDRAWAL = 6;
+    /// @dev `Functions.WithdrawLockupStaking` enum index — same position in both interfaces.
+    uint8 internal constant FN_WITHDRAW_LOCKUP_STAKING = 5;
 
     IAddressBookV1 internal abv1 = IAddressBookV1(ADDRESS_BOOK);
 

@@ -82,6 +82,24 @@ interface ICnStakingLive {
     function publicDelegation() external view returns (address);
 }
 
+/// @dev Legacy V2/V3 initial-lockup surface. Both multisigs expose the same functions and
+///      `Functions.WithdrawLockupStaking` sits at the same enum index (ICnStakingV2.sol:116-128,
+///      ICnStakingV3MultiSig.sol:46-59).
+interface ILegacyLockupLive {
+    function remainingLockupStaking() external view returns (uint256);
+    function getLockupStakingInfo()
+        external
+        view
+        returns (
+            uint256[] memory unlockTime,
+            uint256[] memory unlockAmount,
+            uint256 initial,
+            uint256 remaining,
+            uint256 withdrawable
+        );
+    function submitWithdrawLockupStaking(address to, uint256 value) external;
+}
+
 /// @dev Mainnet SimpleBlsRegistry / KIP113 (UUPS, OwnableUpgradeable)
 interface ISBRLive {
     function owner() external view returns (address);
@@ -155,6 +173,12 @@ interface IERC20Live {
 ///                                        via shared-admin sibling pots, consolidated through
 ///                                        a new CnStakingDelegator. DELEGATOR_NODES adds
 ///                                        cases known only off-chain.
+///       Initial lockup still held by a legacy contract (remainingLockupStaking, which
+///       staking() excludes) is withdrawn on D-day through submitWithdrawLockupStaking —
+///       executed in the confirming tx once unlockTime has passed — and restaked with the
+///       GC's own pot, because STv3 and the post-fork client count V4 staking() only.
+///       Every GC eligible today (balance-based, initial lockup included) must stay eligible
+///       on STv3; the run fails otherwise.
 ///   7.  Sunset VMC: AddressBook admins and SimpleBlsRegistry ownership -> the Registry
 ///       owner (recipient stand-in; between migration completion and data-contract
 ///       finalization)
@@ -222,6 +246,8 @@ contract MainnetFullMigrationFork is ABv1ForkCommon {
         uint256 gcId;
         address voter;
         uint256 effectiveStake; // staking() - unstaking() at snapshot time
+        uint256 balanceStake; // balance - unstaking() over own + sibling pots: what STv2 and the pre-fork client count
+        bool eligibleToday; // balanceStake >= MIN_STAKE at snapshot time
         Scenario scenario;
         // Sibling (dummy-node) CnStakings under the same gcId. For KF-delegation GCs
         // (via DELEGATOR_NODES) the pot is the foundation's delegated stake and consolidates
@@ -245,6 +271,7 @@ contract MainnetFullMigrationFork is ABv1ForkCommon {
         uint256 funderClaimId;
         uint256 rewardAmount; // §3 PD-on: delegatee reward leaving the legacy delegator
         uint256 rewardClaimId;
+        uint256 lockupAmount; // initial lockup withdrawn on D-day (own pot + sibling pots)
     }
 
     GC[] internal gcs;
@@ -382,6 +409,28 @@ contract MainnetFullMigrationFork is ABv1ForkCommon {
         uint256[4] memory scenarioCounts;
         for (uint256 j = 0; j < gcs.length; j++) {
             GC storage gc = gcs[j];
+
+            // Eligibility as counted today: STv2 (StakingTrackerV2.sol:494) and the pre-fork
+            // client (MultiCallContract._getCnStakingAmountsLegacy) use the contract balance
+            // net of pending withdrawals, consolidated per GC — initial lockup included.
+            // STv3 and the post-fork client use staking() - unstaking() of the V4 instead,
+            // so lockup-funded GCs only stay eligible if the lockup is migrated too.
+            gc.balanceStake = _balanceStake(gc.oldStaking);
+            uint256 effective = gc.effectiveStake;
+            for (uint256 k = 0; k < gc.siblingStakings.length; k++) {
+                gc.balanceStake += _balanceStake(gc.siblingStakings[k]);
+                ICnStakingLive sib = ICnStakingLive(gc.siblingStakings[k]);
+                effective += sib.staking() - sib.unstaking();
+            }
+            gc.eligibleToday = gc.balanceStake >= MIN_STAKE;
+            if (gc.eligibleToday && effective < MIN_STAKE) {
+                console.log(
+                    "  [note] eligible today only through initial lockup, gcId / lockup (KAIA):",
+                    gc.gcId,
+                    (gc.balanceStake - effective) / 1e18
+                );
+            }
+
             gc.oldDelegator = _findLegacyDelegator(gc.oldPd);
             bool isDelegator =
                 gc.oldDelegator != address(0) || _contains(delegatorNodes, delegatorNodes.length, gc.nodeId);
@@ -402,6 +451,7 @@ contract MainnetFullMigrationFork is ABv1ForkCommon {
         console.log("Scenario counts - PdOff / PdOn / DelegatorPdOff / DelegatorPdOn:");
         console.log("  ", scenarioCounts[0], scenarioCounts[1]);
         console.log("  ", scenarioCounts[2], scenarioCounts[3]);
+        console.log("Eligible today (balance-based, >= MIN_STAKE):", _eligibleTodayCount());
 
         console.log("=== Initial mainnet state ===");
         console.log("Voting:", VOTING);
@@ -500,6 +550,7 @@ contract MainnetFullMigrationFork is ABv1ForkCommon {
         (,, uint256 numGCs, uint256 totalVotes, uint256 numEligible) = stv2.getTrackerSummary(trackerId);
         console.log("Proposal id:", proposalId);
         console.log("STv2 tracker GCs / eligible / totalVotes:", numGCs, numEligible, totalVotes);
+        console.log("Eligible today (balance-based snapshot, committee GCs):", _eligibleTodayCount());
         require(numEligible > 0, "No eligible GC to vote");
 
         _castAllVotesOnSTv2(proposalId, trackerId);
@@ -841,6 +892,52 @@ contract MainnetFullMigrationFork is ABv1ForkCommon {
         }
     }
 
+    /// @dev Withdraws the withdrawable initial lockup of a legacy V2/V3 contract to
+    ///      `recipient` through its admin multisig (submit + confirmations). Unlike the
+    ///      approve/withdraw pair, the transfer happens in the confirming transaction with no
+    ///      7-day wait, provided unlockTime has passed. Returns 0 when nothing is withdrawable;
+    ///      lockup that is still time-locked cannot be migrated and is reported.
+    function _withdrawLockup(address staking, address recipient) internal returns (uint256 amount) {
+        ILegacyLockupLive legacy = ILegacyLockupLive(staking);
+        (,,,, amount) = legacy.getLockupStakingInfo();
+        if (amount == 0) {
+            uint256 locked = legacy.remainingLockupStaking();
+            if (locked > 0) {
+                console.log("  [warn] initial lockup still time-locked, NOT migrated (KAIA):", locked / 1e18);
+                console.log("         contract:", staking);
+            }
+            return 0;
+        }
+
+        (address[] memory admins, uint256 quorum) = _fetchOldAdmins(staking);
+        uint256 multisigId = IMainnetMultiSig(staking).requestCount();
+        uint256 balBefore = recipient.balance;
+
+        vm.prank(admins[0]);
+        legacy.submitWithdrawLockupStaking(recipient, amount);
+
+        bytes32 toArg = bytes32(uint256(uint160(recipient)));
+        bytes32 valueArg = bytes32(amount);
+        for (uint256 i = 1; i < quorum; ++i) {
+            vm.prank(admins[i]);
+            IMainnetMultiSig(staking).confirmRequest(multisigId, FN_WITHDRAW_LOCKUP_STAKING, toArg, valueArg, 0);
+        }
+        require(recipient.balance - balBefore == amount, "lockup withdrawal shortfall");
+    }
+
+    /// @dev What STv2 (StakingTrackerV2.sol:494) and the pre-fork client
+    ///      (MultiCallContract._getCnStakingAmountsLegacy) count for a legacy contract: its
+    ///      balance net of pending withdrawals — initial lockup included, unlike staking().
+    function _balanceStake(address staking) internal view returns (uint256) {
+        return staking.balance - ICnStakingLive(staking).unstaking();
+    }
+
+    function _eligibleTodayCount() internal view returns (uint256 count) {
+        for (uint256 i = 0; i < gcs.length; i++) {
+            if (gcs[i].eligibleToday) count++;
+        }
+    }
+
     /// @dev Manual steps 6-9 for one GC (D-day).
     function _migrateDday(uint256 gcId) internal {
         GC storage gc = _gc(gcId);
@@ -871,6 +968,23 @@ contract MainnetFullMigrationFork is ABv1ForkCommon {
             }
         }
 
+        // Initial lockup on the GC's own legacy contract: staking() excludes it, so the
+        // step-4 withdrawal above leaves it behind, while STv3 and the post-fork client count
+        // V4 staking() only. Withdraw it (immediate once unlockTime has passed) and restake it
+        // with the GC's own pot.
+        uint256 ownLockup = _withdrawLockup(gc.oldStaking, gc.holder);
+        if (ownLockup > 0) {
+            if (pdOn) {
+                vm.prank(gc.holder);
+                IV3PDV1(gc.newPd).stake{value: ownLockup}();
+            } else {
+                vm.prank(gc.holder);
+                CnStakingV4(payable(gc.newStaking)).delegate{value: ownLockup}();
+            }
+            gc.lockupAmount += ownLockup;
+            console.log("  own initial lockup migrated (KAIA):", ownLockup / 1e18);
+        }
+
         // §3 PD-on step 6/8 (claim side): funder claims its principal and re-delegates it
         // through the NEW PublicDelegationDelegator; the delegatee claims its reward, which
         // is income and is NOT restaked (manual step 8 restakes only the funder portion)
@@ -891,13 +1005,24 @@ contract MainnetFullMigrationFork is ABv1ForkCommon {
 
         // Withdraw each sibling pot, then re-stake the total: through the delegator (§3,
         // stays withdrawable by the funder) or as the GC's own stake (disjoint-admin pots)
+        bool viaDelegator = gc.delegatorContract != address(0);
         uint256 sibTotal;
         for (uint256 k = 0; k < gc.siblingStakings.length; k++) {
-            if (gc.siblingAmounts[k] == 0) continue;
-            (address[] memory sibAdmins,) = _fetchOldAdmins(gc.siblingStakings[k]);
-            vm.prank(sibAdmins[0]);
-            IMainnetMultiSig(gc.siblingStakings[k]).withdrawApprovedStaking(gc.siblingIds[k]);
-            sibTotal += gc.siblingAmounts[k];
+            address sib = gc.siblingStakings[k];
+            if (gc.siblingAmounts[k] > 0) {
+                (address[] memory sibAdmins,) = _fetchOldAdmins(sib);
+                vm.prank(sibAdmins[0]);
+                IMainnetMultiSig(sib).withdrawApprovedStaking(gc.siblingIds[k]);
+                sibTotal += gc.siblingAmounts[k];
+            }
+            // Sibling-pot initial lockup follows the pot's destination (D-7 sent the pot to
+            // the funder for §3 GCs, to the GC itself otherwise).
+            uint256 sibLockup = _withdrawLockup(sib, viaDelegator ? gc.funder : gc.holder);
+            if (sibLockup > 0) {
+                sibTotal += sibLockup;
+                gc.lockupAmount += sibLockup;
+                console.log("  sibling initial lockup migrated (KAIA):", sibLockup / 1e18);
+            }
         }
         if (sibTotal > 0) {
             if (gc.scenario == Scenario.DelegatorPdOff) {
@@ -924,9 +1049,13 @@ contract MainnetFullMigrationFork is ABv1ForkCommon {
 
         // Step 9 [GC]: requalification checks
         uint256 v4Staking = CnStakingV4(payable(gc.newStaking)).staking();
-        require(v4Staking >= gc.extractAmount + sibTotal + gc.funderAmount, "V4 staking below migrated amount");
-        if (v4Staking < MIN_STAKE) {
-            console.log("  [note] below MIN_STAKE post-migration (as today), gcId:", gc.gcId);
+        require(
+            v4Staking >= gc.extractAmount + ownLockup + sibTotal + gc.funderAmount, "V4 staking below migrated amount"
+        );
+        if (gc.eligibleToday) {
+            require(v4Staking >= MIN_STAKE, "GC eligible today falls below MIN_STAKE after migration");
+        } else if (v4Staking < MIN_STAKE) {
+            console.log("  [note] below MIN_STAKE post-migration (already below today), gcId:", gc.gcId);
         }
         console.log("  gcId", gc.gcId, string.concat("[", _scenarioName(gc.scenario), "] -> V4:"), gc.newStaking);
     }
@@ -1279,6 +1408,21 @@ contract MainnetFullMigrationFork is ABv1ForkCommon {
         // The tracker counts unique gcIds, not AB nodes — several GCs run multiple nodes.
         require(numGCs == _uniqueGcIdCount(), "STv3 tracker missing GCs");
         require(numEligible > 0, "No eligible GC in STv3 tracker");
+
+        // The eligible set must not shrink: every GC eligible today (balance-based, initial
+        // lockup included) must be eligible on STv3, which counts V4 staking() only.
+        for (uint256 i = 0; i < gcs.length; i++) {
+            if (!gcs[i].eligibleToday) continue;
+            (uint256 cnBal,) = stv3.getTrackedGCBalance(trackerId, gcs[i].gcId);
+            if (cnBal < MIN_STAKE) {
+                console.log(
+                    "  [fail] eligible today, ineligible on STv3 - gcId / V4 stake (KAIA):", gcs[i].gcId, cnBal / 1e18
+                );
+                revert("eligible GC set shrank after migration");
+            }
+        }
+        console.log("Eligible today / eligible on STv3:", _eligibleTodayCount(), numEligible);
+        require(numEligible >= _eligibleTodayCount(), "STv3 eligible count below today's");
 
         _verifyCLDEX(trackerId);
 
