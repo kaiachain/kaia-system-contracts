@@ -926,9 +926,9 @@ contract MainnetFullMigrationFork is ABv1ForkCommon {
         require(recipient.balance - balBefore >= amount, "lockup withdrawal shortfall");
     }
 
-    /// @dev What STv2 (StakingTrackerV2.sol:494) and the pre-fork client
-    ///      (MultiCallContract._getCnStakingAmountsLegacy) count for a legacy contract: its
-    ///      balance net of pending withdrawals — initial lockup included, unlike staking().
+    /// @dev What STv2 (StakingTrackerV2.sol:494) counts for a legacy contract: its balance net
+    ///      of pending withdrawals — initial lockup included, unlike staking(). The pre-fork
+    ///      client (MultiCallContract._getCnStakingAmountsLegacy) counts the raw balance.
     function _balanceStake(address staking) internal view returns (uint256) {
         return staking.balance - ICnStakingLive(staking).unstaking();
     }
