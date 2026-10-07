@@ -410,9 +410,10 @@ contract MainnetFullMigrationFork is ABv1ForkCommon {
         for (uint256 j = 0; j < gcs.length; j++) {
             GC storage gc = gcs[j];
 
-            // Eligibility as counted today: STv2 (StakingTrackerV2.sol:494) and the pre-fork
-            // client (MultiCallContract._getCnStakingAmountsLegacy) use the contract balance
-            // net of pending withdrawals, consolidated per GC — initial lockup included.
+            // Eligibility as counted today, initial lockup included: STv2 (StakingTrackerV2.sol:494)
+            // uses the contract balance net of pending withdrawals, consolidated per GC; the
+            // pre-fork client (MultiCallContract._getCnStakingAmountsLegacy) uses the raw balance.
+            // The snapshot uses the STv2 figure, since pending withdrawals are not migrated.
             // STv3 and the post-fork client use staking() - unstaking() of the V4 instead,
             // so lockup-funded GCs only stay eligible if the lockup is migrated too.
             gc.balanceStake = _balanceStake(gc.oldStaking);
