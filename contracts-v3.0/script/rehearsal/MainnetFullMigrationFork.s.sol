@@ -246,7 +246,7 @@ contract MainnetFullMigrationFork is ABv1ForkCommon {
         uint256 gcId;
         address voter;
         uint256 effectiveStake; // staking() - unstaking() at snapshot time
-        uint256 balanceStake; // balance - unstaking() over own + sibling pots: what STv2 and the pre-fork client count
+        uint256 balanceStake; // balance - unstaking() over own + sibling pots: what STv2 counts
         bool eligibleToday; // balanceStake >= MIN_STAKE at snapshot time
         Scenario scenario;
         // Sibling (dummy-node) CnStakings under the same gcId. For KF-delegation GCs
